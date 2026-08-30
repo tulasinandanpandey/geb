@@ -5,6 +5,16 @@ from app.api.routes.properties import router as properties_router
 from app.api.routes.uploads import router as uploads_router
 from app.api.routes.ai import router as ai_router
 from app.api.routes.conversations import router as conversations_router
+from app.core.config import settings
+
+
+def get_cors_origins() -> list[str]:
+    origins = [
+        origin.strip()
+        for origin in settings.cors_origins.split(",")
+        if origin.strip()
+    ]
+    return origins or ["http://localhost:3000"]
 
 
 app = FastAPI(
@@ -16,9 +26,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-    ],
+    allow_origins=get_cors_origins(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
