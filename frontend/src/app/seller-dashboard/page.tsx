@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   ArrowLeft,
@@ -36,7 +36,7 @@ import {
   getConversationMessages,
 } from "@/services/conversations";
 
-export default function SellerDashboard() {
+function SellerDashboardContent() {
   const { user, loading: authLoading } = useAuth();
   const searchParams = useSearchParams();
 
@@ -1342,5 +1342,13 @@ export default function SellerDashboard() {
         </div>
       )}
     </main>
+  );
+}
+
+export default function SellerDashboard() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50" />}>
+      <SellerDashboardContent />
+    </Suspense>
   );
 }

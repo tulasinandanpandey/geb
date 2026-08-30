@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState, useTransition } from "react";
+import { Suspense, useEffect, useState, useTransition } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   ArrowLeft,
@@ -27,7 +27,7 @@ import {
   getConversationMessages,
 } from "@/services/conversations";
 
-export default function BuyerDashboard() {
+function BuyerDashboardContent() {
   const { user, loading: authLoading, roles } = useAuth();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
@@ -730,5 +730,13 @@ export default function BuyerDashboard() {
         </div>
       )}
     </main>
+  );
+}
+
+export default function BuyerDashboard() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50" />}>
+      <BuyerDashboardContent />
+    </Suspense>
   );
 }
