@@ -179,17 +179,17 @@ export default function GEBChatModal({
   return (
     <div className="fixed inset-0 z-[3000] flex items-center justify-center bg-black/60 md:p-4 backdrop-blur-md">
       <div 
-        className="flex h-full w-full md:h-[85vh] md:max-w-6xl flex-col overflow-hidden rounded-none md:rounded-[2.5rem] bg-[#f7f7f5] shadow-2xl border-none md:border md:border-black/5"
+        className="flex h-full w-full md:h-[85vh] md:max-w-6xl flex-col overflow-hidden rounded-none md:rounded-[2.5rem] bg-[var(--paper)] shadow-2xl border-none md:border md:border-[var(--stone-line)]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* HEADER */}
-        <div className="flex items-center justify-between border-b border-black/5 bg-white px-4 py-3.5 md:px-6 md:py-4">
+        <div className="flex items-center justify-between border-b border-[var(--stone-line)] bg-white px-4 py-3.5 md:px-6 md:py-4">
           {activeConversation ? (
             <div className="flex items-center gap-2.5 min-w-0 flex-1">
               {(mode === "seller" || !directConversation) && (
                 <button
                   onClick={() => setActiveConversation(null)}
-                  className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-zinc-100 md:hidden shrink-0 border border-black/5 bg-white"
+                  className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-[var(--paper)] md:hidden shrink-0 border border-[var(--stone-line)] bg-white"
                   aria-label="Back to conversations list"
                 >
                   <ArrowLeft size={16} />
@@ -199,21 +199,21 @@ export default function GEBChatModal({
                 <img
                   src={activeConversation.property.image}
                   alt=""
-                  className="h-10 w-10 md:h-12 md:w-12 object-cover rounded-xl shrink-0 border border-black/5"
+                  className="h-10 w-10 md:h-12 md:w-12 object-cover rounded-xl shrink-0 border border-[var(--stone-line)]"
                 />
               )}
               <div className="min-w-0 flex-1">
-                <h2 className="font-serif text-sm md:text-base font-bold tracking-tight text-zinc-900 truncate">
+                <h2 className="font-display text-sm md:text-base font-bold tracking-tight text-[var(--ink)] truncate">
                   {activeConversation.property.title}
                 </h2>
-                <div className="flex flex-col md:flex-row md:items-center gap-x-2 text-[9px] md:text-[10px] text-zinc-500 font-semibold leading-tight mt-0.5">
+                <div className="flex flex-col md:flex-row md:items-center gap-x-2 text-[9px] md:text-[10px] text-[var(--ink-soft)] font-semibold leading-tight mt-0.5">
                   <span className="truncate">
                     {activeConversation.property.locality
                       ? `${activeConversation.property.locality}, `
                       : ""}
                     {activeConversation.property.city}
                   </span>
-                  <span className="hidden md:inline text-zinc-300">•</span>
+                  <span className="hidden md:inline text-[var(--stone-line)]">•</span>
                   <span className="text-emerald-700 bg-emerald-50 border border-emerald-100/50 px-1.5 py-0.5 rounded-md self-start mt-0.5 md:mt-0 font-bold">
                     Seller: {activeConversation.seller.full_name || "Verified Seller"}
                   </span>
@@ -222,14 +222,14 @@ export default function GEBChatModal({
             </div>
           ) : (
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-zinc-950 text-white">
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[var(--ink)] text-white">
                 <MessageSquare size={20} />
               </div>
               <div>
-                <h2 className="font-serif text-xl font-bold tracking-tight">
+                <h2 className="font-display text-xl font-bold tracking-tight">
                   {mode === "seller" ? "GEB Seller Inbox" : "Contact Listing Agent"}
                 </h2>
-                <p className="text-xs text-zinc-400 font-medium">
+                <p className="text-xs text-[var(--ink-soft)] font-medium">
                   Your conversations on GEB
                 </p>
               </div>
@@ -274,7 +274,7 @@ export default function GEBChatModal({
             )}
 
             {activeConversation && !isSellerOfActive && (
-              <div className="flex items-center gap-1 bg-zinc-50 border border-black/5 px-2.5 py-1.5 rounded-full shrink-0">
+              <div className="flex items-center gap-1 bg-[var(--paper)] border border-[var(--stone-line)] px-2.5 py-1.5 rounded-full shrink-0">
                 {activeConversation.mode === "ai_active" ? (
                   <>
                     <Sparkles size={11} className="text-purple-600 animate-pulse" />
@@ -293,7 +293,7 @@ export default function GEBChatModal({
               <button
                 onClick={() => fetchMessages(activeConversation.id)}
                 disabled={loadingMessages}
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-zinc-50 hover:bg-zinc-100 transition border border-black/5"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--paper)] hover:bg-[var(--paper)] transition border border-[var(--stone-line)]"
                 title="Refresh messages"
               >
                 <RefreshCw size={14} className={loadingMessages ? "animate-spin" : ""} />
@@ -301,7 +301,7 @@ export default function GEBChatModal({
             )}
             <button
               onClick={onClose}
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-zinc-50 hover:bg-zinc-100 transition border border-black/5"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--paper)] hover:bg-[var(--paper)] transition border border-[var(--stone-line)]"
               aria-label="Close chat window"
             >
               <X size={15} />
@@ -313,24 +313,24 @@ export default function GEBChatModal({
         <div className="flex flex-1 overflow-hidden">
           {/* LEFT SIDE PANEL (Inbox list - only visible when not in direct conversation mode OR in seller mode) */}
           {(mode === "seller" || !directConversation) && (
-            <div className={`w-full md:w-80 shrink-0 border-r border-black/5 bg-white flex flex-col overflow-hidden ${
+            <div className={`w-full md:w-80 shrink-0 border-r border-[var(--stone-line)] bg-white flex flex-col overflow-hidden ${
               activeConversation ? "hidden md:flex" : "flex"
             }`}>
-              <div className="p-4 border-b border-black/5">
-                <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+              <div className="p-4 border-b border-[var(--stone-line)]">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--ink-soft)]">
                   Recent Conversations
                 </p>
               </div>
 
               <div className="flex-1 overflow-y-auto p-2 space-y-1">
                 {loadingConversations ? (
-                  <div className="flex h-40 items-center justify-center text-zinc-400">
+                  <div className="flex h-40 items-center justify-center text-[var(--ink-soft)]">
                     <Loader2 className="animate-spin mr-2" size={16} />
                     <span className="text-sm font-medium">Loading conversations...</span>
                   </div>
                 ) : conversations.length === 0 ? (
-                  <div className="p-8 text-center text-zinc-400">
-                    <Building2 size={24} className="mx-auto mb-2 text-zinc-300" />
+                  <div className="p-8 text-center text-[var(--ink-soft)]">
+                    <Building2 size={24} className="mx-auto mb-2 text-[var(--stone-line)]" />
                     <p className="text-xs font-semibold">No messages yet</p>
                     <p className="text-[10px] mt-1">Start a conversation from a property listing details modal.</p>
                   </div>
@@ -347,8 +347,8 @@ export default function GEBChatModal({
                         onClick={() => handleSelectConversation(conv)}
                         className={`w-full text-left p-3.5 rounded-2xl transition flex flex-col gap-1.5 ${
                           active 
-                            ? "bg-zinc-950 text-white shadow-lg shadow-black/10" 
-                            : "hover:bg-zinc-50 text-zinc-900"
+                            ? "bg-[var(--ink)] text-white shadow-lg shadow-black/10" 
+                            : "hover:bg-[var(--paper)] text-[var(--ink)]"
                         }`}
                       >
                         <div className="flex items-center justify-between">
@@ -358,20 +358,20 @@ export default function GEBChatModal({
                           <span className={`text-[8px] px-2 py-0.5 rounded-full capitalize font-semibold ${
                             active 
                               ? "bg-white/20 text-white" 
-                              : "bg-zinc-100 text-zinc-500"
+                              : "bg-[var(--paper)] text-[var(--ink-soft)]"
                           }`}>
                             {conv.mode.replace("_", " ")}
                           </span>
                         </div>
                         
                         <div className={`text-[11px] font-medium truncate ${
-                          active ? "text-zinc-300" : "text-zinc-500"
+                          active ? "text-[var(--stone-line)]" : "text-[var(--ink-soft)]"
                         }`}>
                           🏡 {conv.property.title}
                         </div>
                         
                         <span className={`text-[9px] self-end ${
-                          active ? "text-zinc-400" : "text-zinc-400"
+                          active ? "text-[var(--ink-soft)]" : "text-[var(--ink-soft)]"
                         }`}>
                           {new Date(conv.updated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
@@ -397,18 +397,18 @@ export default function GEBChatModal({
                 )}
 
                 {/* Messages view */}
-                <div className="flex-1 overflow-y-auto p-6 bg-zinc-50 space-y-4">
+                <div className="flex-1 overflow-y-auto p-6 bg-[var(--paper)] space-y-4">
                   {loadingMessages && messages.length === 0 ? (
                     <div className="flex h-full items-center justify-center">
-                      <div className="text-center text-zinc-400">
-                        <Loader2 className="animate-spin mx-auto mb-2 text-zinc-300" size={24} />
+                      <div className="text-center text-[var(--ink-soft)]">
+                        <Loader2 className="animate-spin mx-auto mb-2 text-[var(--stone-line)]" size={24} />
                         <p className="text-xs font-medium">Retrieving messages...</p>
                       </div>
                     </div>
                   ) : messages.length === 0 ? (
-                    <div className="flex h-full items-center justify-center p-8 text-center text-zinc-400">
+                    <div className="flex h-full items-center justify-center p-8 text-center text-[var(--ink-soft)]">
                       <div>
-                        <MessageSquare className="mx-auto mb-3 text-zinc-300" size={32} />
+                        <MessageSquare className="mx-auto mb-3 text-[var(--stone-line)]" size={32} />
                         <p className="text-sm font-semibold">No messages yet</p>
                         <p className="text-xs max-w-xs mt-1">Send a message below to start the conversation with the agent.</p>
                       </div>
@@ -422,7 +422,7 @@ export default function GEBChatModal({
                       if (isSystem) {
                         return (
                           <div key={msg.id} className="flex justify-center my-2">
-                            <span className="rounded-full bg-zinc-200/60 px-3.5 py-1 text-[10px] font-bold text-zinc-500 border border-zinc-300/40">
+                            <span className="rounded-full bg-[var(--stone-line)]/60 px-3.5 py-1 text-[10px] font-bold text-[var(--ink-soft)] border border-[var(--stone-line)]/40">
                               {msg.message}
                             </span>
                           </div>
@@ -438,7 +438,7 @@ export default function GEBChatModal({
                             <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-xs font-bold border shadow-sm ${
                               isAI 
                                 ? "bg-purple-100 text-purple-700 border-purple-200" 
-                                : "bg-white text-zinc-600 border-zinc-200"
+                                : "bg-white text-[var(--ink-soft)] border-[var(--stone-line)]"
                             }`}>
                               {isAI ? <Bot size={14} /> : <User size={14} />}
                             </div>
@@ -446,7 +446,7 @@ export default function GEBChatModal({
 
                           <div className={`max-w-[70%] flex flex-col gap-1`}>
                             {/* Sender details */}
-                            <span className={`text-[9px] font-bold text-zinc-400 px-1 ${isMe ? "self-end" : "self-start"}`}>
+                            <span className={`text-[9px] font-bold text-[var(--ink-soft)] px-1 ${isMe ? "self-end" : "self-start"}`}>
                               {isMe 
                                 ? "You" 
                                 : isAI 
@@ -460,15 +460,15 @@ export default function GEBChatModal({
                             {/* Text bubble */}
                             <div className={`rounded-2xl px-4 py-2.5 text-sm font-medium shadow-sm transition hover:shadow-md ${
                               isMe
-                                ? "bg-zinc-950 text-white rounded-tr-none"
+                                ? "bg-[var(--ink)] text-white rounded-tr-none"
                                 : isAI
                                   ? "bg-purple-50 text-purple-950 border border-purple-200 rounded-tl-none"
-                                  : "bg-white text-zinc-900 border border-black/5 rounded-tl-none"
+                                  : "bg-white text-[var(--ink)] border border-[var(--stone-line)] rounded-tl-none"
                             }`}>
                               <p className="whitespace-pre-wrap leading-relaxed">{msg.message}</p>
                             </div>
                             
-                            <span className={`text-[8px] text-zinc-400 font-semibold px-1 ${isMe ? "self-end" : "self-start"}`}>
+                            <span className={`text-[8px] text-[var(--ink-soft)] font-semibold px-1 ${isMe ? "self-end" : "self-start"}`}>
                               {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                             </span>
                           </div>
@@ -482,30 +482,30 @@ export default function GEBChatModal({
                 {/* Input area */}
                 <form 
                   onSubmit={handleSendMessage}
-                  className="bg-white border-t border-black/5 p-4 flex gap-2 shrink-0"
+                  className="bg-white border-t border-[var(--stone-line)] p-4 flex gap-2 shrink-0"
                 >
                   <input
                     type="text"
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
                     placeholder="Type your message..."
-                    className="flex-1 bg-zinc-50 border border-black/5 rounded-2xl px-5 py-3 text-sm font-semibold outline-none focus:bg-white focus:border-zinc-300 transition"
+                    className="flex-1 bg-[var(--paper)] border border-[var(--stone-line)] rounded-2xl px-5 py-3 text-sm font-semibold outline-none focus:bg-white focus:border-[var(--stone-line)] transition"
                     disabled={sending}
                   />
                   <button
                     type="submit"
                     disabled={sending || !newMessage.trim()}
-                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-zinc-950 text-white hover:bg-zinc-800 transition disabled:opacity-50 disabled:hover:bg-zinc-950 shadow-md shadow-black/10"
+                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[var(--ink)] text-white hover:bg-[var(--copper-700)] transition disabled:opacity-50 disabled:hover:bg-[var(--ink)] shadow-md shadow-black/10"
                   >
                     {sending ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
                   </button>
                 </form>
               </>
             ) : (
-              <div className="flex-1 flex items-center justify-center p-8 text-center text-zinc-400">
+              <div className="flex-1 flex items-center justify-center p-8 text-center text-[var(--ink-soft)]">
                 <div>
-                  <Building2 className="mx-auto mb-4 text-zinc-200" size={48} />
-                  <h3 className="text-lg font-serif font-medium text-zinc-700">No active chat</h3>
+                  <Building2 className="mx-auto mb-4 text-[var(--stone-line)]" size={48} />
+                  <h3 className="text-lg font-display font-medium text-[var(--ink-soft)]">No active chat</h3>
                   <p className="text-sm max-w-sm mt-1">Select a conversation from the sidebar or click &ldquo;Contact Seller&rdquo; on any property detail modal.</p>
                 </div>
               </div>

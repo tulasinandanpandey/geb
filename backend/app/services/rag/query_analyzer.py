@@ -21,6 +21,17 @@ ALLOWED_PROPERTY_TYPES = {
     "commercial",
 }
 
+ALLOWED_LISTING_TYPES = {
+    "sale",
+    "rent",
+}
+
+ALLOWED_FURNISHING_STATUSES = {
+    "unfurnished",
+    "semi_furnished",
+    "fully_furnished",
+}
+
 ALLOWED_RISK_PREFERENCES = {
     "conservative",
     "moderate",
@@ -40,6 +51,9 @@ EMPTY_ANALYSIS = {
     "city": None,
     "locality": None,
     "property_type": None,
+    "listing_type": None,
+    "bhk": None,
+    "furnishing_status": None,
     "min_price": None,
     "max_price": None,
     "purpose": None,
@@ -59,12 +73,9 @@ Return ONLY valid JSON.
 
 Allowed values:
 
-purpose:
-- purchase
-- long_term_investment
-- rental_income
-- short_term_investment
-- future_home
+listing_type:
+- sale
+- rent
 - null
 
 property_type:
@@ -75,26 +86,19 @@ property_type:
 - commercial
 - null
 
-risk_preference:
-- conservative
-- moderate
-- aggressive
-- null
-
-priority:
-- appreciation
-- rental_income
-- affordability
-- location
-- property_size
-- balanced
+furnishing_status:
+- unfurnished
+- semi_furnished
+- fully_furnished
 - null
 
 Extract:
-
 city
 locality
 property_type
+listing_type
+bhk
+furnishing_status
 min_price
 max_price
 purpose
@@ -103,36 +107,12 @@ priority
 risk_preference
 
 Rules:
-
 1. Do not invent information.
 2. If the user does not provide a value, return null.
-3. Prices must be numbers in INR.
-4. Convert lakh/crore into INR.
-5. "50 lakh" = 5000000.
-6. "1 crore" = 10000000.
-7. "long term", "hold for years", or similar language may indicate
-   long_term_investment.
-8. A specific duration such as "10 years" should become
-   time_horizon_years: 10.
-9. If the user says they want rental income, use rental_income.
-10. If the user says they want a property to live in, use future_home
-    or purchase depending on the wording.
-11. Do not guess city or locality from context.
-12. Return exactly the requested JSON fields.
-
-Required JSON format:
-
-{
-  "city": null,
-  "locality": null,
-  "property_type": null,
-  "min_price": null,
-  "max_price": null,
-  "purpose": null,
-  "time_horizon_years": null,
-  "priority": null,
-  "risk_preference": null
-}
+3. Prices must be numbers in INR. Convert "25k" = 25000, "50 lakh" = 5000000.
+4. "2BHK" or "2 bed" -> bhk: 2.
+5. "for rent" -> listing_type: "rent".
+6. Return exactly the requested JSON fields.
 """
 
 
@@ -151,6 +131,9 @@ def _parse_amount_to_inr(
     value = float(amount.replace(",", ""))
     normalized_unit = (unit or "").lower()
 
+    if normalized_unit in {"k", "thousand"}:
+        return value * 1000
+
     if normalized_unit in {"l", "lac", "lakh", "lakhs"}:
         return value * 100000
 
@@ -166,7 +149,7 @@ def _extract_price_bounds(
 ) -> None:
     amount_pattern = (
         r"(\d+(?:,\d+)*(?:\.\d+)?)\s*"
-        r"(lakh|lakhs|lac|l|crore|crores|cr)?"
+        r"(k|thousand|lakh|lakhs|lac|l|crore|crores|cr)?"
     )
 
     between_match = re.search(
@@ -193,7 +176,7 @@ def _extract_price_bounds(
         return
 
     under_match = re.search(
-        rf"(?:under|below|less than|up to|upto|max|maximum)\s+{amount_pattern}",
+        rf"(?:under|below|less than|up to|upto|max|maximum|₹|rs\.?)\s*{amount_pattern}",
         text,
     )
 
@@ -225,7 +208,9 @@ def _deterministic_analyze(message: str) -> dict:
     )
 
     if city_match:
-        result["city"] = city_match.group(1).strip().title()
+        raw_city = city_match.group(1).strip().title()
+        if raw_city.lower() not in {"rent", "sale", "2bhk", "3bhk", "1bhk"}:
+            result["city"] = raw_city
 
     if re.search(r"\bplots?\b", text):
         result["property_type"] = "plot"
@@ -238,13 +223,32 @@ def _deterministic_analyze(message: str) -> dict:
     elif re.search(r"\bcommercial\b", text):
         result["property_type"] = "commercial"
 
+    # Listing Type
+    if re.search(r"\b(rent|rentals?|for rent|to rent|lease|renting)\b", text):
+        result["listing_type"] = "rent"
+    elif re.search(r"\b(buy|purchase|for sale|buying|sale)\b", text):
+        result["listing_type"] = "sale"
+
+    # BHK Extraction
+    bhk_match = re.search(r"\b(\d+)\s*(?:bhk|bed|bedroom|bedrooms)\b", text)
+    if bhk_match:
+        result["bhk"] = int(bhk_match.group(1))
+
+    # Furnishing Status
+    if re.search(r"\b(fully[-\s]?furnished|furnished)\b", text):
+        result["furnishing_status"] = "fully_furnished"
+    elif re.search(r"\b(semi[-\s]?furnished|partially[-\s]?furnished)\b", text):
+        result["furnishing_status"] = "semi_furnished"
+    elif re.search(r"\bunfurnished\b", text):
+        result["furnishing_status"] = "unfurnished"
+
     _extract_price_bounds(text, result)
 
     if re.search(r"\b(long[-\s]?term|hold|investment|investor)\b", text):
         result["purpose"] = "long_term_investment"
         result["priority"] = "appreciation"
 
-    if re.search(r"\brental income|rent income|rentals?|rental\b", text):
+    if re.search(r"\brental income|rent income|rentals?|rental\b", text) and result["listing_type"] != "rent":
         result["purpose"] = "rental_income"
         result["priority"] = "rental_income"
 
@@ -344,6 +348,7 @@ def _sanitize_analysis(result: dict) -> dict:
 
     city = result.get("city")
     locality = result.get("locality")
+    bhk = result.get("bhk")
 
     return {
         "city": city.strip() if isinstance(city, str) and city.strip() else None,
@@ -351,6 +356,15 @@ def _sanitize_analysis(result: dict) -> dict:
         "property_type": _sanitize_choice(
             result.get("property_type"),
             ALLOWED_PROPERTY_TYPES,
+        ),
+        "listing_type": _sanitize_choice(
+            result.get("listing_type"),
+            ALLOWED_LISTING_TYPES,
+        ),
+        "bhk": int(bhk) if bhk is not None and isinstance(bhk, (int, float)) else None,
+        "furnishing_status": _sanitize_choice(
+            result.get("furnishing_status"),
+            ALLOWED_FURNISHING_STATUSES,
         ),
         "min_price": min_price,
         "max_price": max_price,

@@ -18,6 +18,7 @@ import {
   X,
 } from "lucide-react";
 
+import Navbar from "@/components/layout/Navbar";
 import PropertyCard from "@/components/properties/PropertyCard";
 import GEBAIChat from "@/components/ai/GEBAIChat";
 import GEBChatModal from "@/components/chat/GEBChatModal";
@@ -32,9 +33,9 @@ const PropertyMap = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="flex h-full min-h-[360px] items-center justify-center bg-zinc-100">
-        <div className="flex items-center gap-2 text-sm font-medium text-zinc-400">
-          <span className="h-2 w-2 animate-pulse rounded-full bg-zinc-400" />
+      <div className="flex h-full min-h-[360px] items-center justify-center bg-[var(--paper)]">
+        <div className="flex items-center gap-2 text-sm font-medium text-[var(--ink-soft)]">
+          <span className="h-2 w-2 animate-pulse rounded-full bg-[var(--ink-soft)]" />
           Loading GEB map...
         </div>
       </div>
@@ -126,6 +127,9 @@ export default function Home() {
   const [location, setLocation] = useState("");
 
   const [propertyType, setPropertyType] =
+    useState("all");
+
+  const [listingTypeFilter, setListingTypeFilter] =
     useState("all");
 
   const [budgetIndex, setBudgetIndex] =
@@ -317,6 +321,9 @@ export default function Home() {
         propertyType:
           appliedPropertyType,
 
+        listingType:
+          listingTypeFilter,
+
         minPrice:
           selectedBudget.min,
 
@@ -340,6 +347,7 @@ export default function Home() {
     allProperties,
     appliedLocation,
     appliedPropertyType,
+    listingTypeFilter,
     selectedBudget.min,
     selectedBudget.max,
     searchedLatitude,
@@ -483,539 +491,190 @@ export default function Home() {
 
 
   return (
-    <main className="min-h-screen bg-[#f7f7f5] text-zinc-950">
+    <main className="relative min-h-screen bg-[var(--ink)] font-sans text-[var(--ink)] overflow-x-hidden">
+      {/* Full-Bleed Fixed Architectural Background Wallpaper */}
+      <div
+        className="fixed inset-0 bg-cover bg-center bg-no-repeat pointer-events-none z-0 scale-105"
+        style={{ backgroundImage: `url('/hero-house.png')` }}
+      />
+      {/* Light Luxury Glass Overlay */}
+      <div className="fixed inset-0 bg-gradient-to-b from-[var(--ink)]/40 via-[var(--paper)]/85 to-[var(--paper)]/95 pointer-events-none z-0 backdrop-blur-[2px]" />
 
-      {/* =====================================================
-          NAVBAR
-      ===================================================== */}
-
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
-
-        <div className="flex items-center gap-2">
-
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-zinc-950 text-sm font-bold text-white">
-            G
-          </div>
-
-          <span className="text-xl font-bold tracking-tight">
-            GEB
-          </span>
-
-        </div>
-
-
-        <div className="hidden items-center gap-8 text-sm font-medium md:flex">
-          <a
-            href="#explore"
-            className="transition-colors hover:text-zinc-500 font-semibold"
-          >
-            Properties
-          </a>
-
-          <button
-            onClick={() => setAiOpen(true)}
-            className="transition-colors hover:text-zinc-500 font-semibold text-sm cursor-pointer"
-          >
-            AI Advisor
-          </button>
-
-          <a
-            href="#crm"
-            className="transition-colors hover:text-zinc-500 font-semibold"
-          >
-            For Sellers
-          </a>
-
-          <a
-            href="#about"
-            className="transition-colors hover:text-zinc-500 font-semibold"
-          >
-            About GEB
-          </a>
-        </div>
-
-
-        <div className="flex items-center gap-3">
-
-          {authLoading ? (
-
-            <div className="h-9 w-20 animate-pulse rounded-full bg-zinc-200" />
-
-          ) : user ? (
-
-            <>
-
-              <div className="group relative">
-
-                <button
-                  type="button"
-                  className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-semibold transition hover:bg-zinc-50"
-                >
-                  Account
-                </button>
-
-                <div className="invisible absolute right-0 top-full z-[2000] mt-2 w-64 translate-y-1 rounded-2xl border border-black/10 bg-white p-3 opacity-0 shadow-xl transition-all group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-                  <div className="border-b border-zinc-100 px-3 pb-3">
-                    <p className="text-xs font-bold uppercase tracking-wider text-zinc-400">
-                      Account
-                    </p>
-                    <p className="mt-1 truncate text-sm font-bold text-zinc-800">
-                      {user.email}
-                    </p>
-                  </div>
-
-                  <div className="py-2 max-h-[320px] overflow-y-auto">
-                    {/* Buyer Section */}
-                    <p className="px-3 pt-2 pb-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400">
-                      Buyer
-                    </p>
-                    <Link
-                      href="/buyer-dashboard?tab=profile"
-                      className="block rounded-xl px-3 py-2 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-50"
-                    >
-                      👤 My Profile
-                    </Link>
-                    <Link
-                      href="/buyer-dashboard?tab=conversations"
-                      className="block rounded-xl px-3 py-2 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-50"
-                    >
-                      💬 My Conversations
-                    </Link>
-                    <Link
-                      href="/buyer-dashboard?tab=saved"
-                      className="block rounded-xl px-3 py-2 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-50"
-                    >
-                      ❤️ Saved Properties
-                    </Link>
-                    <Link
-                      href="/buyer-dashboard?tab=followups"
-                      className="block rounded-xl px-3 py-2 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-50"
-                    >
-                      ❓ My Follow-ups
-                    </Link>
-                    <Link
-                      href="/buyer-dashboard?tab=meetings"
-                      className="block rounded-xl px-3 py-2 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-50"
-                    >
-                      📅 My Meetings
-                    </Link>
-
-                    {/* Seller Section - Only show if user has seller role */}
-                    {roles.includes("seller") && (
-                      <>
-                        <div className="border-t border-zinc-100 my-1"></div>
-                        <p className="px-3 pt-2 pb-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400">
-                          Seller
-                        </p>
-                        <Link
-                          href="/seller-dashboard?tab=overview"
-                          className="block rounded-xl px-3 py-2 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-50"
-                        >
-                          💼 Seller Dashboard
-                        </Link>
-                        <Link
-                          href="/seller-dashboard?tab=properties"
-                          className="block rounded-xl px-3 py-2 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-50"
-                        >
-                          🏠 My Properties
-                        </Link>
-                        <Link
-                          href="/seller-dashboard?tab=conversations"
-                          className="block rounded-xl px-3 py-2 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-50"
-                        >
-                          ✉️ Buyer Messages
-                        </Link>
-                        <Link
-                          href="/seller-dashboard?tab=followups"
-                          className="block rounded-xl px-3 py-2 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-50"
-                        >
-                          🙋 Follow-ups
-                        </Link>
-                        <Link
-                          href="/seller-dashboard?tab=meetings"
-                          className="block rounded-xl px-3 py-2 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-50"
-                        >
-                          📅 Meetings
-                        </Link>
-                        <Link
-                          href="/seller-dashboard?tab=leads"
-                          className="block rounded-xl px-3 py-2 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-50"
-                        >
-                          📊 CRM Leads
-                        </Link>
-                      </>
-                    )}
-                  </div>
-
-                  <div className="border-t border-zinc-100 pt-2">
-                    <button
-                      type="button"
-                      onClick={signOut}
-                      className="w-full rounded-xl px-3 py-2 text-left text-xs font-bold text-red-600 transition hover:bg-red-50"
-                    >
-                      Sign out
-                    </button>
-                  </div>
-                </div>
-
-              </div>
-
-
-              <a
-                href="/list-property"
-                className="rounded-full bg-zinc-950 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-zinc-800"
-              >
-                List Property
-              </a>
-
-            </>
-
-          ) : (
-
-            <>
-
-              <a
-                href="/login"
-                className="hidden rounded-full px-4 py-2 text-sm font-medium transition hover:bg-white md:block"
-              >
-                Sign in
-              </a>
-
-              <a
-                href="/list-property"
-                className="rounded-full bg-zinc-950 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-zinc-800"
-              >
-                List Property
-              </a>
-
-            </>
-
-          )}
-
-        </div>
-
-      </nav>
-
-
-      {/* =====================================================
-          HERO
-      ===================================================== */}
-
-      <section className="mx-auto max-w-7xl px-6 pb-12 pt-14 lg:px-8 lg:pt-20">
-
-        <div className="max-w-5xl">
-
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium shadow-sm">
-
-            <Sparkles size={15} />
-
-            AI-powered real estate intelligence
-
-          </div>
-
-
-          <h1 className="max-w-5xl text-6xl font-semibold leading-[0.9] tracking-[-0.05em] sm:text-7xl lg:text-[7.5rem]">
-
-            Find property.
-
-            <br />
-
-            <span className="font-serif italic font-medium text-zinc-400">
-              Make a smarter move.
-            </span>
-
-          </h1>
-
-
-          <p className="mt-7 max-w-2xl text-lg leading-8 text-zinc-500">
-
-            Discover properties across locations, compare opportunities and
-            understand your investment potential with GEB AI.
-
-          </p>
-
-        </div>
-
+      <div className="relative z-10 space-y-4">
+        {/* =====================================================
+            GLOBAL NAVBAR
+        ===================================================== */}
+        <Navbar onOpenAIChat={() => setAiOpen(true)} />
 
         {/* =====================================================
-            SEARCH
+            HERO BANNER - MATCHED TO INSPIRATION IMAGE 2
         ===================================================== */}
-
-        <div className="mt-8 rounded-[2rem] border border-black/10 bg-white p-3 shadow-xl shadow-black/5">
-
-          <div className="grid gap-2 md:grid-cols-[1.4fr_1fr_1fr_auto]">
-
-            {/* LOCATION */}
-
-            <div className="relative flex items-center gap-3 rounded-2xl bg-zinc-50 px-5 py-3">
-
-              <MapPin
-                size={20}
-                className="shrink-0 text-zinc-400"
-              />
-
-              <div className="min-w-0 flex-1">
-
-                <p className="text-xs font-medium text-zinc-400">
-                  Location
-                </p>
-
-                <input
-                  ref={inputRef}
-                  value={location}
-                  onFocus={() => setShowSuggestions(true)}
-                  onChange={(event) => {
-                    setLocation(event.target.value);
-                    setShowSuggestions(true);
-                  }}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter") {
-                      handleSearch();
-                      setShowSuggestions(false);
-                    } else if (event.key === "Escape") {
-                      setShowSuggestions(false);
-                    }
-                  }}
-                  placeholder="City or locality"
-                  className="w-full bg-transparent text-sm font-semibold outline-none placeholder:text-zinc-400"
-                />
-
-              </div>
-
-              {location && (
-                <button
-                  onClick={() => {
-                    setLocation("");
-                    setAppliedLocation("");
-                    setShowSuggestions(false);
-                    setSearchedLatitude(undefined);
-                    setSearchedLongitude(undefined);
-                    setSearchedLocationName("");
-                    setSelectedProperty(null);
-                    setSearchMessage("");
-                  }}
-                  className="text-zinc-400 hover:text-zinc-600 focus:outline-none shrink-0"
-                  type="button"
-                >
-                  <X size={14} />
-                </button>
-              )}
-
-              {/* Suggestions Dropdown */}
-              {showSuggestions && filteredSuggestions.length > 0 && (
-                <div
-                  ref={suggestionsRef}
-                  className="absolute left-0 right-0 top-full z-[2000] mt-2 max-h-60 overflow-y-auto rounded-2xl border border-black/5 bg-white py-2 shadow-xl"
-                >
-                  {filteredSuggestions.map((suggestion) => (
-                    <button
-                      key={suggestion}
-                      onClick={() => {
-                        setLocation(suggestion);
-                        setAppliedLocation(suggestion);
-                        setSearchedLatitude(undefined);
-                        setSearchedLongitude(undefined);
-                        setSearchedLocationName("");
-                        setSelectedProperty(null);
-                        setSearchMessage("Search updated");
-                        setShowSuggestions(false);
-                      }}
-                      className="w-full px-5 py-2 text-left text-sm font-semibold text-zinc-800 hover:bg-zinc-50 transition"
-                      type="button"
-                    >
-                      {suggestion}
-                    </button>
-                  ))}
-                </div>
-              )}
-
+        <section className="relative pt-4 pb-12 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-6xl mx-auto text-center space-y-4 pt-4 pb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 border border-orange-200/80 text-orange-700 text-xs font-extrabold shadow-sm backdrop-blur">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>AI Real Estate Intelligence & GIS Suite</span>
             </div>
 
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-medium text-[var(--ink)] tracking-tight font-display max-w-4xl mx-auto leading-[1.05]">
+              Find land you can trust, before you ever visit it.
+            </h1>
 
-            {/* PROPERTY */}
-
-            <div className="relative rounded-2xl bg-zinc-50 px-5 py-3">
-
-              <p className="text-xs font-medium text-zinc-400">
-                Property
-              </p>
-
-              <div className="relative">
-
-                <select
-                  value={propertyType}
-                  onChange={(event) =>
-                    setPropertyType(
-                      event.target.value
-                    )
-                  }
-                  className="w-full cursor-pointer appearance-none bg-transparent pr-6 text-sm font-semibold outline-none"
-                >
-
-                  {propertyTypes.map(
-                    (type) => (
-
-                      <option
-                        key={type.value}
-                        value={type.value}
-                      >
-                        {type.label}
-                      </option>
-
-                    )
-                  )}
-
-                </select>
-
-                <ChevronDown
-                  size={15}
-                  className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-zinc-400"
-                />
-
-              </div>
-
-            </div>
-
-
-            {/* BUDGET */}
-
-            <div className="relative rounded-2xl bg-zinc-50 px-5 py-3">
-
-              <p className="text-xs font-medium text-zinc-400">
-                Budget
-              </p>
-
-              <div className="relative">
-
-                <select
-                  value={budgetIndex}
-                  onChange={(event) =>
-                    setBudgetIndex(
-                      Number(
-                        event.target.value
-                      )
-                    )
-                  }
-                  className="w-full cursor-pointer appearance-none bg-transparent pr-6 text-sm font-semibold outline-none"
-                >
-
-                  {budgets.map(
-                    (budget, index) => (
-
-                      <option
-                        key={budget.label}
-                        value={index}
-                      >
-                        {budget.label}
-                      </option>
-
-                    )
-                  )}
-
-                </select>
-
-                <ChevronDown
-                  size={15}
-                  className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-zinc-400"
-                />
-
-              </div>
-
-            </div>
-
-
-            {/* SEARCH */}
-
-            <button
-              onClick={handleSearch}
-              className="flex items-center justify-center gap-2 rounded-2xl bg-zinc-950 px-7 py-4 font-semibold text-white transition hover:bg-zinc-800"
-            >
-
-              <Search size={19} />
-
-              Search
-
-            </button>
-
+            <p className="text-[var(--ink-soft)] text-sm sm:text-base max-w-2xl mx-auto font-semibold">
+              You will have everything nearby: supermarkets, transit, schools, prime growth corridors, verified soil stability & environmental air quality.
+            </p>
           </div>
 
-        </div>
-
-
-        {/* SEARCH STATUS */}
-
-        <div className="mt-3 flex min-h-5 items-center gap-3">
-
-          {searchMessage && (
-
-            <>
-
-              <span className="text-sm font-medium text-zinc-500">
-
-                {searchMessage}
-
-                {searchedLocationName &&
-                  ` · ${filteredProperties.length} found`}
-
-              </span>
-
-
+          {/* Floating Search Panel - Direct glassmorphic floating box */}
+          <div className="relative z-10 bg-white/95 backdrop-blur-xl rounded-3xl p-6 sm:p-8 shadow-2xl border border-white/80 max-w-5xl mx-auto w-full my-6">
+            {/* Buy / Rent Tab Switcher */}
+            <div className="inline-flex bg-[var(--paper)] p-1 rounded-2xl mb-4 font-bold text-xs">
               <button
-                onClick={resetSearch}
-                className="inline-flex items-center gap-1 text-sm font-semibold text-zinc-950 hover:text-zinc-500"
+                type="button"
+                onClick={() => setListingTypeFilter("sale")}
+                className={`px-6 py-2.5 rounded-xl transition-all cursor-pointer ${
+                  listingTypeFilter === "sale" || listingTypeFilter === "all"
+                    ? "bg-white text-orange-700 shadow-md font-extrabold"
+                    : "text-[var(--ink-soft)] hover:text-[var(--ink)]"
+                }`}
               >
-
-                <RotateCcw size={13} />
-
-                Reset
-
+                Buy
               </button>
+              <button
+                type="button"
+                onClick={() => setListingTypeFilter("rent")}
+                className={`px-6 py-2.5 rounded-xl transition-all cursor-pointer ${
+                  listingTypeFilter === "rent"
+                    ? "bg-orange-600 text-white shadow-md font-extrabold"
+                    : "text-[var(--ink-soft)] hover:text-[var(--ink)]"
+                }`}
+              >
+                Rent
+              </button>
+            </div>
 
-            </>
+            {/* Inputs Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-center">
+              {/* Location Input */}
+              <div className="relative bg-[var(--paper)] border border-[var(--stone-line)]/80 rounded-2xl p-3 flex flex-col justify-center">
+                <span className="text-[10px] font-extrabold text-[var(--ink-soft)] uppercase tracking-wider">Location</span>
+                <div className="flex items-center gap-2 mt-1">
+                  <MapPin className="w-4 h-4 text-orange-600 shrink-0" />
+                  <input
+                    ref={inputRef}
+                    value={location}
+                    onFocus={() => setShowSuggestions(true)}
+                    onChange={(e) => {
+                      setLocation(e.target.value);
+                      setShowSuggestions(true);
+                    }}
+                    placeholder="Lucknow, Uttar Pradesh"
+                    className="w-full bg-transparent text-xs font-bold text-[var(--ink)] outline-none placeholder:text-[var(--ink-soft)]"
+                  />
+                </div>
 
-          )}
+                {/* Suggestions dropdown */}
+                {showSuggestions && filteredSuggestions.length > 0 && (
+                  <div
+                    ref={suggestionsRef}
+                    className="absolute left-0 right-0 top-full z-50 mt-2 max-h-56 overflow-y-auto rounded-2xl bg-white border border-[var(--stone-line)] p-2 shadow-2xl"
+                  >
+                    {filteredSuggestions.map((s) => (
+                      <button
+                        key={s}
+                        type="button"
+                        onClick={() => {
+                          setLocation(s);
+                          setAppliedLocation(s);
+                          setShowSuggestions(false);
+                        }}
+                        className="w-full text-left px-3 py-2 text-xs font-semibold text-[var(--ink)] hover:bg-orange-50 rounded-xl transition-all"
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
 
-        </div>
+              {/* Property Type Dropdown */}
+              <div className="bg-[var(--paper)] border border-[var(--stone-line)]/80 rounded-2xl p-3 flex flex-col justify-center">
+                <span className="text-[10px] font-extrabold text-[var(--ink-soft)] uppercase tracking-wider">Property Type</span>
+                <div className="flex items-center gap-2 mt-1">
+                  <Building2 className="w-4 h-4 text-orange-600 shrink-0" />
+                  <select
+                    value={propertyType}
+                    onChange={(e) => {
+                      setPropertyType(e.target.value);
+                      setAppliedPropertyType(e.target.value);
+                    }}
+                    className="w-full bg-transparent text-xs font-bold text-[var(--ink)] outline-none cursor-pointer"
+                  >
+                    {propertyTypes.map((t) => (
+                      <option key={t.value} value={t.value}>
+                        {t.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
 
+              {/* Price Dropdown */}
+              <div className="bg-[var(--paper)] border border-[var(--stone-line)]/80 rounded-2xl p-3 flex flex-col justify-center">
+                <span className="text-[10px] font-extrabold text-[var(--ink-soft)] uppercase tracking-wider">Price Range</span>
+                <div className="flex items-center gap-2 mt-1">
+                  <Sparkles className="w-4 h-4 text-orange-600 shrink-0" />
+                  <select
+                    value={budgetIndex}
+                    onChange={(e) => {
+                      const idx = Number(e.target.value);
+                      setBudgetIndex(idx);
+                      setAppliedBudgetIndex(idx);
+                    }}
+                    className="w-full bg-transparent text-xs font-bold text-[var(--ink)] outline-none cursor-pointer"
+                  >
+                    {budgets.map((b, i) => (
+                      <option key={i} value={i}>
+                        {b.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
 
-        {/* AI CTA */}
-
-        <button
-          id="ai"
-            onClick={() => setAiOpen(true)}
-          className="mt-2 inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-5 py-3 text-sm font-semibold shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
-        >
-
-          <Sparkles size={16} />
-
-          Ask GEB AI what you should buy
-
-          <ArrowRight size={16} />
-
-        </button>
-
-      </section>
+              {/* Submit Search Button */}
+              <button
+                type="button"
+                onClick={handleSearch}
+                className="w-full h-full py-3.5 px-6 rounded-2xl bg-orange-600 hover:bg-orange-500 text-white font-extrabold text-xs transition-all shadow-lg shadow-orange-600/30 flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <Search className="w-4 h-4" />
+                <span>Search Properties</span>
+              </button>
+            </div>
+          </div>
+        </section>
 
       {/* =====================================================
           FEATURES GRID (DISCOVERABILITY)
       ===================================================== */}
       <section className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
-        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400 font-semibold">
+        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--ink-soft)] font-semibold">
           GEB ECOSYSTEM
         </span>
-        <h2 className="mt-2 font-serif text-3xl font-medium tracking-tight">
+        <h2 className="mt-2 font-display text-3xl font-medium tracking-tight">
           Major Platform Features
         </h2>
         
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {/* PROPERTY DISCOVERY */}
-          <div className="bg-white border border-black/5 p-6 rounded-[2rem] shadow-sm flex flex-col justify-between hover:shadow-md transition">
+          <div className="bg-white border border-[var(--stone-line)] p-6 rounded-[2rem] shadow-sm flex flex-col justify-between hover:shadow-md transition">
             <div>
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-100 text-zinc-900 mb-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--paper)] text-[var(--ink)] mb-4">
                 <Building2 size={20} />
               </div>
-              <h4 className="text-sm font-bold text-zinc-900 uppercase">Property Discovery</h4>
-              <p className="mt-2 text-xs text-zinc-500 leading-relaxed font-semibold">
+              <h4 className="text-sm font-bold text-[var(--ink)] uppercase">Property Discovery</h4>
+              <p className="mt-2 text-xs text-[var(--ink-soft)] leading-relaxed font-semibold">
                 Search, filter, and explore active real-estate opportunities in your target areas.
               </p>
             </div>
@@ -1023,20 +682,20 @@ export default function Home() {
               onClick={() => {
                 document.getElementById("explore")?.scrollIntoView({ behavior: "smooth" });
               }}
-              className="mt-6 text-xs font-bold text-zinc-950 hover:text-zinc-500 self-start underline cursor-pointer"
+              className="mt-6 text-xs font-bold text-[var(--ink)] hover:text-[var(--ink-soft)] self-start underline cursor-pointer"
             >
               Explore Listings
             </button>
           </div>
 
           {/* GEB AI */}
-          <div className="bg-white border border-black/5 p-6 rounded-[2rem] shadow-sm flex flex-col justify-between hover:shadow-md transition">
+          <div className="bg-white border border-[var(--stone-line)] p-6 rounded-[2rem] shadow-sm flex flex-col justify-between hover:shadow-md transition">
             <div>
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-50 text-purple-600 mb-4">
                 <Sparkles size={20} />
               </div>
-              <h4 className="text-sm font-bold text-zinc-900 uppercase">GEB AI Chatbot</h4>
-              <p className="mt-2 text-xs text-zinc-500 leading-relaxed font-semibold">
+              <h4 className="text-sm font-bold text-[var(--ink)] uppercase">GEB AI Chatbot</h4>
+              <p className="mt-2 text-xs text-[var(--ink-soft)] leading-relaxed font-semibold">
                 Ask natural language queries to analyze market deals and find appropriate properties.
               </p>
             </div>
@@ -1049,13 +708,13 @@ export default function Home() {
           </div>
 
           {/* INVESTMENT ADVISOR */}
-          <div className="bg-white border border-black/5 p-6 rounded-[2rem] shadow-sm flex flex-col justify-between hover:shadow-md transition">
+          <div className="bg-white border border-[var(--stone-line)] p-6 rounded-[2rem] shadow-sm flex flex-col justify-between hover:shadow-md transition">
             <div>
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-amber-500 mb-4">
                 <Zap size={20} />
               </div>
-              <h4 className="text-sm font-bold text-zinc-900 uppercase">Investment Advisor</h4>
-              <p className="mt-2 text-xs text-zinc-500 leading-relaxed font-semibold">
+              <h4 className="text-sm font-bold text-[var(--ink)] uppercase">Investment Advisor</h4>
+              <p className="mt-2 text-xs text-[var(--ink-soft)] leading-relaxed font-semibold">
                 Evaluate suitability based on budget limits, risk tolerance, and time horizon targets.
               </p>
             </div>
@@ -1068,13 +727,13 @@ export default function Home() {
           </div>
 
           {/* SELLER CRM */}
-          <div className="bg-white border border-black/5 p-6 rounded-[2rem] shadow-sm flex flex-col justify-between hover:shadow-md transition">
+          <div className="bg-white border border-[var(--stone-line)] p-6 rounded-[2rem] shadow-sm flex flex-col justify-between hover:shadow-md transition">
             <div>
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 mb-4">
                 <Building2 size={20} />
               </div>
-              <h4 className="text-sm font-bold text-zinc-900 uppercase">Seller CRM</h4>
-              <p className="mt-2 text-xs text-zinc-500 leading-relaxed font-semibold">
+              <h4 className="text-sm font-bold text-[var(--ink)] uppercase">Seller CRM</h4>
+              <p className="mt-2 text-xs text-[var(--ink-soft)] leading-relaxed font-semibold">
                 Organize discussions, capture client leads, schedule site visits, and reply to buyers.
               </p>
             </div>
@@ -1087,32 +746,32 @@ export default function Home() {
           </div>
 
           {/* DIRECT CHAT */}
-          <div className="bg-white border border-black/5 p-6 rounded-[2rem] shadow-sm flex flex-col justify-between hover:shadow-md transition">
+          <div className="bg-white border border-[var(--stone-line)] p-6 rounded-[2rem] shadow-sm flex flex-col justify-between hover:shadow-md transition">
             <div>
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-500 mb-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-50 text-orange-500 mb-4">
                 <MessageSquare size={20} />
               </div>
-              <h4 className="text-sm font-bold text-zinc-900 uppercase">Direct Chat</h4>
-              <p className="mt-2 text-xs text-zinc-500 leading-relaxed font-semibold">
+              <h4 className="text-sm font-bold text-[var(--ink)] uppercase">Direct Chat</h4>
+              <p className="mt-2 text-xs text-[var(--ink-soft)] leading-relaxed font-semibold">
                 Talk directly with verified property sellers with full history persistence.
               </p>
             </div>
             <Link
               href="/buyer-dashboard?tab=conversations"
-              className="mt-6 text-xs font-bold text-blue-700 hover:text-blue-900 self-start underline"
+              className="mt-6 text-xs font-bold text-orange-700 hover:text-orange-900 self-start underline"
             >
               Open Conversations
             </Link>
           </div>
 
           {/* MEETINGS COORDINATION */}
-          <div className="bg-white border border-black/5 p-6 rounded-[2rem] shadow-sm flex flex-col justify-between hover:shadow-md transition">
+          <div className="bg-white border border-[var(--stone-line)] p-6 rounded-[2rem] shadow-sm flex flex-col justify-between hover:shadow-md transition">
             <div>
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-rose-50 text-rose-500 mb-4">
                 <MessageSquare size={20} />
               </div>
-              <h4 className="text-sm font-bold text-zinc-900 uppercase">Meetings</h4>
-              <p className="mt-2 text-xs text-zinc-500 leading-relaxed font-semibold">
+              <h4 className="text-sm font-bold text-[var(--ink)] uppercase">Meetings</h4>
+              <p className="mt-2 text-xs text-[var(--ink-soft)] leading-relaxed font-semibold">
                 Propose, confirm, and coordinate site visits or reschedule requested slots.
               </p>
             </div>
@@ -1124,40 +783,59 @@ export default function Home() {
             </Link>
           </div>
 
-          {/* VERIFIED PROPERTIES - ROADMAP */}
-          <div className="bg-zinc-50 border border-zinc-200/50 p-6 rounded-[2rem] flex flex-col justify-between opacity-80">
+          {/* DEEP LAND ANALYSIS & SOIL AGENT */}
+          <div className="bg-emerald-950 text-white border border-emerald-800 p-6 rounded-[2rem] shadow-lg flex flex-col justify-between hover:shadow-emerald-900/20 transition">
             <div>
-              <span className="text-[9px] font-bold text-zinc-400 bg-zinc-200 px-2 py-0.5 rounded-full uppercase">Roadmap</span>
-              <h4 className="mt-4 text-sm font-bold text-zinc-400 uppercase">Verified Properties</h4>
-              <p className="mt-2 text-xs text-zinc-400 leading-relaxed font-semibold">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400 mb-4">
+                <Zap size={20} />
+              </div>
+              <h4 className="text-sm font-extrabold text-emerald-400 uppercase tracking-wider">Deep Land Analysis & Soil Agent</h4>
+              <p className="mt-2 text-xs text-[var(--stone-line)] leading-relaxed font-medium">
+                Geotechnical bearing capacity, soil pH, NPK profiles, foundation feasibility, and autonomous Soil AI Co-Pilot.
+              </p>
+            </div>
+            <Link
+              href="/deep-land-analysis"
+              className="mt-6 text-xs font-bold text-emerald-400 hover:text-emerald-300 self-start underline flex items-center gap-1"
+            >
+              Launch Soil Map Agent →
+            </Link>
+          </div>
+
+          {/* VERIFIED PROPERTIES - ROADMAP */}
+          <div className="bg-[var(--paper)] border border-[var(--stone-line)]/50 p-6 rounded-[2rem] flex flex-col justify-between opacity-80">
+            <div>
+              <span className="text-[9px] font-bold text-[var(--ink-soft)] bg-[var(--stone-line)] px-2 py-0.5 rounded-full uppercase">Roadmap</span>
+              <h4 className="mt-4 text-sm font-bold text-[var(--ink-soft)] uppercase">Verified Properties</h4>
+              <p className="mt-2 text-xs text-[var(--ink-soft)] leading-relaxed font-semibold">
                 Verify title deeds, road widths, and photo geolocations before making investment decisions.
               </p>
             </div>
-            <span className="mt-6 text-xs font-bold text-zinc-300 self-start">Coming Soon</span>
+            <span className="mt-6 text-xs font-bold text-[var(--stone-line)] self-start">Coming Soon</span>
           </div>
 
           {/* DOCUMENTS - ROADMAP */}
-          <div className="bg-zinc-50 border border-zinc-200/50 p-6 rounded-[2rem] flex flex-col justify-between opacity-80">
+          <div className="bg-[var(--paper)] border border-[var(--stone-line)]/50 p-6 rounded-[2rem] flex flex-col justify-between opacity-80">
             <div>
-              <span className="text-[9px] font-bold text-zinc-400 bg-zinc-200 px-2 py-0.5 rounded-full uppercase">Roadmap</span>
-              <h4 className="mt-4 text-sm font-bold text-zinc-400 uppercase">Documents Exchange</h4>
-              <p className="mt-2 text-xs text-zinc-400 leading-relaxed font-semibold">
+              <span className="text-[9px] font-bold text-[var(--ink-soft)] bg-[var(--stone-line)] px-2 py-0.5 rounded-full uppercase">Roadmap</span>
+              <h4 className="mt-4 text-sm font-bold text-[var(--ink-soft)] uppercase">Documents Exchange</h4>
+              <p className="mt-2 text-xs text-[var(--ink-soft)] leading-relaxed font-semibold">
                 Request registry papers and documents securely within the platform workspace.
               </p>
             </div>
-            <span className="mt-6 text-xs font-bold text-zinc-300 self-start">Coming Soon</span>
+            <span className="mt-6 text-xs font-bold text-[var(--stone-line)] self-start">Coming Soon</span>
           </div>
 
           {/* INSTANT BROKER - ROADMAP */}
-          <div className="bg-zinc-50 border border-zinc-200/50 p-6 rounded-[2rem] flex flex-col justify-between opacity-80">
+          <div className="bg-[var(--paper)] border border-[var(--stone-line)]/50 p-6 rounded-[2rem] flex flex-col justify-between opacity-80">
             <div>
-              <span className="text-[9px] font-bold text-zinc-400 bg-zinc-200 px-2 py-0.5 rounded-full uppercase">Roadmap</span>
-              <h4 className="mt-4 text-sm font-bold text-zinc-400 uppercase">Instant Broker</h4>
-              <p className="mt-2 text-xs text-zinc-400 leading-relaxed font-semibold">
+              <span className="text-[9px] font-bold text-[var(--ink-soft)] bg-[var(--stone-line)] px-2 py-0.5 rounded-full uppercase">Roadmap</span>
+              <h4 className="mt-4 text-sm font-bold text-[var(--ink-soft)] uppercase">Instant Broker</h4>
+              <p className="mt-2 text-xs text-[var(--ink-soft)] leading-relaxed font-semibold">
                 Connect in real-time with top local real-estate experts to source prime off-market deals.
               </p>
             </div>
-            <span className="mt-6 text-xs font-bold text-zinc-300 self-start">Coming Soon</span>
+            <span className="mt-6 text-xs font-bold text-[var(--stone-line)] self-start">Coming Soon</span>
           </div>
         </div>
       </section>
@@ -1175,11 +853,11 @@ export default function Home() {
 
           <div>
 
-            <p className="mb-1.5 text-sm font-semibold uppercase tracking-[0.2em] text-zinc-400">
+            <p className="mb-1.5 text-sm font-semibold uppercase tracking-[0.2em] text-[var(--ink-soft)]">
               Explore the market
             </p>
 
-            <h2 className="font-serif text-4xl font-medium tracking-tight md:text-5xl">
+            <h2 className="font-display text-4xl font-medium tracking-tight md:text-5xl">
               Properties around you.
             </h2>
 
@@ -1194,7 +872,7 @@ export default function Home() {
                 : filteredProperties.length}
             </p>
 
-            <p className="text-sm text-zinc-400">
+            <p className="text-sm text-[var(--ink-soft)]">
               matching opportunities
             </p>
 
@@ -1205,7 +883,7 @@ export default function Home() {
 
         {/* MAP */}
 
-        <div className="rounded-[2rem] border border-zinc-200 bg-white p-2 shadow-lg shadow-black/5">
+        <div className="rounded-[2rem] border border-[var(--stone-line)] bg-white p-2 shadow-lg shadow-black/5">
 
           <div className="relative h-[360px] overflow-hidden rounded-[1.5rem]">
 
@@ -1227,7 +905,7 @@ export default function Home() {
 
             ) : (
 
-              <div className="flex h-full items-center justify-center bg-zinc-100">
+              <div className="flex h-full items-center justify-center bg-[var(--paper)]">
 
                 <div className="text-center">
 
@@ -1238,7 +916,7 @@ export default function Home() {
                         Unable to load GEB properties
                       </p>
 
-                      <p className="mt-1 text-xs text-zinc-400">
+                      <p className="mt-1 text-xs text-[var(--ink-soft)]">
                         Make sure the backend is running on port 8000.
                       </p>
                     </>
@@ -1246,9 +924,9 @@ export default function Home() {
                   ) : (
 
                     <>
-                      <div className="mx-auto mb-3 h-8 w-8 animate-spin rounded-full border-2 border-zinc-300 border-t-zinc-900" />
+                      <div className="mx-auto mb-3 h-8 w-8 animate-spin rounded-full border-2 border-[var(--stone-line)] border-t-[var(--ink)]" />
 
-                      <p className="text-sm font-medium text-zinc-400">
+                      <p className="text-sm font-medium text-[var(--ink-soft)]">
                         Loading GEB properties...
                       </p>
                     </>
@@ -1264,26 +942,26 @@ export default function Home() {
 
             {/* LEGEND */}
 
-            <div className="absolute bottom-4 left-4 z-[1000] rounded-2xl border border-black/5 bg-white/95 px-4 py-3 shadow-lg backdrop-blur-md">
+            <div className="absolute bottom-4 left-4 z-[1000] rounded-2xl border border-[var(--stone-line)] bg-white/95 px-4 py-3 shadow-lg backdrop-blur-md">
 
-              <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-400">
+              <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--ink-soft)]">
                 Listing source
               </p>
 
-              <div className="flex items-center gap-4 text-xs font-medium text-zinc-600">
+              <div className="flex items-center gap-4 text-xs font-medium text-[var(--ink-soft)]">
 
                 <span className="flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-zinc-950" />
+                  <span className="h-2 w-2 rounded-full bg-[var(--ink)]" />
                   GEB
                 </span>
 
                 <span className="flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-zinc-500" />
+                  <span className="h-2 w-2 rounded-full bg-[var(--ink-soft)]" />
                   External
                 </span>
 
                 <span className="flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-zinc-700" />
+                  <span className="h-2 w-2 rounded-full bg-[var(--ink)]" />
                   Broker
                 </span>
 
@@ -1294,7 +972,7 @@ export default function Home() {
 
             {/* LIVE STATUS */}
 
-            <div className="absolute right-4 top-4 z-[1000] flex items-center gap-2 rounded-full border border-black/5 bg-white/95 px-4 py-2 text-xs font-semibold shadow-lg backdrop-blur-md">
+            <div className="absolute right-4 top-4 z-[1000] flex items-center gap-2 rounded-full border border-[var(--stone-line)] bg-white/95 px-4 py-2 text-xs font-semibold shadow-lg backdrop-blur-md">
 
               <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
 
@@ -1320,26 +998,83 @@ export default function Home() {
       <section className="mx-auto max-w-7xl px-6 py-8 lg:px-8">
 
         <div className="mb-5 flex items-end justify-between">
-
           <div>
-
-            <p className="mb-1.5 text-sm font-semibold uppercase tracking-widest text-zinc-400">
-              Properties
+            <p className="mb-1.5 text-xs font-extrabold uppercase tracking-widest text-orange-700">
+              Live Property Marketplace
             </p>
-
-            <h2 className="font-serif text-4xl font-medium tracking-tight">
-              Worth a closer look.
+            <h2 className="font-sans text-3xl sm:text-4xl font-extrabold tracking-tight text-[var(--ink)]">
+              Verified Properties Around You
             </h2>
-
           </div>
 
-
-          <div className="text-sm font-medium text-zinc-400">
+          <div className="text-xs font-extrabold text-[var(--ink-soft)]">
             {loadingProperties
-              ? "Loading..."
-              : `${filteredProperties.length} results`}
+              ? "Loading opportunities..."
+              : `${filteredProperties.length} active listings`}
           </div>
+        </div>
 
+        {/* Interactive Filter Control Bar */}
+        <div className="mb-8 bg-white/90 backdrop-blur-md border border-[var(--stone-line)] p-4 rounded-3xl shadow-sm space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            {/* All | Buy | Rent Segmented Bar */}
+            <div className="inline-flex bg-[var(--paper)] p-1 rounded-2xl font-bold text-xs">
+              <button
+                type="button"
+                onClick={() => setListingTypeFilter("all")}
+                className={`px-5 py-2.5 rounded-xl transition-all cursor-pointer ${
+                  listingTypeFilter === "all"
+                    ? "bg-white text-[var(--ink)] shadow-sm font-extrabold"
+                    : "text-[var(--ink-soft)] hover:text-[var(--ink)]"
+                }`}
+              >
+                All
+              </button>
+              <button
+                type="button"
+                onClick={() => setListingTypeFilter("sale")}
+                className={`px-5 py-2.5 rounded-xl transition-all cursor-pointer ${
+                  listingTypeFilter === "sale"
+                    ? "bg-orange-600 text-white shadow-md font-extrabold"
+                    : "text-[var(--ink-soft)] hover:text-[var(--ink)]"
+                }`}
+              >
+                Buy (Sale)
+              </button>
+              <button
+                type="button"
+                onClick={() => setListingTypeFilter("rent")}
+                className={`px-5 py-2.5 rounded-xl transition-all cursor-pointer ${
+                  listingTypeFilter === "rent"
+                    ? "bg-orange-600 text-white shadow-md font-extrabold"
+                    : "text-[var(--ink-soft)] hover:text-[var(--ink)]"
+                }`}
+              >
+                Rent
+              </button>
+            </div>
+
+            {/* Property Type Pills */}
+            <div className="flex flex-wrap items-center gap-2 text-xs font-semibold">
+              {propertyTypes.map((t) => (
+                <button
+                  key={t.value}
+                  type="button"
+                  onClick={() => {
+                    setPropertyType(t.value);
+                    setAppliedPropertyType(t.value);
+                  }}
+                  className={`px-4 py-2 rounded-xl border transition-all cursor-pointer ${
+                    appliedPropertyType === t.value
+                      ? "bg-[var(--ink)] text-white border-[var(--ink)] font-extrabold shadow-sm"
+                      : "bg-[var(--paper)] text-[var(--ink-soft)] border-[var(--stone-line)] hover:border-[var(--stone-line)]"
+                  }`}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
 
@@ -1356,18 +1091,18 @@ export default function Home() {
 
                 <div
                   key={item}
-                  className="overflow-hidden rounded-[2rem] border border-zinc-200 bg-white"
+                  className="overflow-hidden rounded-[2rem] border border-[var(--stone-line)] bg-white"
                 >
 
-                  <div className="h-64 animate-pulse bg-zinc-200" />
+                  <div className="h-64 animate-pulse bg-[var(--stone-line)]" />
 
                   <div className="space-y-3 p-5">
 
-                    <div className="h-5 w-3/4 animate-pulse rounded bg-zinc-200" />
+                    <div className="h-5 w-3/4 animate-pulse rounded bg-[var(--stone-line)]" />
 
-                    <div className="h-4 w-1/2 animate-pulse rounded bg-zinc-200" />
+                    <div className="h-4 w-1/2 animate-pulse rounded bg-[var(--stone-line)]" />
 
-                    <div className="h-4 w-2/3 animate-pulse rounded bg-zinc-200" />
+                    <div className="h-4 w-2/3 animate-pulse rounded bg-[var(--stone-line)]" />
 
                   </div>
 
@@ -1391,7 +1126,7 @@ export default function Home() {
               Unable to load properties
             </h3>
 
-            <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-zinc-500">
+            <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-[var(--ink-soft)]">
               Make sure your GEB FastAPI backend is running on
               <span className="font-semibold">
                 {" "}localhost:8000
@@ -1403,7 +1138,7 @@ export default function Home() {
               onClick={() =>
                 window.location.reload()
               }
-              className="mt-6 inline-flex items-center gap-2 rounded-full bg-zinc-950 px-5 py-3 text-sm font-semibold text-white"
+              className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--ink)] px-5 py-3 text-sm font-semibold text-white"
             >
 
               <RotateCcw size={15} />
@@ -1444,10 +1179,10 @@ export default function Home() {
 
         ) : (
 
-          <div className="rounded-[2rem] border border-dashed border-zinc-300 bg-white px-6 py-16 text-center">
+          <div className="rounded-[2rem] border border-dashed border-[var(--stone-line)] bg-white px-6 py-16 text-center">
 
             <Search
-              className="mx-auto mb-4 text-zinc-300"
+              className="mx-auto mb-4 text-[var(--stone-line)]"
               size={32}
             />
 
@@ -1455,14 +1190,14 @@ export default function Home() {
               No properties nearby
             </h3>
 
-            <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-zinc-500">
+            <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-[var(--ink-soft)]">
               There are currently no properties matching
               your search within {SEARCH_RADIUS_KM} km.
             </p>
 
             <button
               onClick={resetSearch}
-              className="mt-6 inline-flex items-center gap-2 rounded-full bg-zinc-950 px-5 py-3 text-sm font-semibold text-white"
+              className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--ink)] px-5 py-3 text-sm font-semibold text-white"
             >
 
               <RotateCcw size={15} />
@@ -1482,23 +1217,23 @@ export default function Home() {
       ===================================================== */}
       <section
         id="crm"
-        className="mx-auto max-w-7xl px-6 py-16 lg:px-8 border-t border-black/5"
+        className="mx-auto max-w-7xl px-6 py-16 lg:px-8 border-t border-[var(--stone-line)]"
       >
-        <div className="rounded-[2.5rem] bg-zinc-950 p-8 text-white md:p-12 shadow-xl">
+        <div className="rounded-[2.5rem] bg-[var(--ink)] p-8 text-white md:p-12 shadow-xl">
           <div className="max-w-3xl">
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400">
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--ink-soft)]">
               GEB FOR OWNERS & AGENTS
             </span>
-            <h2 className="mt-4 font-serif text-4xl md:text-5xl font-medium tracking-tight leading-none">
+            <h2 className="mt-4 font-display text-4xl md:text-5xl font-medium tracking-tight leading-none">
               SELL PROPERTY. <br className="sm:hidden" />
               GET BUYERS. <br className="sm:hidden" />
               MANAGE EVERYTHING.
             </h2>
-            <p className="mt-6 text-zinc-400 leading-8 text-base md:text-lg">
+            <p className="mt-6 text-[var(--ink-soft)] leading-8 text-base md:text-lg">
               GEB doesn&apos;t stop at property discovery. Sellers get an integrated,
               database-backed CRM to coordinate and handle:
             </p>
-            <ul className="mt-6 grid gap-3 sm:grid-cols-2 text-sm text-zinc-300 font-semibold">
+            <ul className="mt-6 grid gap-3 sm:grid-cols-2 text-sm text-[var(--stone-line)] font-semibold">
               <li className="flex items-center gap-2">
                 <span className="text-emerald-500">✓</span> Property listings & status
               </li>
@@ -1518,13 +1253,13 @@ export default function Home() {
                 <span className="text-emerald-500">✓</span> Hybrid AI Co-pilot takeover
               </li>
             </ul>
-            <p className="mt-6 text-xs text-zinc-500 italic font-semibold">
+            <p className="mt-6 text-xs text-[var(--ink-soft)] italic font-semibold">
               Every buyer interaction stays connected directly to the property context.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <button
                 onClick={() => setAiOpen(true)}
-                className="inline-flex items-center gap-2 rounded-full bg-white text-zinc-950 px-6 py-3 font-bold text-sm transition hover:bg-zinc-200 cursor-pointer"
+                className="inline-flex items-center gap-2 rounded-full bg-white text-[var(--ink)] px-6 py-3 font-bold text-sm transition hover:bg-[var(--stone-line)] cursor-pointer"
               >
                 Explore GEB AI
                 <Sparkles size={14} className="text-purple-600" />
@@ -1546,16 +1281,16 @@ export default function Home() {
       ===================================================== */}
       <section
         id="about"
-        className="mx-auto max-w-7xl px-6 py-16 lg:px-8 border-t border-black/5"
+        className="mx-auto max-w-7xl px-6 py-16 lg:px-8 border-t border-[var(--stone-line)]"
       >
         <div className="text-center max-w-3xl mx-auto">
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400">
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--ink-soft)]">
             TRY THE BUYER EXPERIENCE
           </span>
-          <h2 className="mt-4 font-serif text-4xl md:text-5xl font-medium tracking-tight">
+          <h2 className="mt-4 font-display text-4xl md:text-5xl font-medium tracking-tight">
             How GEB Connects Buyers &amp; Sellers
           </h2>
-          <p className="mt-4 text-zinc-500 leading-7">
+          <p className="mt-4 text-[var(--ink-soft)] leading-7">
             Experience the real, integrated loop by performing the buyer actions below and watching how the seller immediately manages them in the CRM.
           </p>
         </div>
@@ -1590,14 +1325,14 @@ export default function Home() {
           ].map((item, idx) => (
             <div
               key={idx}
-              className="bg-white border border-black/5 p-6 rounded-[2rem] shadow-sm flex flex-col justify-between hover:shadow-md transition"
+              className="bg-white border border-[var(--stone-line)] p-6 rounded-[2rem] shadow-sm flex flex-col justify-between hover:shadow-md transition"
             >
               <div>
-                <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-zinc-950 text-xs font-bold text-white">
+                <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-[var(--ink)] text-xs font-bold text-white">
                   {item.step}
                 </span>
-                <h4 className="mt-4 text-sm font-bold text-zinc-900 leading-tight">{item.title}</h4>
-                <p className="mt-2 text-xs leading-relaxed text-zinc-500 font-semibold">{item.desc}</p>
+                <h4 className="mt-4 text-sm font-bold text-[var(--ink)] leading-tight">{item.title}</h4>
+                <p className="mt-2 text-xs leading-relaxed text-[var(--ink-soft)] font-semibold">{item.desc}</p>
               </div>
             </div>
           ))}
@@ -1608,7 +1343,7 @@ export default function Home() {
             onClick={() => {
               document.getElementById("explore")?.scrollIntoView({ behavior: "smooth" });
             }}
-            className="inline-flex items-center gap-2 rounded-full bg-zinc-950 text-white px-6 py-3.5 font-bold text-sm transition hover:bg-zinc-800 cursor-pointer"
+            className="inline-flex items-center gap-2 rounded-full bg-[var(--ink)] text-white px-6 py-3.5 font-bold text-sm transition hover:bg-[var(--copper-700)] cursor-pointer"
           >
             Try GEB as a Buyer
           </button>
@@ -1624,7 +1359,7 @@ export default function Home() {
         className="mx-auto max-w-7xl px-6 py-12 lg:px-8"
       >
 
-        <div className="overflow-hidden rounded-[2.5rem] bg-zinc-950 p-8 text-white md:p-12">
+        <div className="overflow-hidden rounded-[2.5rem] bg-[var(--ink)] p-8 text-white md:p-12">
 
           <div className="max-w-2xl">
 
@@ -1632,20 +1367,20 @@ export default function Home() {
               <Zap />
             </div>
 
-            <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-zinc-400">
+            <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-[var(--ink-soft)]">
               Instant Buyer
             </p>
 
-            <h2 className="font-serif text-5xl font-medium tracking-tight">
+            <h2 className="font-display text-5xl font-medium tracking-tight">
               Need a property fast?
             </h2>
 
-            <p className="mt-5 leading-7 text-zinc-400">
+            <p className="mt-5 leading-7 text-[var(--ink-soft)]">
               Tell GEB what you need and connect with local brokers who can
               help you find the right property quickly.
             </p>
 
-            <button className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-semibold text-zinc-950 transition hover:bg-zinc-200">
+            <button className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-semibold text-[var(--ink)] transition hover:bg-[var(--stone-line)]">
 
               Find local experts
 
@@ -1674,7 +1409,7 @@ export default function Home() {
           size={30}
         />
 
-        <h2 className="font-serif text-5xl font-medium tracking-tight">
+        <h2 className="font-display text-5xl font-medium tracking-tight">
 
           Real estate decisions,
 
@@ -1684,7 +1419,7 @@ export default function Home() {
 
         </h2>
 
-        <p className="mx-auto mt-5 max-w-xl leading-7 text-zinc-500">
+        <p className="mx-auto mt-5 max-w-xl leading-7 text-[var(--ink-soft)]">
 
           GEB brings property discovery, AI analysis, sellers and local experts
           together in one experience.
@@ -1698,7 +1433,7 @@ export default function Home() {
           FOOTER
       ===================================================== */}
 
-      <footer className="border-t border-black/5 px-6 py-8 text-center text-sm text-zinc-400">
+      <footer className="border-t border-[var(--stone-line)] px-6 py-8 text-center text-sm text-[var(--ink-soft)]">
 
         © 2026 GEB · Global Estate Bridge
 
@@ -1775,10 +1510,10 @@ export default function Home() {
 
               <button
                 onClick={handleToggleSave}
-                className="absolute right-16 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/95 text-zinc-900 shadow-lg transition hover:bg-white cursor-pointer"
+                className="absolute right-16 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/95 text-[var(--ink)] shadow-lg transition hover:bg-white cursor-pointer"
                 aria-label={isSaved ? "Unsave Property" : "Save Property"}
               >
-                <Heart size={18} className={isSaved ? "text-red-500 fill-red-500" : "text-zinc-400"} />
+                <Heart size={18} className={isSaved ? "text-red-500 fill-red-500" : "text-[var(--ink-soft)]"} />
               </button>
 
               <button
@@ -1801,11 +1536,11 @@ export default function Home() {
                     ₹{selectedProperty.price.toLocaleString("en-IN")}
                   </p>
 
-                  <h2 className="mt-2 font-serif text-4xl font-medium tracking-tight">
+                  <h2 className="mt-2 font-display text-4xl font-medium tracking-tight">
                     {selectedProperty.title}
                   </h2>
 
-                  <div className="mt-3 flex items-center gap-2 text-sm text-zinc-500">
+                  <div className="mt-3 flex items-center gap-2 text-sm text-[var(--ink-soft)]">
                     <MapPin size={16} />
                     {selectedProperty.locality
                       ? `${selectedProperty.locality}, `
@@ -1815,8 +1550,8 @@ export default function Home() {
                 </div>
 
                 {selectedProperty.investmentScore && (
-                  <div className="rounded-2xl bg-zinc-950 px-5 py-4 text-white">
-                    <p className="text-xs uppercase tracking-widest text-zinc-400">
+                  <div className="rounded-2xl bg-[var(--ink)] px-5 py-4 text-white">
+                    <p className="text-xs uppercase tracking-widest text-[var(--ink-soft)]">
                       Investment score
                     </p>
                     <p className="mt-1 text-3xl font-bold">
@@ -1827,8 +1562,8 @@ export default function Home() {
               </div>
 
               <div className="mt-8 grid gap-3 sm:grid-cols-3">
-                <div className="rounded-2xl bg-zinc-50 p-4">
-                  <p className="text-xs font-medium uppercase tracking-wider text-zinc-400">
+                <div className="rounded-2xl bg-[var(--paper)] p-4">
+                  <p className="text-xs font-medium uppercase tracking-wider text-[var(--ink-soft)]">
                     Property type
                   </p>
                   <p className="mt-1 font-semibold capitalize">
@@ -1836,8 +1571,8 @@ export default function Home() {
                   </p>
                 </div>
 
-                <div className="rounded-2xl bg-zinc-50 p-4">
-                  <p className="text-xs font-medium uppercase tracking-wider text-zinc-400">
+                <div className="rounded-2xl bg-[var(--paper)] p-4">
+                  <p className="text-xs font-medium uppercase tracking-wider text-[var(--ink-soft)]">
                     Area
                   </p>
                   <p className="mt-1 font-semibold">
@@ -1847,8 +1582,8 @@ export default function Home() {
                   </p>
                 </div>
 
-                <div className="rounded-2xl bg-zinc-50 p-4">
-                  <p className="text-xs font-medium uppercase tracking-wider text-zinc-400">
+                <div className="rounded-2xl bg-[var(--paper)] p-4">
+                  <p className="text-xs font-medium uppercase tracking-wider text-[var(--ink-soft)]">
                     Listing source
                   </p>
                   <p className="mt-1 font-semibold capitalize">
@@ -1863,7 +1598,7 @@ export default function Home() {
                     About this property
                   </h3>
 
-                  <p className="mt-2 leading-7 text-zinc-500">
+                  <p className="mt-2 leading-7 text-[var(--ink-soft)]">
                     {selectedProperty.description}
                   </p>
                 </div>
@@ -1871,17 +1606,17 @@ export default function Home() {
 
               {/* LISTED BY SECTION */}
               {selectedProperty.source === "geb" && (
-                <div className="mt-8 pt-6 border-t border-zinc-100">
-                  <p className="text-xs font-bold uppercase tracking-wider text-zinc-400">
+                <div className="mt-8 pt-6 border-t border-[var(--stone-line)]">
+                  <p className="text-xs font-bold uppercase tracking-wider text-[var(--ink-soft)]">
                     Listed By
                   </p>
-                  <div className="mt-3 flex items-center justify-between bg-zinc-50 border border-black/5 p-4 rounded-2xl">
+                  <div className="mt-3 flex items-center justify-between bg-[var(--paper)] border border-[var(--stone-line)] p-4 rounded-2xl">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-950 text-white text-xs font-bold">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--ink)] text-white text-xs font-bold">
                         {selectedProperty.seller?.full_name?.charAt(0).toUpperCase() || "V"}
                       </div>
                       <div>
-                        <p className="text-sm font-bold text-zinc-900">
+                        <p className="text-sm font-bold text-[var(--ink)]">
                           {selectedProperty.seller?.full_name || "Verified Seller"}
                         </p>
                         <p className="text-[10px] text-emerald-600 font-bold flex items-center gap-0.5 mt-0.5">
@@ -1917,7 +1652,7 @@ export default function Home() {
                     href={selectedProperty.sourceUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-zinc-950 px-6 py-3 font-semibold text-white transition hover:bg-zinc-800"
+                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[var(--ink)] px-6 py-3 font-semibold text-white transition hover:bg-[var(--copper-700)]"
                   >
                     View original listing
                     <ArrowRight size={17} />
@@ -1946,7 +1681,7 @@ export default function Home() {
 
                 <button
                   onClick={() => setSelectedProperty(null)}
-                  className="rounded-full border border-zinc-200 px-6 py-3 font-semibold transition hover:bg-zinc-50"
+                  className="rounded-full border border-[var(--stone-line)] px-6 py-3 font-semibold transition hover:bg-[var(--paper)]"
                 >
                   Close
                 </button>
@@ -1961,6 +1696,17 @@ export default function Home() {
           </div>
         </div>
       )}
+
+      {/* Persistent Floating AI Chatbot Trigger */}
+      <button
+        type="button"
+        onClick={() => setAiOpen(true)}
+        className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-5 py-3.5 rounded-full bg-gradient-to-r from-orange-600 to-orange-600 hover:from-orange-500 hover:to-orange-500 text-white font-extrabold text-xs shadow-2xl shadow-orange-600/40 hover:scale-105 transition-all cursor-pointer border border-white/40"
+      >
+        <Sparkles className="w-4 h-4 text-amber-300" />
+        <span>Ask GEB AI</span>
+      </button>
+      </div>
     </main>
   );
 }

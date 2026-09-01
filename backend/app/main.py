@@ -5,6 +5,7 @@ from app.api.routes.properties import router as properties_router
 from app.api.routes.uploads import router as uploads_router
 from app.api.routes.ai import router as ai_router
 from app.api.routes.conversations import router as conversations_router
+from app.api.routes.land_analysis import router as land_analysis_router
 from app.core.config import settings
 
 
@@ -42,6 +43,7 @@ app.include_router(properties_router)
 app.include_router(uploads_router)
 app.include_router(ai_router)
 app.include_router(conversations_router)
+app.include_router(land_analysis_router)
 @app.get("/")
 def root():
 

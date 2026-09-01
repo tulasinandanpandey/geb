@@ -89,18 +89,28 @@ const API_URL =
   "http://127.0.0.1:8000";
 
 const suggestions = [
+  "2BHK flat for rent under ₹25k in Lucknow",
+  "Furnished house for rent in Lucknow",
   "Find plots in Lucknow under 50 lakh",
-  "Find a villa in Lucknow",
-  "Show properties between 30 and 60 lakh",
-  "I want rental income",
+  "I want long-term investment in Lucknow",
 ];
 
-function formatPrice(price: number) {
-  if (price >= 10000000) {
-    return `₹${(price / 10000000).toFixed(2)} Cr`;
+function formatPrice(property: { price: number; listing_type?: string; monthly_rent?: number; title?: string }) {
+  const isRent = property.listing_type === "rent" || (property.title && property.title.toLowerCase().includes("rent"));
+  const priceVal = property.monthly_rent || property.price;
+
+  if (isRent) {
+    if (priceVal >= 100000) {
+      return `₹${(priceVal / 100000).toFixed(1)} L / month`;
+    }
+    return `₹${priceVal.toLocaleString("en-IN")} / month`;
   }
 
-  return `₹${(price / 100000).toFixed(1)} L`;
+  if (priceVal >= 10000000) {
+    return `₹${(priceVal / 10000000).toFixed(2)} Cr`;
+  }
+
+  return `₹${(priceVal / 100000).toFixed(1)} L`;
 }
 
 function createMessageId() {
@@ -120,7 +130,7 @@ function PropertyRecommendation({
     <button
       type="button"
       onClick={() => onPropertySelect(property)}
-      className="block w-full overflow-hidden rounded-2xl border border-zinc-200 bg-white text-left transition hover:-translate-y-0.5 hover:border-zinc-400 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-zinc-950"
+      className="block w-full overflow-hidden rounded-2xl border border-[var(--stone-line)] bg-white text-left transition hover:-translate-y-0.5 hover:border-[var(--ink-soft)] hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[var(--ink)]"
     >
       {property.image && (
         <img
@@ -137,13 +147,13 @@ function PropertyRecommendation({
           </p>
 
           {property.geb_match_score !== undefined && (
-            <span className="shrink-0 rounded-full bg-zinc-950 px-2.5 py-1 text-[10px] font-bold text-white">
+            <span className="shrink-0 rounded-full bg-[var(--ink)] px-2.5 py-1 text-[10px] font-bold text-white">
               GEB {property.geb_match_score}/100
             </span>
           )}
         </div>
 
-        <p className="mt-1 text-xs text-zinc-400">
+        <p className="mt-1 text-xs text-[var(--ink-soft)]">
           {property.locality
             ? `${property.locality}, `
             : ""}
@@ -152,10 +162,10 @@ function PropertyRecommendation({
 
         <div className="mt-3 flex items-center justify-between gap-3">
           <p className="font-semibold">
-            {formatPrice(property.price)}
+            {formatPrice(property)}
           </p>
 
-          <span className="rounded-full bg-zinc-100 px-2.5 py-1 text-[10px] font-semibold uppercase">
+          <span className="rounded-full bg-[var(--paper)] px-2.5 py-1 text-[10px] font-semibold uppercase">
             {property.property_type}
           </span>
         </div>
@@ -163,32 +173,32 @@ function PropertyRecommendation({
         {breakdown && (
           <div className="mt-3 flex flex-wrap gap-1.5">
             {breakdown.budget_fit !== undefined && (
-              <span className="rounded-full bg-zinc-100 px-2 py-1 text-[9px] font-medium text-zinc-500">
+              <span className="rounded-full bg-[var(--paper)] px-2 py-1 text-[9px] font-medium text-[var(--ink-soft)]">
                 Budget {breakdown.budget_fit}
               </span>
             )}
 
             {breakdown.investment_fit !== undefined && (
-              <span className="rounded-full bg-zinc-100 px-2 py-1 text-[9px] font-medium text-zinc-500">
+              <span className="rounded-full bg-[var(--paper)] px-2 py-1 text-[9px] font-medium text-[var(--ink-soft)]">
                 Investment {breakdown.investment_fit}
               </span>
             )}
 
             {breakdown.risk_fit !== undefined && (
-              <span className="rounded-full bg-zinc-100 px-2 py-1 text-[9px] font-medium text-zinc-500">
+              <span className="rounded-full bg-[var(--paper)] px-2 py-1 text-[9px] font-medium text-[var(--ink-soft)]">
                 Risk {breakdown.risk_fit}
               </span>
             )}
 
             {breakdown.horizon_fit !== undefined && (
-              <span className="rounded-full bg-zinc-100 px-2 py-1 text-[9px] font-medium text-zinc-500">
+              <span className="rounded-full bg-[var(--paper)] px-2 py-1 text-[9px] font-medium text-[var(--ink-soft)]">
                 Horizon {breakdown.horizon_fit}
               </span>
             )}
           </div>
         )}
 
-        <div className="mt-3 flex items-center gap-1 text-xs font-medium text-zinc-400">
+        <div className="mt-3 flex items-center gap-1 text-xs font-medium text-[var(--ink-soft)]">
           Click to view property details
           <ArrowRight size={12} />
         </div>
@@ -271,7 +281,7 @@ function FormattedBody({ text }: { text: string }) {
     flushList("end");
   }
 
-  return <div className="text-zinc-700">{elements}</div>;
+  return <div className="text-[var(--ink-soft)]">{elements}</div>;
 }
 
 function RAGSectionRenderer({ title, body }: { title: string; body: string }) {
@@ -296,8 +306,8 @@ function RAGSectionRenderer({ title, body }: { title: string; body: string }) {
 
   if (normalizedTitle.includes("why")) {
     return (
-      <div className="my-4 rounded-2xl border border-zinc-100 bg-zinc-50/50 p-5">
-        <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-2">
+      <div className="my-4 rounded-2xl border border-[var(--stone-line)] bg-[var(--paper)]/50 p-5">
+        <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--ink-soft)] mb-2">
           🎯 Why It Matches
         </h4>
         <FormattedBody text={body} />
@@ -307,8 +317,8 @@ function RAGSectionRenderer({ title, body }: { title: string; body: string }) {
 
   if (normalizedTitle.includes("alternative") || normalizedTitle.includes("other matches")) {
     return (
-      <div className="my-4 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
-        <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-600 mb-2">
+      <div className="my-4 rounded-2xl border border-[var(--stone-line)] bg-white p-5 shadow-sm">
+        <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--ink-soft)] mb-2">
           🔄 Alternative Options
         </h4>
         <FormattedBody text={body} />
@@ -340,8 +350,8 @@ function RAGSectionRenderer({ title, body }: { title: string; body: string }) {
 
   if (normalizedTitle.includes("next step") || normalizedTitle.includes("next action")) {
     return (
-      <div className="my-4 rounded-2xl border border-blue-500/20 bg-blue-50/40 p-5">
-        <h4 className="text-xs font-bold uppercase tracking-wider text-blue-800 mb-2">
+      <div className="my-4 rounded-2xl border border-orange-500/20 bg-orange-50/40 p-5">
+        <h4 className="text-xs font-bold uppercase tracking-wider text-orange-800 mb-2">
           🚀 Next Step
         </h4>
         <FormattedBody text={body} />
@@ -351,7 +361,7 @@ function RAGSectionRenderer({ title, body }: { title: string; body: string }) {
 
   if (normalizedTitle.includes("disclaimer")) {
     return (
-      <div className="my-4 border-t border-zinc-200 pt-3 text-xs leading-5 text-zinc-400">
+      <div className="my-4 border-t border-[var(--stone-line)] pt-3 text-xs leading-5 text-[var(--ink-soft)]">
         <p className="italic">{body}</p>
       </div>
     );
@@ -359,7 +369,7 @@ function RAGSectionRenderer({ title, body }: { title: string; body: string }) {
 
   return (
     <div className="my-4">
-      <h4 className="font-semibold text-sm text-zinc-950 mb-1">{title}</h4>
+      <h4 className="font-semibold text-sm text-[var(--ink)] mb-1">{title}</h4>
       <FormattedBody text={body} />
     </div>
   );
@@ -489,10 +499,10 @@ export default function GEBAIChat({
         className="absolute inset-0 bg-black/30 backdrop-blur-sm"
       />
 
-      <div className="absolute bottom-0 right-0 h-[92vh] w-full overflow-hidden rounded-t-[2rem] border border-black/10 bg-[#f7f7f5] shadow-2xl md:bottom-6 md:right-6 md:h-[760px] md:max-h-[calc(100vh-3rem)] md:w-[520px] md:rounded-[2rem]">
-        <div className="flex items-center justify-between border-b border-black/5 bg-white px-5 py-4">
+      <div className="absolute bottom-0 right-0 h-[92vh] w-full overflow-hidden rounded-t-[2rem] border border-[var(--stone-line)] bg-[var(--paper)] shadow-2xl md:bottom-6 md:right-6 md:h-[760px] md:max-h-[calc(100vh-3rem)] md:w-[520px] md:rounded-[2rem]">
+        <div className="flex items-center justify-between border-b border-[var(--stone-line)] bg-white px-5 py-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-950 text-white">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--ink)] text-white">
               <Sparkles size={18} />
             </div>
 
@@ -501,7 +511,7 @@ export default function GEBAIChat({
                 GEB AI
               </p>
 
-              <p className="text-xs text-zinc-400">
+              <p className="text-xs text-[var(--ink-soft)]">
                 Your real-estate intelligence agent
               </p>
             </div>
@@ -510,7 +520,7 @@ export default function GEBAIChat({
           <button
             type="button"
             onClick={onClose}
-            className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-zinc-100"
+            className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-[var(--paper)]"
           >
             <X size={18} />
           </button>
@@ -525,11 +535,11 @@ export default function GEBAIChat({
                   <Bot size={25} />
                 </div>
 
-                <h2 className="mt-5 font-serif text-3xl font-medium">
+                <h2 className="mt-5 font-display text-3xl font-medium">
                   What should you buy?
                 </h2>
 
-                <p className="mt-2 text-sm leading-6 text-zinc-500">
+                <p className="mt-2 text-sm leading-6 text-[var(--ink-soft)]">
                   Ask GEB to find properties and explain
                   opportunities using real GEB listings.
                 </p>
@@ -542,7 +552,7 @@ export default function GEBAIChat({
                       onClick={() =>
                         setMessage(suggestion)
                       }
-                      className="rounded-full border border-zinc-200 bg-white px-3 py-2 text-xs font-medium transition hover:border-zinc-400"
+                      className="rounded-full border border-[var(--stone-line)] bg-white px-3 py-2 text-xs font-medium transition hover:border-[var(--ink-soft)]"
                     >
                       {suggestion}
                     </button>
@@ -563,7 +573,7 @@ export default function GEBAIChat({
                   }
                 >
                   {item.role === "user" ? (
-                    <div className="max-w-[85%] rounded-2xl bg-zinc-950 px-4 py-3 text-sm leading-6 text-white">
+                    <div className="max-w-[85%] rounded-2xl bg-[var(--ink)] px-4 py-3 text-sm leading-6 text-white">
                       {item.content}
                     </div>
                   ) : (
@@ -572,10 +582,10 @@ export default function GEBAIChat({
                         <div className="mb-3 flex items-center gap-2">
                           <Sparkles
                             size={15}
-                            className="text-zinc-500"
+                            className="text-[var(--ink-soft)]"
                           />
 
-                          <span className="text-xs font-bold uppercase tracking-wider text-zinc-400">
+                          <span className="text-xs font-bold uppercase tracking-wider text-[var(--ink-soft)]">
                             GEB AI
                           </span>
                         </div>
@@ -599,7 +609,7 @@ export default function GEBAIChat({
                                 Matching properties
                               </p>
 
-                              <span className="text-xs text-zinc-400">
+                              <span className="text-xs text-[var(--ink-soft)]">
                                 {item.properties.length} found
                               </span>
                             </div>
@@ -630,14 +640,14 @@ export default function GEBAIChat({
             <div className="mt-5 rounded-2xl bg-white p-5 text-center shadow-sm">
               <Loader2
                 size={24}
-                className="mx-auto animate-spin text-zinc-500"
+                className="mx-auto animate-spin text-[var(--ink-soft)]"
               />
 
               <p className="mt-3 text-sm font-medium">
                 GEB AI is analyzing the market...
               </p>
 
-              <p className="mt-1 text-xs text-zinc-400">
+              <p className="mt-1 text-xs text-[var(--ink-soft)]">
                 Retrieving relevant properties
               </p>
             </div>
@@ -660,23 +670,23 @@ export default function GEBAIChat({
 
         <form
           onSubmit={askAI}
-          className="absolute bottom-0 left-0 right-0 border-t border-black/5 bg-white p-3"
+          className="absolute bottom-0 left-0 right-0 border-t border-[var(--stone-line)] bg-white p-3"
         >
-          <div className="flex items-center gap-2 rounded-2xl bg-zinc-50 px-4 py-2">
+          <div className="flex items-center gap-2 rounded-2xl bg-[var(--paper)] px-4 py-2">
             <input
               value={message}
               onChange={(event) =>
                 setMessage(event.target.value)
               }
               placeholder="Ask GEB AI..."
-              className="min-w-0 flex-1 bg-transparent py-2 text-sm outline-none placeholder:text-zinc-400"
+              className="min-w-0 flex-1 bg-transparent py-2 text-sm outline-none placeholder:text-[var(--ink-soft)]"
               disabled={loading}
             />
 
             <button
               type="submit"
               disabled={loading || !message.trim()}
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-zinc-950 text-white transition hover:bg-zinc-800 disabled:opacity-30"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--ink)] text-white transition hover:bg-[var(--copper-700)] disabled:opacity-30"
             >
               {loading ? (
                 <Loader2

@@ -207,12 +207,30 @@ Tested and verified the following end-to-end CRM workflows:
 ### Resolved Issues
 ✓ Fixed a critical `SyntaxError: expected 'except' or 'finally' block` compiler blocker in `backend/app/api/routes/conversations.py` by adding the missing `except` block handler.
 
-### Unimplemented Features
-- **Property Verification (Geolocation & Photo Capture)**: NOT IMPLEMENTED.
-- **Document Requests (Private Document Exchange)**: NOT IMPLEMENTED.
-- **Instant Broker Connection**: NOT IMPLEMENTED.
+---
 
+## Phase 8 Completed: Deep Land Analysis Map & Soil Agent
 
+### Core Capabilities
+✓ Autonomous Soil Agent (`app/services/ai/soil_agent.py`) calculating geotechnical parameters (Safe Bearing Capacity kN/m², Soil pH, NPK reserves, Water Table Depth, Elevation, Slope, Flood/Erosion risk, Seismic Zone).
+✓ Grounded Soil AI Q&A engine using Gemini 3.6 Flash with automated fallback responder for structural foundation engineering and crop rotation questions.
+✓ FastAPI routes (`/api/land-analysis/analyze`, `/api/land-analysis/property/{id}`, `/api/land-analysis/zones`, `/api/land-analysis/query`).
+✓ Leaflet GIS Soil Map (`DeepLandAnalysisMap.tsx`) with choropleth polygon soil zone overlays, water table depth toggle, property markers, and click-to-sample location pin dropper.
+✓ Soil Agent Drawer UI (`SoilAgentDrawer.tsx`) featuring 3 tabs: Geotechnical Report (`SoilAnalysisCard.tsx`), Soil Health & NPK Profile, and Soil AI Co-Pilot chat interface.
+✓ Dedicated `/deep-land-analysis` page and navigation integration.
+✓ Verified Python backend (`compileall app`) and Next.js frontend production build (`npm run build`) pass cleanly.
 
+---
+
+## Phase 11 Completed: RENT Property System, Rental RAG & Homepage Filters
+
+### Core Capabilities
+✓ Added `listing_type` (`"sale"` / `"rent"`), `monthly_rent`, `security_deposit`, `available_from`, `furnishing_status`, `bhk` to properties schema & moderation engine.
+✓ Dual Listing Creation Form (`/list-property`) with `FOR SALE` / `FOR RENT` toggle and rental-specific inputs.
+✓ Prominent `All Listings | Buy / Sale | Rent` homepage filter bar working seamlessly with property types (`Plot | House | Apartment | Villa | Commercial`), location, and budget.
+✓ Updated Property Cards (`PropertyCard.tsx`) and GIS map pins (`PropertyMap.tsx`) rendering `₹XX,XXX / month`, BHK badges, and Furnishing status.
+✓ Extended Conversational RAG (`query_analyzer.py`, `retriever.py`, `rag_service.py`, `ai.py`) supporting natural queries like `"2BHK flat for rent under ₹25k in Lucknow"`.
+✓ Connected rental inquiries to Buyer-Seller Chat modal & Seller CRM.
+✓ Verified Python backend (`compileall app`) and Next.js production build (`npm run build`) pass cleanly.
 
 

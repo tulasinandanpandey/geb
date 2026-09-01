@@ -661,20 +661,20 @@ export default function LocationPicker({
 
   return (
 
-    <div className="overflow-hidden rounded-[1.5rem] border border-zinc-200 bg-white">
+    <div className="overflow-hidden rounded-[1.5rem] border border-[var(--stone-line)] bg-white">
 
 
       {/* SEARCH */}
 
-      <div className="border-b border-zinc-100 p-3">
+      <div className="border-b border-[var(--stone-line)] p-3">
 
         <div className="flex gap-2">
 
-          <div className="flex flex-1 items-center gap-3 rounded-xl bg-zinc-50 px-4">
+          <div className="flex flex-1 items-center gap-3 rounded-xl bg-[var(--paper)] px-4">
 
             <Search
               size={18}
-              className="shrink-0 text-zinc-400"
+              className="shrink-0 text-[var(--ink-soft)]"
             />
 
             <input
@@ -698,7 +698,7 @@ export default function LocationPicker({
 
               }}
               placeholder="Search city, locality or landmark..."
-              className="w-full bg-transparent py-3 text-sm font-medium outline-none placeholder:text-zinc-400"
+              className="w-full bg-transparent py-3 text-sm font-medium outline-none placeholder:text-[var(--ink-soft)]"
             />
 
           </div>
@@ -708,7 +708,7 @@ export default function LocationPicker({
             type="button"
             onClick={searchLocation}
             disabled={searching}
-            className="flex items-center gap-2 rounded-xl bg-zinc-950 px-5 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:opacity-50"
+            className="flex items-center gap-2 rounded-xl bg-[var(--ink)] px-5 text-sm font-semibold text-white transition hover:bg-[var(--copper-700)] disabled:opacity-50"
           >
 
             {searching ? (
@@ -732,7 +732,7 @@ export default function LocationPicker({
           <button
             type="button"
             onClick={useMyLocation}
-            className="hidden items-center justify-center rounded-xl border border-zinc-200 px-4 transition hover:bg-zinc-50 sm:flex"
+            className="hidden items-center justify-center rounded-xl border border-[var(--stone-line)] px-4 transition hover:bg-[var(--paper)] sm:flex"
             title="Use my location"
           >
 
@@ -757,7 +757,7 @@ export default function LocationPicker({
 
       {/* LOCATION RESULT */}
 
-      <div className="border-t border-zinc-100 bg-zinc-50 px-4 py-4">
+      <div className="border-t border-[var(--stone-line)] bg-[var(--paper)] px-4 py-4">
 
         <div className="flex items-start gap-3">
 
@@ -767,14 +767,14 @@ export default function LocationPicker({
 
               <Loader2
                 size={17}
-                className="animate-spin text-zinc-500"
+                className="animate-spin text-[var(--ink-soft)]"
               />
 
             ) : (
 
               <MapPin
                 size={17}
-                className="text-zinc-700"
+                className="text-[var(--ink-soft)]"
               />
 
             )}
@@ -784,12 +784,12 @@ export default function LocationPicker({
 
           <div className="min-w-0 flex-1">
 
-            <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
+            <p className="text-xs font-semibold uppercase tracking-wider text-[var(--ink-soft)]">
               Selected property location
             </p>
 
 
-            <p className="mt-1 text-sm font-medium text-zinc-800">
+            <p className="mt-1 text-sm font-medium text-[var(--ink)]">
 
               {selectedAddress
                 ? selectedAddress
@@ -802,7 +802,7 @@ export default function LocationPicker({
 
               <div className="mt-3 flex flex-wrap gap-2">
 
-                <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-zinc-700 shadow-sm">
+                <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-[var(--ink-soft)] shadow-sm">
 
                   City · {selectedCity}
 
@@ -811,7 +811,7 @@ export default function LocationPicker({
 
                 {selectedLocality && (
 
-                  <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-zinc-700 shadow-sm">
+                  <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-[var(--ink-soft)] shadow-sm">
 
                     Locality · {selectedLocality}
 
@@ -827,7 +827,7 @@ export default function LocationPicker({
             {latitude !== undefined &&
               longitude !== undefined && (
 
-                <p className="mt-2 text-xs text-zinc-400">
+                <p className="mt-2 text-xs text-[var(--ink-soft)]">
 
                   {latitude.toFixed(6)},{" "}
                   {longitude.toFixed(6)}

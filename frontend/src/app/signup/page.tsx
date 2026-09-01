@@ -1,10 +1,11 @@
-﻿"use client";
+"use client";
 
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Loader2, Sparkles } from "lucide-react";
 
 import { supabase } from "@/lib/supabase/client";
+import GEBLogo from "@/components/common/GEBLogo";
 
 export default function SignupPage() {
 
@@ -90,61 +91,60 @@ export default function SignupPage() {
 
   return (
 
-    <main className="min-h-screen bg-[#f7f7f5] text-zinc-950">
+    <main className="min-h-screen bg-[var(--paper)] text-[var(--ink)] lg:flex">
+      {/* Editorial brand panel */}
+      <div className="relative hidden w-[44%] flex-col justify-between overflow-hidden bg-[var(--ink)] px-12 py-10 text-white lg:flex">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-40"
+          style={{
+            background:
+              "radial-gradient(circle at 80% 15%, var(--copper-700), transparent 55%), radial-gradient(circle at 15% 85%, var(--violet), transparent 45%)",
+          }}
+        />
+        <div className="relative z-10">
+          <GEBLogo variant="dark" size="md" />
+        </div>
 
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
+        <div className="relative z-10 max-w-sm">
+          <p className="font-display text-4xl italic leading-tight text-white/95">
+            "A map-first way to buy, sell and understand land — verified before it's listed."
+          </p>
+        </div>
 
-        <Link
-          href="/"
-          className="flex items-center gap-2"
-        >
+        <p className="relative z-10 text-xs text-white/40">© {new Date().getFullYear()} GEB Prop</p>
+      </div>
 
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-zinc-950 text-sm font-bold text-white">
-            G
-          </div>
+      <div className="flex flex-1 flex-col">
+        <nav className="mx-auto flex w-full max-w-md items-center justify-between px-6 py-8">
+          <Link href="/" className="flex items-center gap-2 lg:hidden">
+            <img src="/geb-logo.png" alt="GEB Prop" className="h-8 w-auto object-contain" />
+          </Link>
+          <Link
+            href="/"
+            className="ml-auto inline-flex items-center gap-2 rounded-full border border-[var(--stone-line)] bg-[var(--paper-raised)] px-4 py-2 text-sm font-semibold transition hover:border-[var(--copper-400)]"
+          >
+            <ArrowLeft size={15} />
+            Back to GEB
+          </Link>
+        </nav>
 
-          <span className="text-xl font-bold tracking-tight">
-            GEB
-          </span>
-
-        </Link>
-
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-semibold transition hover:bg-zinc-100"
-        >
-          <ArrowLeft size={15} />
-          Back to GEB
-        </Link>
-
-      </nav>
-
-
-      <section className="mx-auto flex max-w-md px-6 pb-20 pt-16">
-
-        <div className="w-full">
-
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium shadow-sm">
-
-            <Sparkles size={15} />
-
+        <section className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center px-6 pb-16">
+          <div className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-[var(--stone-line)] bg-[var(--paper-raised)] px-4 py-2 text-sm font-medium">
+            <Sparkles size={15} className="text-[var(--violet)]" />
             Join GEB
-
           </div>
 
-
-          <h1 className="font-serif text-5xl font-medium tracking-tight">
+          <h1 className="font-display text-5xl font-medium tracking-tight">
             Create your account.
           </h1>
 
-          <p className="mt-4 leading-7 text-zinc-500">
+          <p className="mt-4 leading-7 text-[var(--ink-soft)]">
             Start discovering properties and unlock more GEB features.
           </p>
 
-
           <form
             onSubmit={handleSignup}
-            className="mt-8 rounded-[2rem] border border-black/10 bg-white p-6 shadow-xl shadow-black/5"
+            className="mt-8 rounded-[2rem] border border-[var(--stone-line)] bg-[var(--paper-raised)] p-6 shadow-xl shadow-[var(--copper-900)]/5"
           >
 
             <div className="space-y-5">
@@ -163,7 +163,7 @@ export default function SignupPage() {
                   }
                   placeholder="Your name"
                   autoComplete="name"
-                  className="w-full rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3.5 text-sm outline-none transition focus:border-zinc-950 focus:bg-white"
+                  className="w-full rounded-2xl border border-[var(--stone-line)] bg-[var(--paper)] px-4 py-3.5 text-sm outline-none transition focus:border-[var(--copper-600)] focus:bg-white"
                 />
 
               </div>
@@ -183,7 +183,7 @@ export default function SignupPage() {
                   }
                   placeholder="you@example.com"
                   autoComplete="email"
-                  className="w-full rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3.5 text-sm outline-none transition focus:border-zinc-950 focus:bg-white"
+                  className="w-full rounded-2xl border border-[var(--stone-line)] bg-[var(--paper)] px-4 py-3.5 text-sm outline-none transition focus:border-[var(--copper-600)] focus:bg-white"
                 />
 
               </div>
@@ -203,7 +203,7 @@ export default function SignupPage() {
                   }
                   placeholder="Minimum 6 characters"
                   autoComplete="new-password"
-                  className="w-full rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3.5 text-sm outline-none transition focus:border-zinc-950 focus:bg-white"
+                  className="w-full rounded-2xl border border-[var(--stone-line)] bg-[var(--paper)] px-4 py-3.5 text-sm outline-none transition focus:border-[var(--copper-600)] focus:bg-white"
                 />
 
               </div>
@@ -223,7 +223,7 @@ export default function SignupPage() {
                   }
                   placeholder="Repeat your password"
                   autoComplete="new-password"
-                  className="w-full rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3.5 text-sm outline-none transition focus:border-zinc-950 focus:bg-white"
+                  className="w-full rounded-2xl border border-[var(--stone-line)] bg-[var(--paper)] px-4 py-3.5 text-sm outline-none transition focus:border-[var(--copper-600)] focus:bg-white"
                 />
 
               </div>
@@ -252,7 +252,7 @@ export default function SignupPage() {
             <button
               type="submit"
               disabled={loading}
-              className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-zinc-950 px-5 py-4 font-semibold text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50"
+              className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-[var(--ink)] px-5 py-4 font-semibold text-white transition hover:bg-[var(--copper-700)] disabled:cursor-not-allowed disabled:opacity-50"
             >
 
               {loading ? (
@@ -276,13 +276,13 @@ export default function SignupPage() {
             </button>
 
 
-            <p className="mt-6 text-center text-sm text-zinc-500">
+            <p className="mt-6 text-center text-sm text-[var(--ink-soft)]">
 
               Already have an account?{" "}
 
               <Link
                 href="/login"
-                className="font-semibold text-zinc-950 hover:underline"
+                className="font-semibold text-[var(--ink)] hover:underline"
               >
                 Sign in
               </Link>
@@ -290,12 +290,8 @@ export default function SignupPage() {
             </p>
 
           </form>
-
-        </div>
-
-      </section>
-
+        </section>
+      </div>
     </main>
-
   );
 }

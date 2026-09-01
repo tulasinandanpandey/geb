@@ -45,5 +45,11 @@ Thumbs.db
 .idea/
 frontend/.git-backup-before-root-import/
 
+# Archives
+*.rar
+
 # Vercel
 .vercel/
+
+geb-prop-frontend-redesigned(1)/
+

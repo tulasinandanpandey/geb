@@ -337,14 +337,14 @@ export default function PropertyImageUploader({
         onClick={() =>
           inputRef.current?.click()
         }
-        className="group w-full rounded-[1.5rem] border-2 border-dashed border-zinc-200 bg-zinc-50 px-6 py-10 text-center transition hover:border-zinc-400 hover:bg-white"
+        className="group w-full rounded-[1.5rem] border-2 border-dashed border-[var(--stone-line)] bg-[var(--paper)] px-6 py-10 text-center transition hover:border-[var(--ink-soft)] hover:bg-white"
       >
 
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white shadow-sm transition group-hover:scale-105">
 
           <ImagePlus
             size={24}
-            className="text-zinc-700"
+            className="text-[var(--ink-soft)]"
           />
 
         </div>
@@ -357,14 +357,14 @@ export default function PropertyImageUploader({
         </p>
 
 
-        <p className="mt-1 text-xs text-zinc-400">
+        <p className="mt-1 text-xs text-[var(--ink-soft)]">
 
           JPG, PNG or WEBP · Maximum 5 MB each
 
         </p>
 
 
-        <p className="mt-2 text-xs text-zinc-400">
+        <p className="mt-2 text-xs text-[var(--ink-soft)]">
 
           Up to {MAX_FILES} photos
 
@@ -398,7 +398,7 @@ export default function PropertyImageUploader({
             </p>
 
 
-            <p className="text-xs text-zinc-400">
+            <p className="text-xs text-[var(--ink-soft)]">
 
               {files.length} / {MAX_FILES}
 
@@ -414,7 +414,7 @@ export default function PropertyImageUploader({
 
                 <div
                   key={preview}
-                  className="group relative aspect-square overflow-hidden rounded-2xl bg-zinc-100"
+                  className="group relative aspect-square overflow-hidden rounded-2xl bg-[var(--paper)]"
                 >
 
                   <img
@@ -440,7 +440,7 @@ export default function PropertyImageUploader({
                     onClick={() =>
                       removeFile(index)
                     }
-                    className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-white/95 text-zinc-700 opacity-100 shadow-sm transition hover:bg-zinc-950 hover:text-white"
+                    className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-white/95 text-[var(--ink-soft)] opacity-100 shadow-sm transition hover:bg-[var(--ink)] hover:text-white"
                   >
 
                     <X size={14} />
@@ -468,7 +468,7 @@ export default function PropertyImageUploader({
             type="button"
             onClick={uploadFiles}
             disabled={uploading}
-            className="flex w-full items-center justify-center gap-2 rounded-2xl border border-zinc-200 bg-zinc-950 px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex w-full items-center justify-center gap-2 rounded-2xl border border-[var(--stone-line)] bg-[var(--ink)] px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-[var(--copper-700)] disabled:cursor-not-allowed disabled:opacity-50"
           >
 
             {uploading ? (

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useRef, useState } from "react";
 import L from "leaflet";
@@ -29,7 +29,17 @@ interface LocationResult {
   display_name: string;
 }
 
-function formatPrice(price: number) {
+function formatPrice(property: Property) {
+  const price = property.monthlyRent || property.price;
+  const isRent = property.listingType === "rent" || (property.title && property.title.toLowerCase().includes("rent"));
+
+  if (isRent) {
+    if (price >= 100000) {
+      return `₹${(price / 100000).toFixed(1)}L/mo`;
+    }
+    return `₹${(price / 1000).toFixed(0)}k/mo`;
+  }
+
   if (price >= 10000000) {
     return `₹${(price / 10000000).toFixed(2)} Cr`;
   }
@@ -49,7 +59,7 @@ function createMarkerIcon(property: Property) {
     className: "geb-map-marker-wrapper",
     html: `
       <div class="geb-map-marker ${sourceClass}">
-        <span>${formatPrice(property.price)}</span>
+        <span>${formatPrice(property)}</span>
       </div>
     `,
     iconSize: [90, 38],
@@ -149,7 +159,7 @@ export default function PropertyMap({
           <div class="geb-popup-content">
 
             <div class="geb-popup-price">
-              ${formatPrice(property.price)}
+              ${formatPrice(property)}
             </div>
 
             <div class="geb-popup-title">
@@ -407,7 +417,7 @@ export default function PropertyMap({
    */
 
   return (
-    <div className="relative h-full w-full">
+    <div className="relative z-0 isolate h-full w-full">
 
       {/* MAP */}
 
@@ -423,11 +433,11 @@ export default function PropertyMap({
 
       <div className="absolute left-4 top-4 z-[1000] w-[min(420px,calc(100%-32px))]">
 
-        <div className="flex items-center rounded-2xl border border-black/10 bg-white/95 p-1.5 shadow-xl backdrop-blur-md">
+        <div className="flex items-center rounded-2xl border border-[var(--stone-line)] bg-white/95 p-1.5 shadow-xl backdrop-blur-md">
 
           <Search
             size={18}
-            className="ml-3 shrink-0 text-zinc-400"
+            className="ml-3 shrink-0 text-[var(--ink-soft)]"
           />
 
           <input
@@ -438,13 +448,13 @@ export default function PropertyMap({
             }}
             onKeyDown={handleSearchKeyDown}
             placeholder="Search city, locality or area..."
-            className="min-w-0 flex-1 bg-transparent px-3 py-3 text-sm font-medium outline-none placeholder:text-zinc-400"
+            className="min-w-0 flex-1 bg-transparent px-3 py-3 text-sm font-medium outline-none placeholder:text-[var(--ink-soft)]"
           />
 
           <button
             onClick={searchLocation}
             disabled={searching}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-zinc-950 text-white transition hover:bg-zinc-800 disabled:opacity-60"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--ink)] text-white transition hover:bg-[var(--copper-700)] disabled:opacity-60"
           >
 
             {searching ? (
@@ -465,7 +475,7 @@ export default function PropertyMap({
 
         {searchResults.length > 0 && (
 
-          <div className="mt-2 overflow-hidden rounded-2xl border border-black/5 bg-white shadow-xl">
+          <div className="mt-2 overflow-hidden rounded-2xl border border-[var(--stone-line)] bg-white shadow-xl">
 
             {searchResults.map((result, index) => (
 
@@ -474,15 +484,15 @@ export default function PropertyMap({
                 onClick={() =>
                   selectLocation(result)
                 }
-                className="flex w-full items-start gap-3 border-b border-zinc-100 px-4 py-3 text-left last:border-0 hover:bg-zinc-50"
+                className="flex w-full items-start gap-3 border-b border-[var(--stone-line)] px-4 py-3 text-left last:border-0 hover:bg-[var(--paper)]"
               >
 
                 <MapPin
                   size={16}
-                  className="mt-0.5 shrink-0 text-zinc-400"
+                  className="mt-0.5 shrink-0 text-[var(--ink-soft)]"
                 />
 
-                <span className="text-xs leading-5 text-zinc-600">
+                <span className="text-xs leading-5 text-[var(--ink-soft)]">
                   {result.display_name}
                 </span>
 
@@ -517,7 +527,7 @@ export default function PropertyMap({
       <button
         onClick={locateUser}
         title="Use my location"
-        className="absolute bottom-4 right-16 z-[1000] flex h-10 w-10 items-center justify-center rounded-xl border border-black/10 bg-white/95 text-zinc-700 shadow-lg backdrop-blur-md transition hover:bg-zinc-50"
+        className="absolute bottom-4 right-16 z-[1000] flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--stone-line)] bg-white/95 text-[var(--ink-soft)] shadow-lg backdrop-blur-md transition hover:bg-[var(--paper)]"
       >
 
         <LocateFixed size={17} />

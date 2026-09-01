@@ -126,8 +126,8 @@ export default function CapabilitiesPage() {
 
   if (loading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#f7f7f5]">
-        <p className="text-sm font-medium text-zinc-400">
+      <main className="flex min-h-screen items-center justify-center bg-[var(--paper)]">
+        <p className="text-sm font-medium text-[var(--ink-soft)]">
           Loading your account...
         </p>
       </main>
@@ -136,15 +136,15 @@ export default function CapabilitiesPage() {
 
   if (!user) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#f7f7f5] px-6">
+      <main className="flex min-h-screen items-center justify-center bg-[var(--paper)] px-6">
         <div className="text-center">
-          <h1 className="font-serif text-4xl">
+          <h1 className="font-display text-4xl">
             Sign in to continue
           </h1>
 
           <Link
             href="/login"
-            className="mt-6 inline-flex items-center gap-2 rounded-full bg-zinc-950 px-6 py-3 text-sm font-semibold text-white"
+            className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--ink)] px-6 py-3 text-sm font-semibold text-white"
           >
             Sign in
             <ArrowRight size={16} />
@@ -155,27 +155,27 @@ export default function CapabilitiesPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#f7f7f5] px-6 py-12 text-zinc-950">
+    <main className="min-h-screen bg-[var(--paper)] px-6 py-12 text-[var(--ink)]">
       <div className="mx-auto max-w-3xl">
 
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-zinc-500 hover:text-zinc-950"
+          className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--ink-soft)] hover:text-[var(--ink)]"
         >
           ← Back to GEB
         </Link>
 
         <div className="mt-12">
 
-          <div className="mb-6 inline-flex rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium shadow-sm">
+          <div className="mb-6 inline-flex rounded-full border border-[var(--stone-line)] bg-[var(--paper-raised)] px-4 py-2 text-sm font-medium shadow-sm">
             GEB Account
           </div>
 
-          <h1 className="font-serif text-5xl font-medium tracking-tight md:text-6xl">
+          <h1 className="font-display text-5xl font-medium tracking-tight md:text-6xl">
             What do you want to do?
           </h1>
 
-          <p className="mt-4 max-w-xl text-lg leading-7 text-zinc-500">
+          <p className="mt-4 max-w-xl text-lg leading-7 text-[var(--ink-soft)]">
             Choose any capabilities you want to use on GEB.
             You can select multiple.
           </p>
@@ -203,8 +203,8 @@ export default function CapabilitiesPage() {
                   }
                   className={`flex w-full items-center gap-5 rounded-3xl border p-6 text-left transition ${
                     selected
-                      ? "border-zinc-950 bg-zinc-950 text-white"
-                      : "border-zinc-200 bg-white hover:border-zinc-400"
+                      ? "border-[var(--ink)] bg-[var(--ink)] text-white"
+                      : "border-[var(--stone-line)] bg-[var(--paper-raised)] hover:border-[var(--copper-400)]"
                   }`}
                 >
 
@@ -212,7 +212,7 @@ export default function CapabilitiesPage() {
                     className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${
                       selected
                         ? "bg-white/10"
-                        : "bg-zinc-100"
+                        : "bg-[var(--paper)]"
                     }`}
                   >
                     <Icon size={21} />
@@ -227,8 +227,8 @@ export default function CapabilitiesPage() {
                     <p
                       className={`mt-1 text-sm ${
                         selected
-                          ? "text-zinc-400"
-                          : "text-zinc-500"
+                          ? "text-[var(--ink-soft)]"
+                          : "text-[var(--ink-soft)]"
                       }`}
                     >
                       {description}
@@ -239,8 +239,8 @@ export default function CapabilitiesPage() {
                   <div
                     className={`flex h-7 w-7 items-center justify-center rounded-full border ${
                       selected
-                        ? "border-white bg-white text-zinc-950"
-                        : "border-zinc-300"
+                        ? "border-white bg-white text-[var(--ink)]"
+                        : "border-[var(--stone-line)]"
                     }`}
                   >
                     {selected && (
@@ -256,7 +256,7 @@ export default function CapabilitiesPage() {
         </div>
 
         {message && (
-          <div className="mt-5 rounded-2xl border border-zinc-200 bg-white px-5 py-4 text-sm font-medium">
+          <div className="mt-5 rounded-2xl border border-[var(--stone-line)] bg-[var(--paper-raised)] px-5 py-4 text-sm font-medium">
             {message}
           </div>
         )}
@@ -265,7 +265,7 @@ export default function CapabilitiesPage() {
           type="button"
           onClick={saveCapabilities}
           disabled={saving}
-          className="mt-8 flex w-full items-center justify-center gap-2 rounded-2xl bg-zinc-950 px-6 py-4 font-semibold text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50"
+          className="mt-8 flex w-full items-center justify-center gap-2 rounded-2xl bg-[var(--ink)] px-6 py-4 font-semibold text-white transition hover:bg-[var(--copper-700)] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {saving
             ? "Saving..."
