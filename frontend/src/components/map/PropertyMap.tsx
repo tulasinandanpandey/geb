@@ -433,11 +433,11 @@ export default function PropertyMap({
 
       <div className="absolute left-4 top-4 z-[1000] w-[min(420px,calc(100%-32px))]">
 
-        <div className="flex items-center rounded-2xl border border-black/10 bg-white/95 p-1.5 shadow-xl backdrop-blur-md">
+        <div className="flex items-center rounded-2xl border border-[var(--stone-line)] bg-white/95 p-1.5 shadow-xl backdrop-blur-md">
 
           <Search
             size={18}
-            className="ml-3 shrink-0 text-zinc-400"
+            className="ml-3 shrink-0 text-[var(--ink-soft)]"
           />
 
           <input
@@ -448,13 +448,13 @@ export default function PropertyMap({
             }}
             onKeyDown={handleSearchKeyDown}
             placeholder="Search city, locality or area..."
-            className="min-w-0 flex-1 bg-transparent px-3 py-3 text-sm font-medium outline-none placeholder:text-zinc-400"
+            className="min-w-0 flex-1 bg-transparent px-3 py-3 text-sm font-medium outline-none placeholder:text-[var(--ink-soft)]"
           />
 
           <button
             onClick={searchLocation}
             disabled={searching}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-zinc-950 text-white transition hover:bg-zinc-800 disabled:opacity-60"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--ink)] text-white transition hover:bg-[var(--copper-700)] disabled:opacity-60"
           >
 
             {searching ? (
@@ -475,7 +475,7 @@ export default function PropertyMap({
 
         {searchResults.length > 0 && (
 
-          <div className="mt-2 overflow-hidden rounded-2xl border border-black/5 bg-white shadow-xl">
+          <div className="mt-2 overflow-hidden rounded-2xl border border-[var(--stone-line)] bg-white shadow-xl">
 
             {searchResults.map((result, index) => (
 
@@ -484,15 +484,15 @@ export default function PropertyMap({
                 onClick={() =>
                   selectLocation(result)
                 }
-                className="flex w-full items-start gap-3 border-b border-zinc-100 px-4 py-3 text-left last:border-0 hover:bg-zinc-50"
+                className="flex w-full items-start gap-3 border-b border-[var(--stone-line)] px-4 py-3 text-left last:border-0 hover:bg-[var(--paper)]"
               >
 
                 <MapPin
                   size={16}
-                  className="mt-0.5 shrink-0 text-zinc-400"
+                  className="mt-0.5 shrink-0 text-[var(--ink-soft)]"
                 />
 
-                <span className="text-xs leading-5 text-zinc-600">
+                <span className="text-xs leading-5 text-[var(--ink-soft)]">
                   {result.display_name}
                 </span>
 
@@ -527,7 +527,7 @@ export default function PropertyMap({
       <button
         onClick={locateUser}
         title="Use my location"
-        className="absolute bottom-4 right-16 z-[1000] flex h-10 w-10 items-center justify-center rounded-xl border border-black/10 bg-white/95 text-zinc-700 shadow-lg backdrop-blur-md transition hover:bg-zinc-50"
+        className="absolute bottom-4 right-16 z-[1000] flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--stone-line)] bg-white/95 text-[var(--ink-soft)] shadow-lg backdrop-blur-md transition hover:bg-[var(--paper)]"
       >
 
         <LocateFixed size={17} />

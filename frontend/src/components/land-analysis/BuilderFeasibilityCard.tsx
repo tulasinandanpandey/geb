@@ -22,22 +22,22 @@ export default function BuilderFeasibilityCard({
   onOpenAiChat,
 }: BuilderFeasibilityCardProps) {
   return (
-    <div className="bg-white border border-slate-200/90 rounded-3xl p-5 shadow-md space-y-6 text-slate-800 font-sans">
+    <div className="bg-white border border-[var(--stone-line)]/90 rounded-3xl p-5 shadow-md space-y-6 text-[var(--ink)] font-sans">
       {/* Header Banner */}
-      <div className="flex flex-wrap items-start justify-between gap-4 border-b border-slate-100 pb-4">
+      <div className="flex flex-wrap items-start justify-between gap-4 border-b border-[var(--stone-line)] pb-4">
         <div>
           <div className="flex items-center gap-2">
             <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-indigo-100 text-indigo-800 border border-indigo-200">
               Builder Architectural Feasibility
             </span>
-            <span className="text-xs text-slate-500 font-medium">
+            <span className="text-xs text-[var(--ink-soft)] font-medium">
               Plot Area: {builder.plot_area_sqft} sqft
             </span>
           </div>
-          <h3 className="text-xl font-extrabold text-slate-900 mt-2 tracking-tight">
+          <h3 className="text-xl font-extrabold text-[var(--ink)] mt-2 tracking-tight">
             {builder.property_title || "Development Feasibility Report"}
           </h3>
-          <p className="text-xs text-slate-500 mt-0.5 font-medium">
+          <p className="text-xs text-[var(--ink-soft)] mt-0.5 font-medium">
             Proposed Usage: <span className="text-indigo-700 font-bold">{builder.proposed_usage}</span>
           </p>
         </div>
@@ -54,20 +54,20 @@ export default function BuilderFeasibilityCard({
       </div>
 
       {/* Primary Built-up Potential Banner */}
-      <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 flex flex-wrap items-center justify-between gap-4 shadow-sm">
+      <div className="bg-[var(--paper)] border border-[var(--stone-line)] rounded-2xl p-5 flex flex-wrap items-center justify-between gap-4 shadow-sm">
         <div>
-          <span className="text-[10px] text-slate-400 font-extrabold uppercase tracking-wider">
+          <span className="text-[10px] text-[var(--ink-soft)] font-extrabold uppercase tracking-wider">
             Potential Built-Up Area (FAR Multiplier {builder.estimated_far_multiplier}x)
           </span>
           <p className="text-2xl font-extrabold text-indigo-700 mt-1">
-            {builder.potential_builtup_sqft} <span className="text-sm text-slate-500 font-medium">sqft</span>
+            {builder.potential_builtup_sqft} <span className="text-sm text-[var(--ink-soft)] font-medium">sqft</span>
           </p>
-          <p className="text-xs text-slate-500 mt-0.5 font-medium">Estimated Height: {builder.estimated_max_floors}</p>
+          <p className="text-xs text-[var(--ink-soft)] mt-0.5 font-medium">Estimated Height: {builder.estimated_max_floors}</p>
         </div>
 
-        <div className="bg-white border border-slate-200 px-4 py-3 rounded-xl text-xs shadow-sm">
-          <span className="text-slate-400 font-medium">Max Ground Coverage:</span>
-          <p className="text-base font-extrabold text-slate-900 mt-0.5">
+        <div className="bg-white border border-[var(--stone-line)] px-4 py-3 rounded-xl text-xs shadow-sm">
+          <span className="text-[var(--ink-soft)] font-medium">Max Ground Coverage:</span>
+          <p className="text-base font-extrabold text-[var(--ink)] mt-0.5">
             {builder.max_ground_coverage_sqft} sqft ({builder.estimated_coverage_pct}%)
           </p>
         </div>
@@ -75,20 +75,20 @@ export default function BuilderFeasibilityCard({
 
       {/* Engineering Technical Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
-        <div className="bg-slate-50 border border-slate-200 rounded-2xl p-3.5">
-          <p className="text-slate-400 text-[11px] font-bold">Road Access Width</p>
-          <p className="text-base font-extrabold text-slate-900 mt-1">{builder.road_width_m} meters</p>
-          <p className="text-[10px] text-slate-500 mt-0.5 font-medium">Determines Max Height</p>
+        <div className="bg-[var(--paper)] border border-[var(--stone-line)] rounded-2xl p-3.5">
+          <p className="text-[var(--ink-soft)] text-[11px] font-bold">Road Access Width</p>
+          <p className="text-base font-extrabold text-[var(--ink)] mt-1">{builder.road_width_m} meters</p>
+          <p className="text-[10px] text-[var(--ink-soft)] mt-0.5 font-medium">Determines Max Height</p>
         </div>
 
-        <div className="bg-slate-50 border border-slate-200 rounded-2xl p-3.5">
-          <p className="text-slate-400 text-[11px] font-bold">Recommended Foundation</p>
+        <div className="bg-[var(--paper)] border border-[var(--stone-line)] rounded-2xl p-3.5">
+          <p className="text-[var(--ink-soft)] text-[11px] font-bold">Recommended Foundation</p>
           <p className="text-xs font-extrabold text-emerald-700 mt-1">{builder.recommended_foundation}</p>
-          <p className="text-[10px] text-slate-500 mt-0.5 font-medium">Bearing: {builder.bearing_capacity_kpa} kN/m²</p>
+          <p className="text-[10px] text-[var(--ink-soft)] mt-0.5 font-medium">Bearing: {builder.bearing_capacity_kpa} kN/m²</p>
         </div>
 
-        <div className="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 col-span-2 sm:col-span-1">
-          <p className="text-slate-400 text-[11px] font-bold">Basement Feasibility</p>
+        <div className="bg-[var(--paper)] border border-[var(--stone-line)] rounded-2xl p-3.5 col-span-2 sm:col-span-1">
+          <p className="text-[var(--ink-soft)] text-[11px] font-bold">Basement Feasibility</p>
           <p className="text-xs font-extrabold text-indigo-700 mt-1">{builder.basement_feasibility}</p>
         </div>
       </div>
@@ -103,7 +103,7 @@ export default function BuilderFeasibilityCard({
       </div>
 
       {/* Summary */}
-      <div className="text-xs text-slate-600 italic bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80">
+      <div className="text-xs text-[var(--ink-soft)] italic bg-[var(--paper)] p-3.5 rounded-2xl border border-[var(--stone-line)]/80">
         "{builder.summary}"
       </div>
     </div>

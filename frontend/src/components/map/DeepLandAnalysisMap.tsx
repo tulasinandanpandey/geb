@@ -120,10 +120,10 @@ export default function DeepLandAnalysisMap({
       polygon.bindTooltip(
         `<div class="p-1 text-xs font-semibold">
           <p class="text-emerald-400 font-bold">${zone.name}</p>
-          <p class="text-slate-300">Soil: ${zone.soil_type}</p>
+          <p class="text-[var(--stone-line)]">Soil: ${zone.soil_type}</p>
           <p class="text-purple-300">Bearing: ${zone.bearing_capacity_avg} kN/m²</p>
         </div>`,
-        { sticky: true, className: "bg-slate-900 text-white border-slate-700 rounded shadow-lg" }
+        { sticky: true, className: "bg-[var(--ink)] text-white border-[var(--ink)] rounded shadow-lg" }
       );
 
       polygonGroupRef.current?.addLayer(polygon);
@@ -146,7 +146,7 @@ export default function DeepLandAnalysisMap({
           <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold text-white shadow-xl transition-all ${
             isSelected
               ? "bg-emerald-600 ring-4 ring-emerald-400/50 scale-110"
-              : "bg-slate-900/90 border border-slate-700 hover:bg-slate-800 hover:scale-105"
+              : "bg-[var(--ink)]/90 border border-[var(--ink)] hover:bg-[var(--copper-700)] hover:scale-105"
           }">
             <span class="w-2 h-2 rounded-full ${isSelected ? "bg-emerald-300 animate-ping" : "bg-emerald-400"}"></span>
             <span>₹${(property.price / 100000).toFixed(1)}L</span>
@@ -205,64 +205,64 @@ export default function DeepLandAnalysisMap({
   }, [sampledLocation]);
 
   return (
-    <div className="relative z-0 isolate w-full h-full min-h-[550px] rounded-2xl overflow-hidden border border-slate-800 shadow-2xl bg-slate-950">
+    <div className="relative z-0 isolate w-full h-full min-h-[550px] rounded-2xl overflow-hidden border border-[var(--ink)] shadow-2xl bg-[var(--ink)]">
       {/* Map Container */}
       <div ref={mapContainerRef} className="w-full h-full z-0" />
 
       {/* Control Panel */}
-      <div className="absolute top-4 left-4 z-10 bg-slate-900/90 backdrop-blur-md border border-slate-800 rounded-xl p-3 shadow-xl space-y-2 text-xs">
-        <div className="flex items-center gap-2 text-emerald-400 font-bold tracking-wide uppercase pb-1 border-b border-slate-800">
+      <div className="absolute top-4 left-4 z-10 bg-[var(--ink)]/90 backdrop-blur-md border border-[var(--ink)] rounded-xl p-3 shadow-xl space-y-2 text-xs">
+        <div className="flex items-center gap-2 text-emerald-400 font-bold tracking-wide uppercase pb-1 border-b border-[var(--ink)]">
           <Layers className="w-4 h-4" />
           <span>GIS Layers</span>
         </div>
 
-        <label className="flex items-center gap-2 text-slate-200 cursor-pointer hover:text-white transition-colors">
+        <label className="flex items-center gap-2 text-[var(--stone-line)] cursor-pointer hover:text-white transition-colors">
           <input
             type="checkbox"
             checked={showZones}
             onChange={(e) => setShowZones(e.target.checked)}
-            className="rounded border-slate-700 text-emerald-500 focus:ring-emerald-500"
+            className="rounded border-[var(--ink)] text-emerald-500 focus:ring-emerald-500"
           />
           <span>Soil Types & Bearing Map</span>
         </label>
 
-        <label className="flex items-center gap-2 text-slate-200 cursor-pointer hover:text-white transition-colors">
+        <label className="flex items-center gap-2 text-[var(--stone-line)] cursor-pointer hover:text-white transition-colors">
           <input
             type="checkbox"
             checked={showGrowthLayer}
             onChange={(e) => setShowGrowthLayer(e.target.checked)}
-            className="rounded border-slate-700 text-purple-500 focus:ring-purple-500"
+            className="rounded border-[var(--ink)] text-purple-500 focus:ring-purple-500"
           />
           <span className="flex items-center gap-1">
             <TrendingUp className="w-3 h-3 text-purple-400" /> Satellite Growth Corridor
           </span>
         </label>
 
-        <label className="flex items-center gap-2 text-slate-200 cursor-pointer hover:text-white transition-colors">
+        <label className="flex items-center gap-2 text-[var(--stone-line)] cursor-pointer hover:text-white transition-colors">
           <input
             type="checkbox"
             checked={showAirLayer}
             onChange={(e) => setShowAirLayer(e.target.checked)}
-            className="rounded border-slate-700 text-blue-500 focus:ring-blue-500"
+            className="rounded border-[var(--ink)] text-orange-500 focus:ring-orange-500"
           />
           <span className="flex items-center gap-1">
-            <Wind className="w-3 h-3 text-blue-400" /> Air Quality (AQI) Heatmap
+            <Wind className="w-3 h-3 text-orange-400" /> Air Quality (AQI) Heatmap
           </span>
         </label>
 
-        <label className="flex items-center gap-2 text-slate-200 cursor-pointer hover:text-white transition-colors">
+        <label className="flex items-center gap-2 text-[var(--stone-line)] cursor-pointer hover:text-white transition-colors">
           <input
             type="checkbox"
             checked={showProperties}
             onChange={(e) => setShowProperties(e.target.checked)}
-            className="rounded border-slate-700 text-emerald-500 focus:ring-emerald-500"
+            className="rounded border-[var(--ink)] text-emerald-500 focus:ring-emerald-500"
           />
           <span>Property Listings</span>
         </label>
       </div>
 
       {/* Instruction Banner */}
-      <div className="absolute bottom-4 left-4 z-10 bg-slate-950/85 backdrop-blur-md border border-slate-800/80 rounded-lg px-3 py-1.5 text-[11px] text-slate-300 flex items-center gap-2 shadow-lg">
+      <div className="absolute bottom-4 left-4 z-10 bg-[var(--ink)]/85 backdrop-blur-md border border-[var(--ink)]/80 rounded-lg px-3 py-1.5 text-[11px] text-[var(--stone-line)] flex items-center gap-2 shadow-lg">
         <Compass className="w-4 h-4 text-emerald-400 animate-spin-slow" />
         <span>Click map to sample coordinates for **Soil + Growth + Air Intelligence**</span>
       </div>

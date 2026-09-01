@@ -1,31 +1,83 @@
 @import "tailwindcss";
 
+/* ==========================================================
+   GEB Prop — Design Tokens
+   Warm, editorial "trusted advisor" palette pulled from the
+   mark: copper/bronze + graphite steel + a quiet violet glow
+   for AI moments, on a warm paper background instead of a
+   stark clinical white.
+   ========================================================== */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --paper: #faf7f2;
+  --paper-raised: #ffffff;
+  --ink: #221d1a;
+  --ink-soft: #4a423c;
+
+  --copper-50: #fdf4ec;
+  --copper-100: #fbe6d3;
+  --copper-400: #d98a4f;
+  --copper-600: #b5652d;
+  --copper-700: #954f21;
+  --copper-900: #4a2812;
+
+  --violet: #6d5dd3;
+  --violet-soft: #efecfb;
+
+  --sage: #3f7d5c;
+  --sage-soft: #e8f2ec;
+
+  --stone-line: #e8e1d6;
+
+  --background: var(--paper);
+  --foreground: var(--ink);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-cormorant);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
- 
-/* GEB MAP */
+
+h1,
+h2,
+h3,
+.font-display {
+  font-family: var(--font-cormorant), Georgia, serif;
+}
+
+::selection {
+  background: var(--copper-100);
+  color: var(--copper-900);
+}
+
+/* Subtle warm scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--stone-line);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--copper-400);
+}
+
+/* ==========================================================
+   GEB MAP — markers, popups, controls
+   Recolored to the copper/graphite/violet system.
+   ========================================================== */
 
 .geb-map-marker-wrapper {
   background: transparent !important;
@@ -36,110 +88,19 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 78px;
-  height: 34px;
-  padding: 0 12px;
-  border: 2px solid white;
-  border-radius: 999px;
-  background: #09090b;
-  color: white;
-  font-size: 12px;
-  font-weight: 700;
-  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.2);
-  transition: transform 180ms ease;
-}
-
-.geb-map-marker:hover {
-  transform: scale(1.08);
-}
-
-.geb-map-marker.external {
-  background: #52525b;
-}
-
-.geb-map-marker.broker {
-  background: #27272a;
-}
-
-.geb-popup {
-  width: 250px;
-  overflow: hidden;
-  border-radius: 18px;
-}
-
-.geb-popup-image {
-  display: block;
-  width: 100%;
-  height: 130px;
-  object-fit: cover;
-  border-radius: 14px;
-}
-
-.geb-popup-content {
-  padding-top: 12px;
-}
-
-.geb-popup-price {
-  font-size: 20px;
-  font-weight: 800;
-  color: #09090b;
-}
-
-.geb-popup-title {
-  margin-top: 4px;
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.geb-popup-location {
-  margin-top: 4px;
-  font-size: 12px;
-  color: #71717a;
-}
-
-.geb-popup-details {
-  margin-top: 8px;
-  font-size: 12px;
-  color: #52525b;
-}
-
-.geb-popup-score {
-  margin-top: 10px;
-  padding: 8px 10px;
-  border-radius: 10px;
-  background: #f4f4f5;
-  font-size: 11px;
-  font-weight: 700;
-}
-
-.leaflet-popup-content-wrapper {
-  padding: 8px;
-  border-radius: 20px;
-}
-
-.leaflet-popup-content {
-  margin: 8px;
-}
-
-.leaflet-popup-tip {
-  display: none;
-}
-/* GEB PREMIUM MAP */
-
-.geb-map-marker {
   min-width: 76px;
   height: 32px;
   padding: 0 11px;
   border: 2px solid rgba(255, 255, 255, 0.95);
   border-radius: 999px;
-  background: #09090b;
+  background: var(--ink);
   color: white;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: -0.01em;
   box-shadow:
-    0 4px 12px rgba(0, 0, 0, 0.18),
-    0 1px 3px rgba(0, 0, 0, 0.12);
+    0 4px 12px rgba(34, 29, 26, 0.18),
+    0 1px 3px rgba(34, 29, 26, 0.12);
   transition:
     transform 180ms ease,
     box-shadow 180ms ease;
@@ -148,25 +109,25 @@ body {
 .geb-map-marker:hover {
   transform: translateY(-2px) scale(1.05);
   box-shadow:
-    0 8px 20px rgba(0, 0, 0, 0.22),
-    0 2px 5px rgba(0, 0, 0, 0.12);
+    0 8px 20px rgba(34, 29, 26, 0.22),
+    0 2px 5px rgba(34, 29, 26, 0.12);
 }
 
 .geb-map-marker.external {
-  background: #52525b;
+  background: var(--ink-soft);
 }
 
 .geb-map-marker.broker {
-  background: #27272a;
+  background: var(--copper-700);
 }
 
 /* Leaflet controls */
 
 .leaflet-control-zoom {
   overflow: hidden;
-  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  border: 1px solid var(--stone-line) !important;
   border-radius: 14px !important;
-  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 5px 18px rgba(34, 29, 26, 0.12) !important;
 }
 
 .leaflet-control-zoom a {
@@ -175,13 +136,13 @@ body {
   line-height: 36px !important;
   border: none !important;
   background: rgba(255, 255, 255, 0.96) !important;
-  color: #18181b !important;
+  color: var(--ink) !important;
   font-size: 18px !important;
   transition: background 150ms ease;
 }
 
 .leaflet-control-zoom a:hover {
-  background: #f4f4f5 !important;
+  background: var(--copper-50) !important;
 }
 
 /* Attribution */
@@ -191,7 +152,7 @@ body {
   padding: 4px 8px !important;
   border-radius: 999px !important;
   background: rgba(255, 255, 255, 0.82) !important;
-  color: #71717a !important;
+  color: var(--ink-soft) !important;
   font-size: 9px !important;
   backdrop-filter: blur(8px);
 }
@@ -202,7 +163,7 @@ body {
   overflow: hidden;
   padding: 0 !important;
   border-radius: 20px !important;
-  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.16) !important;
+  box-shadow: 0 15px 45px rgba(34, 29, 26, 0.16) !important;
 }
 
 .leaflet-popup-content {
@@ -217,7 +178,7 @@ body {
   height: 28px !important;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.92) !important;
-  color: #18181b !important;
+  color: var(--ink) !important;
   font-size: 18px !important;
   line-height: 25px !important;
   text-align: center;
@@ -248,7 +209,7 @@ body {
   font-size: 20px;
   font-weight: 800;
   letter-spacing: -0.04em;
-  color: #09090b;
+  color: var(--ink);
 }
 
 .geb-popup-title {
@@ -260,21 +221,21 @@ body {
 .geb-popup-location {
   margin-top: 3px;
   font-size: 11px;
-  color: #71717a;
+  color: var(--ink-soft);
 }
 
 .geb-popup-details {
   margin-top: 7px;
   font-size: 11px;
-  color: #52525b;
+  color: var(--ink-soft);
 }
 
 .geb-popup-score {
   margin-top: 9px;
   padding: 8px 10px;
   border-radius: 10px;
-  background: #f4f4f5;
-  color: #18181b;
+  background: var(--copper-50);
+  color: var(--copper-900);
   font-size: 10px;
   font-weight: 700;
 }

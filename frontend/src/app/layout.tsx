@@ -48,7 +48,7 @@ export default function RootLayout({
     <html lang="en">
 
       <body
-        className={`${inter.variable} ${cormorant.variable} font-sans antialiased`}
+        className={`${inter.variable} ${cormorant.variable} font-sans antialiased bg-[var(--paper)] text-[var(--ink)]`}
       >
 
         <Providers>

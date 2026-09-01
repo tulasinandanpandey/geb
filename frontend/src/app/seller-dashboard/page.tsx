@@ -23,6 +23,7 @@ import {
   User,
 } from "lucide-react";
 
+import Navbar from "@/components/layout/Navbar";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { getMyProperties } from "@/services/properties";
 import { Property } from "@/types/property";
@@ -330,10 +331,10 @@ function SellerDashboardContent() {
 
   if (authLoading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#f7f7f5]">
+      <main className="flex min-h-screen items-center justify-center bg-[var(--paper)]">
         <div className="text-center">
-          <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-2 border-zinc-300 border-t-zinc-950" />
-          <p className="text-sm font-medium text-zinc-500">
+          <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-2 border-[var(--stone-line)] border-t-[var(--ink)]" />
+          <p className="text-sm font-medium text-[var(--ink-soft)]">
             Loading your account...
           </p>
         </div>
@@ -343,16 +344,16 @@ function SellerDashboardContent() {
 
   if (!user) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#f7f7f5] px-6">
-        <div className="max-w-md rounded-[2rem] border border-black/10 bg-white p-8 text-center shadow-xl">
+      <main className="flex min-h-screen items-center justify-center bg-[var(--paper)] px-6">
+        <div className="max-w-md rounded-[2rem] border border-[var(--stone-line)] bg-white p-8 text-center shadow-xl">
           <Building2 className="mx-auto mb-5" size={32} />
-          <h1 className="font-serif text-4xl font-medium">Sign in required</h1>
-          <p className="mt-3 text-sm leading-6 text-zinc-500">
+          <h1 className="font-display text-4xl font-medium">Sign in required</h1>
+          <p className="mt-3 text-sm leading-6 text-[var(--ink-soft)]">
             Sign in to view and manage properties you have listed on GEB.
           </p>
           <Link
             href="/"
-            className="mt-6 inline-flex items-center gap-2 rounded-full bg-zinc-950 px-5 py-3 text-sm font-semibold text-white"
+            className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--ink)] px-5 py-3 text-sm font-semibold text-white"
           >
             <ArrowLeft size={15} />
             Back to GEB
@@ -363,69 +364,62 @@ function SellerDashboardContent() {
   }
 
   return (
-    <main className="min-h-screen bg-[#f7f7f5] text-zinc-950">
-      {/* NAVBAR */}
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-zinc-950 text-sm font-bold text-white">
-            G
-          </div>
-          <span className="text-xl font-bold tracking-tight">GEB</span>
-        </Link>
-
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-semibold"
-        >
-          <ArrowLeft size={15} />
-          Back to GEB
-        </Link>
-      </nav>
+    <main className="min-h-screen bg-[var(--paper)] text-[var(--ink)]">
+      <Navbar />
 
       {/* HEADER */}
-      <section className="mx-auto max-w-7xl px-6 pb-6 pt-10 lg:px-8">
-        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-          <div>
-            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-zinc-400">
-              Seller Portal
-            </p>
-            <h1 className="font-serif text-5xl font-medium tracking-tight md:text-6xl">
-              GEB Seller CRM
-            </h1>
-            <p className="mt-3 text-zinc-500">
-              Manage your property listings, view client leads, answer questions,
-              and coordinate visits.
-            </p>
-          </div>
+      <section className="relative overflow-hidden">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-60"
+          style={{
+            background:
+              "radial-gradient(circle at 85% 0%, var(--copper-100), transparent 45%)",
+          }}
+        />
+        <div className="relative mx-auto max-w-7xl px-6 pb-6 pt-12 lg:px-8">
+          <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+            <div>
+              <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-[var(--copper-700)]">
+                Seller Portal
+              </p>
+              <h1 className="font-display text-5xl font-medium tracking-tight md:text-6xl">
+                GEB Seller CRM
+              </h1>
+              <p className="mt-3 max-w-xl text-[var(--ink-soft)]">
+                Manage your property listings, view client leads, answer questions,
+                and coordinate visits.
+              </p>
+            </div>
 
-          <div className="flex flex-wrap gap-3">
-            <button
-              onClick={() => {
-                if (conversations.length > 0) {
-                  setActiveChatConversation(conversations[0]);
-                }
-                setInboxOpen(true);
-              }}
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-black/10 bg-white px-6 py-3.5 text-sm font-semibold hover:bg-zinc-50 transition shadow-sm"
-            >
-              <MessageSquare size={17} />
-              Inbox / Messages
-            </button>
+            <div className="flex flex-wrap gap-3">
+              <button
+                onClick={() => {
+                  if (conversations.length > 0) {
+                    setActiveChatConversation(conversations[0]);
+                  }
+                  setInboxOpen(true);
+                }}
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--stone-line)] bg-white px-6 py-3.5 text-sm font-semibold hover:border-[var(--copper-400)] transition shadow-sm"
+              >
+                <MessageSquare size={17} />
+                Inbox / Messages
+              </button>
 
-            <Link
-              href="/list-property"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-zinc-950 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-zinc-800"
-            >
-              <Plus size={17} />
-              List New Property
-            </Link>
+              <Link
+                href="/list-property"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--ink)] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[var(--copper-700)]"
+              >
+                <Plus size={17} />
+                List New Property
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
       {/* CRM TAB NAVIGATION */}
-      <section className="mx-auto max-w-7xl px-6 pb-6 lg:px-8">
-        <div className="flex border-b border-black/5 overflow-x-auto scrollbar-none gap-8">
+      <section className="mx-auto max-w-7xl px-6 pb-8 lg:px-8">
+        <div className="flex w-full items-center gap-1 overflow-x-auto rounded-full border border-[var(--stone-line)] bg-white p-1.5 scrollbar-none">
           {[
             { id: "overview", label: "Overview", icon: LayoutDashboard },
             { id: "properties", label: "My Properties", icon: Building },
@@ -440,10 +434,10 @@ function SellerDashboardContent() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-2 pb-4 pt-2 text-sm font-semibold border-b-2 transition shrink-0 ${
+                className={`flex items-center gap-2 whitespace-nowrap rounded-full px-4 py-2.5 text-sm font-semibold transition shrink-0 ${
                   active
-                    ? "border-zinc-950 text-zinc-950 font-bold"
-                    : "border-transparent text-zinc-400 hover:text-zinc-600"
+                    ? "bg-[var(--ink)] text-white font-bold"
+                    : "text-[var(--ink-soft)] hover:text-[var(--ink)]"
                 }`}
               >
                 <ActiveIcon size={16} />
@@ -464,12 +458,12 @@ function SellerDashboardContent() {
                 {
                   label: "Active Listings",
                   value: properties.filter((p) => p.status === "active").length,
-                  color: "border-zinc-200 bg-white",
+                  color: "border-[var(--stone-line)] bg-white",
                 },
                 {
                   label: "New Leads",
                   value: leads.filter((l) => l.status === "new").length,
-                  color: "border-blue-200 bg-blue-50/50",
+                  color: "border-orange-200 bg-orange-50/50",
                 },
                 {
                   label: "Open Follow-ups",
@@ -496,29 +490,29 @@ function SellerDashboardContent() {
                   key={i}
                   className={`rounded-3xl border p-6 transition duration-300 hover:shadow-md ${stat.color}`}
                 >
-                  <p className="text-xs font-bold uppercase tracking-wider text-zinc-500">
+                  <p className="text-xs font-bold uppercase tracking-wider text-[var(--ink-soft)]">
                     {stat.label}
                   </p>
-                  <p className="mt-3 text-4xl font-semibold text-zinc-900">
+                  <p className="mt-3 text-4xl font-semibold text-[var(--ink)]">
                     {loadingCrm || loading ? "—" : stat.value}
                   </p>
                 </div>
               ))}
             </div>
 
-            <div className="rounded-[2.5rem] border border-black/10 bg-white p-6 md:p-8">
-              <h3 className="font-serif text-2xl font-semibold mb-6">
+            <div className="rounded-[2.5rem] border border-[var(--stone-line)] bg-white p-6 md:p-8">
+              <h3 className="font-display text-2xl font-semibold mb-6">
                 Recent CRM Actions
               </h3>
               {loadingCrm ? (
-                <div className="flex h-32 items-center justify-center text-zinc-400">
+                <div className="flex h-32 items-center justify-center text-[var(--ink-soft)]">
                   <Loader2 className="animate-spin mr-2" size={16} />
                   <span>Loading latest events...</span>
                 </div>
               ) : leads.length === 0 &&
                 meetings.length === 0 &&
                 followups.length === 0 ? (
-                <p className="text-sm text-zinc-400 italic">
+                <p className="text-sm text-[var(--ink-soft)] italic">
                   No recent CRM events. Buyer requests will appear here
                   automatically.
                 </p>
@@ -527,17 +521,17 @@ function SellerDashboardContent() {
                   {leads.slice(0, 2).map((lead) => (
                     <div
                       key={lead.id}
-                      className="flex justify-between items-center p-4 rounded-2xl bg-zinc-50 border border-black/5"
+                      className="flex justify-between items-center p-4 rounded-2xl bg-[var(--paper)] border border-[var(--stone-line)]"
                     >
                       <div className="truncate pr-4">
-                        <span className="text-xs font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full mr-2">
+                        <span className="text-xs font-bold text-orange-700 bg-orange-50 px-2 py-0.5 rounded-full mr-2">
                           New Lead
                         </span>
-                        <span className="text-sm font-semibold text-zinc-900">
+                        <span className="text-sm font-semibold text-[var(--ink)]">
                           {lead.buyer?.full_name || lead.buyer?.email}
                         </span>
-                        <span className="text-xs text-zinc-500"> is interested in </span>
-                        <span className="text-sm font-bold text-zinc-900">
+                        <span className="text-xs text-[var(--ink-soft)]"> is interested in </span>
+                        <span className="text-sm font-bold text-[var(--ink)]">
                           {lead.property?.title}
                         </span>
                       </div>
@@ -546,7 +540,7 @@ function SellerDashboardContent() {
                           setSelectedLead(lead);
                           setActiveTab("leads");
                         }}
-                        className="text-xs font-bold text-zinc-900 underline shrink-0"
+                        className="text-xs font-bold text-[var(--ink)] underline shrink-0"
                       >
                         View Lead
                       </button>
@@ -559,23 +553,23 @@ function SellerDashboardContent() {
                     .map((meet) => (
                       <div
                         key={meet.id}
-                        className="flex justify-between items-center p-4 rounded-2xl bg-zinc-50 border border-black/5"
+                        className="flex justify-between items-center p-4 rounded-2xl bg-[var(--paper)] border border-[var(--stone-line)]"
                       >
                         <div className="truncate pr-4">
                           <span className="text-xs font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-full mr-2">
                             Visit Request
                           </span>
-                          <span className="text-sm font-semibold text-zinc-900">
+                          <span className="text-sm font-semibold text-[var(--ink)]">
                             {meet.buyer?.full_name || meet.buyer?.email}
                           </span>
-                          <span className="text-xs text-zinc-500"> proposed </span>
-                          <span className="text-sm font-bold text-zinc-900">
+                          <span className="text-xs text-[var(--ink-soft)]"> proposed </span>
+                          <span className="text-sm font-bold text-[var(--ink)]">
                             {meet.requested_date} at {meet.requested_time}
                           </span>
                         </div>
                         <button
                           onClick={() => setActiveTab("meetings")}
-                          className="text-xs font-bold text-zinc-900 underline shrink-0"
+                          className="text-xs font-bold text-[var(--ink)] underline shrink-0"
                         >
                           Manage Visits
                         </button>
@@ -592,8 +586,8 @@ function SellerDashboardContent() {
           <div>
             <div className="mb-5 flex items-center justify-between">
               <div>
-                <h2 className="font-serif text-3xl font-medium">My listings</h2>
-                <p className="mt-1 text-sm text-zinc-400">
+                <h2 className="font-display text-3xl font-medium">My listings</h2>
+                <p className="mt-1 text-sm text-[var(--ink-soft)]">
                   Only properties owned by your account appear here.
                 </p>
               </div>
@@ -601,7 +595,7 @@ function SellerDashboardContent() {
               <button
                 onClick={loadProperties}
                 disabled={loading}
-                className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-semibold transition hover:bg-zinc-100 disabled:opacity-50"
+                className="inline-flex items-center gap-2 rounded-full border border-[var(--stone-line)] bg-white px-4 py-2 text-sm font-semibold transition hover:bg-[var(--paper)] disabled:opacity-50"
               >
                 <RefreshCw
                   size={15}
@@ -616,10 +610,10 @@ function SellerDashboardContent() {
                 <p className="text-sm font-semibold text-red-500">
                   Unable to load your listings
                 </p>
-                <p className="mt-2 text-sm text-zinc-500">{error}</p>
+                <p className="mt-2 text-sm text-[var(--ink-soft)]">{error}</p>
                 <button
                   onClick={loadProperties}
-                  className="mt-5 rounded-full bg-zinc-950 px-5 py-3 text-sm font-semibold text-white"
+                  className="mt-5 rounded-full bg-[var(--ink)] px-5 py-3 text-sm font-semibold text-white"
                 >
                   Try again
                 </button>
@@ -629,28 +623,28 @@ function SellerDashboardContent() {
                 {[1, 2, 3].map((item) => (
                   <div
                     key={item}
-                    className="overflow-hidden rounded-[2.5rem] border border-zinc-200 bg-white"
+                    className="overflow-hidden rounded-[2.5rem] border border-[var(--stone-line)] bg-white"
                   >
-                    <div className="h-64 animate-pulse bg-zinc-200" />
+                    <div className="h-64 animate-pulse bg-[var(--stone-line)]" />
                     <div className="space-y-3 p-5">
-                      <div className="h-5 w-3/4 animate-pulse rounded bg-zinc-200" />
-                      <div className="h-4 w-1/2 animate-pulse rounded bg-zinc-200" />
+                      <div className="h-5 w-3/4 animate-pulse rounded bg-[var(--stone-line)]" />
+                      <div className="h-4 w-1/2 animate-pulse rounded bg-[var(--stone-line)]" />
                     </div>
                   </div>
                 ))}
               </div>
             ) : properties.length === 0 ? (
-              <div className="rounded-[2.5rem] border border-dashed border-zinc-300 bg-white px-6 py-16 text-center">
-                <Building2 className="mx-auto mb-4 text-zinc-300" size={36} />
+              <div className="rounded-[2.5rem] border border-dashed border-[var(--stone-line)] bg-white px-6 py-16 text-center">
+                <Building2 className="mx-auto mb-4 text-[var(--ink-soft)]" size={36} />
                 <h3 className="text-xl font-semibold">
                   No properties listed yet
                 </h3>
-                <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-zinc-500">
+                <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-[var(--ink-soft)]">
                   Start by listing your first property on GEB.
                 </p>
                 <Link
                   href="/list-property"
-                  className="mt-6 inline-flex items-center gap-2 rounded-full bg-zinc-950 px-5 py-3 text-sm font-semibold text-white"
+                  className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--ink)] px-5 py-3 text-sm font-semibold text-white"
                 >
                   <Plus size={16} />
                   List Property
@@ -661,10 +655,10 @@ function SellerDashboardContent() {
                 {properties.map((property) => (
                   <article
                     key={property.id}
-                    className="overflow-hidden rounded-[2.5rem] border border-black/10 bg-white shadow-sm flex flex-col justify-between"
+                    className="overflow-hidden rounded-[2.5rem] border border-[var(--stone-line)] bg-white shadow-sm flex flex-col justify-between"
                   >
                     <div>
-                      <div className="relative h-64 bg-zinc-100">
+                      <div className="relative h-64 bg-[var(--paper)]">
                         {property.image ? (
                           <img
                             src={property.image}
@@ -672,7 +666,7 @@ function SellerDashboardContent() {
                             className="h-full w-full object-cover"
                           />
                         ) : (
-                          <div className="flex h-full items-center justify-center text-zinc-300">
+                          <div className="flex h-full items-center justify-center text-[var(--ink-soft)]">
                             <ImageIcon size={40} />
                           </div>
                         )}
@@ -691,7 +685,7 @@ function SellerDashboardContent() {
                         <h3 className="truncate text-lg font-semibold">
                           {property.title}
                         </h3>
-                        <p className="mt-1 text-sm text-zinc-400">
+                        <p className="mt-1 text-sm text-[var(--ink-soft)]">
                           {property.propertyType}
                         </p>
 
@@ -699,7 +693,7 @@ function SellerDashboardContent() {
                           ₹{property.price.toLocaleString("en-IN")}
                         </p>
 
-                        <div className="mt-4 flex items-center gap-2 text-sm text-zinc-500">
+                        <div className="mt-4 flex items-center gap-2 text-sm text-[var(--ink-soft)]">
                           <MapPin size={15} />
                           <span className="truncate">
                             {property.locality ? `${property.locality}, ` : ""}
@@ -707,7 +701,7 @@ function SellerDashboardContent() {
                           </span>
                         </div>
 
-                        <div className="mt-3 text-sm text-zinc-400">
+                        <div className="mt-3 text-sm text-[var(--ink-soft)]">
                           {property.area
                             ? `${property.area.toLocaleString("en-IN")} ${property.areaUnit}`
                             : "Area not specified"}
@@ -725,13 +719,13 @@ function SellerDashboardContent() {
                       </div>
                     </div>
 
-                    <div className="p-5 pt-0 border-t border-black/5 mt-4">
-                      <div className="flex gap-2 justify-between text-[10px] font-bold text-zinc-500 pt-4">
-                        <span className="bg-zinc-50 border border-black/5 px-2.5 py-1.5 rounded-full">
+                    <div className="p-5 pt-0 border-t border-[var(--stone-line)] mt-4">
+                      <div className="flex gap-2 justify-between text-[10px] font-bold text-[var(--ink-soft)] pt-4">
+                        <span className="bg-[var(--paper)] border border-[var(--stone-line)] px-2.5 py-1.5 rounded-full">
                           Leads:{" "}
                           {leads.filter((l) => l.property_id === property.id).length}
                         </span>
-                        <span className="bg-zinc-50 border border-black/5 px-2.5 py-1.5 rounded-full">
+                        <span className="bg-[var(--paper)] border border-[var(--stone-line)] px-2.5 py-1.5 rounded-full">
                           Chats:{" "}
                           {
                             conversations.filter(
@@ -739,7 +733,7 @@ function SellerDashboardContent() {
                             ).length
                           }
                         </span>
-                        <span className="bg-zinc-50 border border-black/5 px-2.5 py-1.5 rounded-full">
+                        <span className="bg-[var(--paper)] border border-[var(--stone-line)] px-2.5 py-1.5 rounded-full">
                           Meetings:{" "}
                           {
                             meetings.filter((m) => m.property_id === property.id)
@@ -748,12 +742,12 @@ function SellerDashboardContent() {
                         </span>
                       </div>
 
-                      <div className="mt-4 flex gap-2 pt-2 border-t border-zinc-100">
+                      <div className="mt-4 flex gap-2 pt-2 border-t border-[var(--stone-line)]">
                         <button
                           onClick={() => {
                             setSelectedPropertyForDetail(property);
                           }}
-                          className="flex-1 text-center bg-zinc-950 text-white hover:bg-zinc-800 py-2 rounded-xl text-xs font-bold transition shadow-sm"
+                          className="flex-1 text-center bg-[var(--ink)] text-white hover:bg-[var(--copper-700)] py-2 rounded-xl text-xs font-bold transition shadow-sm"
                         >
                           View
                         </button>
@@ -761,7 +755,7 @@ function SellerDashboardContent() {
                           onClick={() => {
                             setActiveTab("conversations");
                           }}
-                          className="flex-1 text-center border border-black/10 hover:bg-zinc-50 py-2 rounded-xl text-xs font-bold transition shadow-sm bg-white"
+                          className="flex-1 text-center border border-[var(--stone-line)] hover:bg-[var(--paper)] py-2 rounded-xl text-xs font-bold transition shadow-sm bg-white"
                         >
                           Messages
                         </button>
@@ -778,16 +772,16 @@ function SellerDashboardContent() {
         {activeTab === "leads" && (
           <div className="flex flex-col lg:flex-row gap-6">
             <div className="flex-1 space-y-4">
-              <h3 className="font-serif text-2xl font-semibold mb-4">
+              <h3 className="font-display text-2xl font-semibold mb-4">
                 Active Purchase Leads
               </h3>
               {loadingCrm ? (
-                <div className="p-12 text-center text-zinc-400 bg-white border border-black/5 rounded-3xl">
-                  <Loader2 className="animate-spin mx-auto mb-2 text-zinc-300" size={24} />
+                <div className="p-12 text-center text-[var(--ink-soft)] bg-white border border-[var(--stone-line)] rounded-3xl">
+                  <Loader2 className="animate-spin mx-auto mb-2 text-[var(--ink-soft)]" size={24} />
                   <span>Loading leads...</span>
                 </div>
               ) : leads.length === 0 ? (
-                <div className="p-12 text-center bg-white border border-black/5 rounded-3xl text-zinc-400">
+                <div className="p-12 text-center bg-white border border-[var(--stone-line)] rounded-3xl text-[var(--ink-soft)]">
                   No purchase leads logged yet.
                 </div>
               ) : (
@@ -800,20 +794,20 @@ function SellerDashboardContent() {
                         onClick={() => setSelectedLead(lead)}
                         className={`p-5 rounded-3xl border cursor-pointer transition duration-300 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 ${
                           active
-                            ? "border-zinc-950 bg-white ring-1 ring-zinc-950 shadow-md"
-                            : "border-black/5 bg-white hover:border-zinc-300 shadow-sm"
+                            ? "border-[var(--ink)] bg-white ring-1 ring-[var(--ink)] shadow-md"
+                            : "border-[var(--stone-line)] bg-white hover:border-[var(--stone-line)] shadow-sm"
                         }`}
                       >
                         <div>
-                          <h4 className="text-sm font-bold text-zinc-950">
+                          <h4 className="text-sm font-bold text-[var(--ink)]">
                             {lead.buyer?.full_name || lead.buyer?.email}
                           </h4>
-                          <p className="text-xs font-semibold text-zinc-500 mt-0.5">
+                          <p className="text-xs font-semibold text-[var(--ink-soft)] mt-0.5">
                             🏡 {lead.property?.title} · ₹
                             {Number(lead.property?.price).toLocaleString("en-IN")}
                           </p>
                           {lead.intent && (
-                            <p className="text-xs text-zinc-400 mt-2 italic font-medium">
+                            <p className="text-xs text-[var(--ink-soft)] mt-2 italic font-medium">
                               &ldquo;{lead.intent}&rdquo;
                             </p>
                           )}
@@ -823,15 +817,15 @@ function SellerDashboardContent() {
                           <span
                             className={`text-[10px] font-bold px-3 py-1 rounded-full capitalize ${
                               lead.status === "new"
-                                ? "bg-blue-50 text-blue-700"
+                                ? "bg-orange-50 text-orange-700"
                                 : lead.status === "closed"
-                                ? "bg-zinc-100 text-zinc-500"
+                                ? "bg-[var(--paper)] text-[var(--ink-soft)]"
                                 : "bg-emerald-50 text-emerald-700"
                             }`}
                           >
                             {lead.status}
                           </span>
-                          <span className="text-[10px] text-zinc-400 font-semibold">
+                          <span className="text-[10px] text-[var(--ink-soft)] font-semibold">
                             {new Date(lead.updated_at).toLocaleDateString()}
                           </span>
                         </div>
@@ -843,44 +837,44 @@ function SellerDashboardContent() {
             </div>
 
             {selectedLead && (
-              <div className="w-full lg:w-96 shrink-0 bg-white border border-black/10 rounded-[2.5rem] p-6 shadow-xl space-y-6 self-start">
-                <div className="flex justify-between items-center pb-4 border-b border-black/5">
-                  <h4 className="font-serif text-lg font-bold">Lead Details</h4>
+              <div className="w-full lg:w-96 shrink-0 bg-white border border-[var(--stone-line)] rounded-[2.5rem] p-6 shadow-xl space-y-6 self-start">
+                <div className="flex justify-between items-center pb-4 border-b border-[var(--stone-line)]">
+                  <h4 className="font-display text-lg font-bold">Lead Details</h4>
                   <button
                     onClick={() => setSelectedLead(null)}
-                    className="text-zinc-400 hover:text-zinc-600 font-bold text-lg"
+                    className="text-[var(--ink-soft)] hover:text-[var(--ink-soft)] font-bold text-lg"
                   >
                     ×
                   </button>
                 </div>
 
                 <div>
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--ink-soft)]">
                     Buyer Information
                   </p>
-                  <p className="text-sm font-bold text-zinc-900 mt-1">
+                  <p className="text-sm font-bold text-[var(--ink)] mt-1">
                     {selectedLead.buyer?.full_name || "Buyer"}
                   </p>
-                  <p className="text-xs text-zinc-500">
+                  <p className="text-xs text-[var(--ink-soft)]">
                     {selectedLead.buyer?.email}
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--ink-soft)]">
                     Property Details
                   </p>
-                  <p className="text-sm font-semibold text-zinc-900 mt-1">
+                  <p className="text-sm font-semibold text-[var(--ink)] mt-1">
                     {selectedLead.property?.title}
                   </p>
-                  <p className="text-xs text-zinc-500">
+                  <p className="text-xs text-[var(--ink-soft)]">
                     {selectedLead.property?.city} · ₹
                     {Number(selectedLead.property?.price).toLocaleString("en-IN")}
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--ink-soft)]">
                     AI Co-pilot Status
                   </p>
                   {(() => {
@@ -889,12 +883,12 @@ function SellerDashboardContent() {
                     );
                     if (!conv)
                       return (
-                        <p className="text-xs text-zinc-500 mt-1">
+                        <p className="text-xs text-[var(--ink-soft)] mt-1">
                           No active conversation.
                         </p>
                       );
                     return (
-                      <div className="flex items-center justify-between mt-2 bg-zinc-50 p-2.5 rounded-2xl border border-black/5">
+                      <div className="flex items-center justify-between mt-2 bg-[var(--paper)] p-2.5 rounded-2xl border border-[var(--stone-line)]">
                         <span
                           className={`text-[10px] px-2.5 py-1 rounded-full font-bold capitalize ${
                             conv.mode === "ai_active"
@@ -907,7 +901,7 @@ function SellerDashboardContent() {
                         {conv.mode === "ai_active" && (
                           <button
                             onClick={() => handleTakeOver(conv.id)}
-                            className="text-[10px] font-bold bg-zinc-950 text-white px-3 py-1.5 rounded-xl hover:bg-zinc-800 transition"
+                            className="text-[10px] font-bold bg-[var(--ink)] text-white px-3 py-1.5 rounded-xl hover:bg-[var(--copper-700)] transition"
                           >
                             Take Over
                           </button>
@@ -917,7 +911,7 @@ function SellerDashboardContent() {
                   })()}
                 </div>
 
-                <div className="pt-4 border-t border-black/5 flex flex-col gap-2">
+                <div className="pt-4 border-t border-[var(--stone-line)] flex flex-col gap-2">
                   <button
                     onClick={() => {
                       const conv = conversations.find(
@@ -930,7 +924,7 @@ function SellerDashboardContent() {
                         alert("Conversation details not loaded.");
                       }
                     }}
-                    className="w-full text-center bg-zinc-950 text-white hover:bg-zinc-800 py-3.5 rounded-2xl text-xs font-bold transition shadow-sm"
+                    className="w-full text-center bg-[var(--ink)] text-white hover:bg-[var(--copper-700)] py-3.5 rounded-2xl text-xs font-bold transition shadow-sm"
                   >
                     Open Chat
                   </button>
@@ -952,16 +946,16 @@ function SellerDashboardContent() {
         {/* CONVERSATIONS TAB */}
         {activeTab === "conversations" && (
           <div className="space-y-4">
-            <h3 className="font-serif text-2xl font-semibold mb-4">
+            <h3 className="font-display text-2xl font-semibold mb-4">
               Buyer Conversations
             </h3>
             {loadingCrm ? (
-              <div className="p-12 text-center text-zinc-400 bg-white border border-black/5 rounded-3xl">
-                <Loader2 className="animate-spin mx-auto mb-2 text-zinc-300" size={24} />
+              <div className="p-12 text-center text-[var(--ink-soft)] bg-white border border-[var(--stone-line)] rounded-3xl">
+                <Loader2 className="animate-spin mx-auto mb-2 text-[var(--ink-soft)]" size={24} />
                 <span>Loading conversations...</span>
               </div>
             ) : conversations.length === 0 ? (
-              <div className="p-12 text-center bg-white border border-black/5 rounded-3xl text-zinc-400">
+              <div className="p-12 text-center bg-white border border-[var(--stone-line)] rounded-3xl text-[var(--ink-soft)]">
                 No active conversations yet.
               </div>
             ) : (
@@ -972,24 +966,24 @@ function SellerDashboardContent() {
                   return (
                     <div
                       key={conv.id}
-                      className="p-5 rounded-[2rem] border border-black/5 bg-white shadow-sm hover:border-zinc-300 transition duration-300 flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+                      className="p-5 rounded-[2rem] border border-[var(--stone-line)] bg-white shadow-sm hover:border-[var(--stone-line)] transition duration-300 flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
                     >
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
-                          <h4 className="text-sm font-bold text-zinc-900">
+                          <h4 className="text-sm font-bold text-[var(--ink)]">
                             {partner}
                           </h4>
                           {lastMsg && (
-                            <span className="text-[9px] text-zinc-400 font-semibold">
+                            <span className="text-[9px] text-[var(--ink-soft)] font-semibold">
                               ({lastMsg.time})
                             </span>
                           )}
                         </div>
-                        <p className="text-xs font-semibold text-zinc-500 mt-0.5">
+                        <p className="text-xs font-semibold text-[var(--ink-soft)] mt-0.5">
                           🏡 {conv.property.title} {conv.property.locality ? `· ${conv.property.locality}` : ""}
                         </p>
                         {lastMsg && (
-                          <p className="text-xs text-zinc-600 bg-zinc-50 border border-black/5 p-3 rounded-2xl mt-3 font-semibold leading-relaxed max-w-2xl">
+                          <p className="text-xs text-[var(--ink-soft)] bg-[var(--paper)] border border-[var(--stone-line)] p-3 rounded-2xl mt-3 font-semibold leading-relaxed max-w-2xl">
                             &ldquo;{lastMsg.message}&rdquo;
                           </p>
                         )}
@@ -1010,7 +1004,7 @@ function SellerDashboardContent() {
                             setActiveChatConversation(conv);
                             setInboxOpen(true);
                           }}
-                          className="bg-zinc-950 text-white hover:bg-zinc-800 text-xs font-bold px-5 py-3 rounded-2xl transition shadow-sm"
+                          className="bg-[var(--ink)] text-white hover:bg-[var(--copper-700)] text-xs font-bold px-5 py-3 rounded-2xl transition shadow-sm"
                         >
                           Open Chat
                         </button>
@@ -1026,16 +1020,16 @@ function SellerDashboardContent() {
         {/* FOLLOW-UPS TAB */}
         {activeTab === "followups" && (
           <div className="space-y-4">
-            <h3 className="font-serif text-2xl font-semibold mb-4">
+            <h3 className="font-display text-2xl font-semibold mb-4">
               Buyer Questions (AI Escalations)
             </h3>
             {loadingCrm ? (
-              <div className="p-12 text-center text-zinc-400 bg-white border border-black/5 rounded-3xl">
-                <Loader2 className="animate-spin mx-auto mb-2 text-zinc-300" size={24} />
+              <div className="p-12 text-center text-[var(--ink-soft)] bg-white border border-[var(--stone-line)] rounded-3xl">
+                <Loader2 className="animate-spin mx-auto mb-2 text-[var(--ink-soft)]" size={24} />
                 <span>Loading follow-ups...</span>
               </div>
             ) : followups.length === 0 ? (
-              <div className="p-12 text-center bg-white border border-black/5 rounded-3xl text-zinc-400">
+              <div className="p-12 text-center bg-white border border-[var(--stone-line)] rounded-3xl text-[var(--ink-soft)]">
                 No AI follow-ups flagged yet.
               </div>
             ) : (
@@ -1043,7 +1037,7 @@ function SellerDashboardContent() {
                 {followups.map((fu) => (
                   <div
                     key={fu.id}
-                    className="p-5 rounded-3xl border border-black/5 bg-white shadow-sm space-y-4"
+                    className="p-5 rounded-3xl border border-[var(--stone-line)] bg-white shadow-sm space-y-4"
                   >
                     <div className="flex justify-between items-start">
                       <div>
@@ -1051,24 +1045,24 @@ function SellerDashboardContent() {
                           className={`text-[9px] font-bold px-2.5 py-0.5 rounded-full capitalize mr-2 ${
                             fu.status === "open"
                               ? "bg-amber-50 text-amber-700"
-                              : "bg-zinc-100 text-zinc-500"
+                              : "bg-[var(--paper)] text-[var(--ink-soft)]"
                           }`}
                         >
                           {fu.status}
                         </span>
-                        <span className="text-xs font-bold text-zinc-900">
+                        <span className="text-xs font-bold text-[var(--ink)]">
                           From {fu.buyer?.full_name || fu.buyer?.email}
                         </span>
-                        <p className="text-xs text-zinc-400 font-semibold mt-0.5">
+                        <p className="text-xs text-[var(--ink-soft)] font-semibold mt-0.5">
                           🏡 {fu.property?.title}
                         </p>
                       </div>
-                      <span className="text-[10px] text-zinc-400 font-semibold">
+                      <span className="text-[10px] text-[var(--ink-soft)] font-semibold">
                         {new Date(fu.created_at).toLocaleDateString()}
                       </span>
                     </div>
 
-                    <div className="bg-zinc-50 border border-black/5 p-4 rounded-2xl text-xs font-semibold text-zinc-700">
+                    <div className="bg-[var(--paper)] border border-[var(--stone-line)] p-4 rounded-2xl text-xs font-semibold text-[var(--ink-soft)]">
                       &ldquo;{fu.question}&rdquo;
                     </div>
 
@@ -1080,13 +1074,13 @@ function SellerDashboardContent() {
                               value={replyText}
                               onChange={(e) => setReplyText(e.target.value)}
                               placeholder="Type your answer to send to the buyer..."
-                              className="w-full border border-black/10 rounded-2xl p-4 text-xs font-semibold focus:outline-none focus:border-zinc-300 bg-zinc-50/50"
+                              className="w-full border border-[var(--stone-line)] rounded-2xl p-4 text-xs font-semibold focus:outline-none focus:border-[var(--stone-line)] bg-[var(--paper)]/50"
                               rows={3}
                             />
                             <div className="flex gap-2 justify-end">
                               <button
                                 onClick={() => setReplyingFollowupId(null)}
-                                className="px-4 py-2 border border-black/10 rounded-xl text-xs font-semibold hover:bg-zinc-50 transition"
+                                className="px-4 py-2 border border-[var(--stone-line)] rounded-xl text-xs font-semibold hover:bg-[var(--paper)] transition"
                               >
                                 Cancel
                               </button>
@@ -1095,7 +1089,7 @@ function SellerDashboardContent() {
                                   handleAnswerFollowup(fu, replyText)
                                 }
                                 disabled={!replyText.trim()}
-                                className="px-4 py-2 bg-zinc-950 text-white rounded-xl text-xs font-semibold hover:bg-zinc-800 transition disabled:opacity-50"
+                                className="px-4 py-2 bg-[var(--ink)] text-white rounded-xl text-xs font-semibold hover:bg-[var(--copper-700)] transition disabled:opacity-50"
                               >
                                 Send Answer
                               </button>
@@ -1107,14 +1101,14 @@ function SellerDashboardContent() {
                               setReplyingFollowupId(fu.id);
                               setReplyText("");
                             }}
-                            className="text-xs font-bold bg-zinc-950 text-white px-4 py-2.5 rounded-xl hover:bg-zinc-800 transition shadow-sm"
+                            className="text-xs font-bold bg-[var(--ink)] text-white px-4 py-2.5 rounded-xl hover:bg-[var(--copper-700)] transition shadow-sm"
                           >
                             Answer Query
                           </button>
                         )}
                       </div>
                     ) : (
-                      <p className="text-[10px] font-bold text-zinc-400 italic">
+                      <p className="text-[10px] font-bold text-[var(--ink-soft)] italic">
                         Resolved on{" "}
                         {new Date(fu.updated_at).toLocaleDateString()}
                       </p>
@@ -1129,16 +1123,16 @@ function SellerDashboardContent() {
         {/* MEETINGS TAB */}
         {activeTab === "meetings" && (
           <div className="space-y-4">
-            <h3 className="font-serif text-2xl font-semibold mb-4">
+            <h3 className="font-display text-2xl font-semibold mb-4">
               Visit Scheduling Requests
             </h3>
             {loadingCrm ? (
-              <div className="p-12 text-center text-zinc-400 bg-white border border-black/5 rounded-3xl">
-                <Loader2 className="animate-spin mx-auto mb-2 text-zinc-300" size={24} />
+              <div className="p-12 text-center text-[var(--ink-soft)] bg-white border border-[var(--stone-line)] rounded-3xl">
+                <Loader2 className="animate-spin mx-auto mb-2 text-[var(--ink-soft)]" size={24} />
                 <span>Loading meetings...</span>
               </div>
             ) : meetings.length === 0 ? (
-              <div className="p-12 text-center bg-white border border-black/5 rounded-3xl text-zinc-400">
+              <div className="p-12 text-center bg-white border border-[var(--stone-line)] rounded-3xl text-[var(--ink-soft)]">
                 No scheduling requests logged yet.
               </div>
             ) : (
@@ -1146,7 +1140,7 @@ function SellerDashboardContent() {
                 {meetings.map((meet) => (
                   <div
                     key={meet.id}
-                    className="p-5 rounded-3xl border border-black/5 bg-white shadow-sm space-y-4"
+                    className="p-5 rounded-3xl border border-[var(--stone-line)] bg-white shadow-sm space-y-4"
                   >
                     <div className="flex justify-between items-start">
                       <div>
@@ -1156,27 +1150,27 @@ function SellerDashboardContent() {
                               ? "bg-rose-50 text-rose-700"
                               : meet.status === "confirmed"
                               ? "bg-emerald-50 text-emerald-700"
-                              : "bg-zinc-100 text-zinc-500"
+                              : "bg-[var(--paper)] text-[var(--ink-soft)]"
                           }`}
                         >
                           {meet.status}
                         </span>
-                        <span className="text-xs font-bold text-zinc-900">
+                        <span className="text-xs font-bold text-[var(--ink)]">
                           Requested by {meet.buyer?.full_name || meet.buyer?.email}
                         </span>
-                        <p className="text-xs text-zinc-400 font-semibold mt-0.5">
+                        <p className="text-xs text-[var(--ink-soft)] font-semibold mt-0.5">
                           🏡 {meet.property?.title}
                         </p>
                       </div>
-                      <span className="text-[10px] text-zinc-400 font-semibold">
+                      <span className="text-[10px] text-[var(--ink-soft)] font-semibold">
                         {new Date(meet.created_at).toLocaleDateString()}
                       </span>
                     </div>
 
-                    <div className="bg-zinc-50 border border-black/5 p-4 rounded-2xl flex flex-col sm:flex-row justify-between gap-3 text-xs font-semibold">
+                    <div className="bg-[var(--paper)] border border-[var(--stone-line)] p-4 rounded-2xl flex flex-col sm:flex-row justify-between gap-3 text-xs font-semibold">
                       <div>
-                        <p className="text-zinc-500">Proposed Schedule:</p>
-                        <p className="text-zinc-900 font-bold mt-1 text-sm">
+                        <p className="text-[var(--ink-soft)]">Proposed Schedule:</p>
+                        <p className="text-[var(--ink)] font-bold mt-1 text-sm">
                           📅 {meet.requested_date} at {meet.requested_time}
                         </p>
                       </div>
@@ -1201,7 +1195,7 @@ function SellerDashboardContent() {
                               setRescheduleDate("");
                               setRescheduleTime("");
                             }}
-                            className="border border-black/10 hover:bg-zinc-50 text-zinc-900 px-4 py-2.5 rounded-xl text-xs font-bold transition shadow-sm bg-white"
+                            className="border border-[var(--stone-line)] hover:bg-[var(--paper)] text-[var(--ink)] px-4 py-2.5 rounded-xl text-xs font-bold transition shadow-sm bg-white"
                           >
                             Reschedule
                           </button>
@@ -1210,8 +1204,8 @@ function SellerDashboardContent() {
                     </div>
 
                     {reschedulingMeetingId === meet.id && (
-                      <div className="p-4 border border-black/10 rounded-2xl bg-zinc-50/50 space-y-3 pt-4">
-                        <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                      <div className="p-4 border border-[var(--stone-line)] rounded-2xl bg-[var(--paper)]/50 space-y-3 pt-4">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--ink-soft)]">
                           Propose New Visit Time
                         </p>
                         <div className="flex flex-wrap gap-2">
@@ -1220,20 +1214,20 @@ function SellerDashboardContent() {
                             placeholder="e.g. Saturday (or 2026-09-05)"
                             value={rescheduleDate}
                             onChange={(e) => setRescheduleDate(e.target.value)}
-                            className="flex-1 min-w-[150px] border border-black/10 rounded-xl px-3.5 py-2 text-xs font-semibold outline-none focus:bg-white focus:border-zinc-300"
+                            className="flex-1 min-w-[150px] border border-[var(--stone-line)] rounded-xl px-3.5 py-2 text-xs font-semibold outline-none focus:bg-white focus:border-[var(--stone-line)]"
                           />
                           <input
                             type="text"
                             placeholder="e.g. 2 PM (or TBD)"
                             value={rescheduleTime}
                             onChange={(e) => setRescheduleTime(e.target.value)}
-                            className="flex-1 min-w-[150px] border border-black/10 rounded-xl px-3.5 py-2 text-xs font-semibold outline-none focus:bg-white focus:border-zinc-300"
+                            className="flex-1 min-w-[150px] border border-[var(--stone-line)] rounded-xl px-3.5 py-2 text-xs font-semibold outline-none focus:bg-white focus:border-[var(--stone-line)]"
                           />
                         </div>
                         <div className="flex gap-2 justify-end pt-2">
                           <button
                             onClick={() => setReschedulingMeetingId(null)}
-                            className="px-4 py-2 border border-black/10 rounded-xl text-xs font-semibold hover:bg-zinc-50 transition bg-white"
+                            className="px-4 py-2 border border-[var(--stone-line)] rounded-xl text-xs font-semibold hover:bg-[var(--paper)] transition bg-white"
                           >
                             Cancel
                           </button>
@@ -1248,7 +1242,7 @@ function SellerDashboardContent() {
                             disabled={
                               !rescheduleDate.trim() || !rescheduleTime.trim()
                             }
-                            className="px-4 py-2 bg-zinc-950 text-white rounded-xl text-xs font-semibold hover:bg-zinc-800 transition disabled:opacity-50"
+                            className="px-4 py-2 bg-[var(--ink)] text-white rounded-xl text-xs font-semibold hover:bg-[var(--copper-700)] transition disabled:opacity-50"
                           >
                             Submit Change
                           </button>
@@ -1264,7 +1258,7 @@ function SellerDashboardContent() {
       </section>
 
       {/* FOOTER */}
-      <footer className="border-t border-black/5 px-6 py-8 text-center text-sm text-zinc-400">
+      <footer className="border-t border-[var(--stone-line)] px-6 py-8 text-center text-sm text-[var(--ink-soft)]">
         © 2026 GEB · Global Estate Bridge
       </footer>
 
@@ -1310,11 +1304,11 @@ function SellerDashboardContent() {
                     ₹{selectedPropertyForDetail.price.toLocaleString("en-IN")}
                   </p>
 
-                  <h2 className="mt-2 font-serif text-4xl font-medium tracking-tight">
+                  <h2 className="mt-2 font-display text-4xl font-medium tracking-tight">
                     {selectedPropertyForDetail.title}
                   </h2>
 
-                  <div className="mt-3 flex items-center gap-2 text-sm text-zinc-500">
+                  <div className="mt-3 flex items-center gap-2 text-sm text-[var(--ink-soft)]">
                     <MapPin size={16} />
                     {selectedPropertyForDetail.locality ? `${selectedPropertyForDetail.locality}, ` : ""}
                     {selectedPropertyForDetail.city}
@@ -1325,14 +1319,14 @@ function SellerDashboardContent() {
               {selectedPropertyForDetail.description && (
                 <div className="mt-8">
                   <h3 className="text-lg font-semibold">About this property</h3>
-                  <p className="mt-2 leading-7 text-zinc-500">{selectedPropertyForDetail.description}</p>
+                  <p className="mt-2 leading-7 text-[var(--ink-soft)]">{selectedPropertyForDetail.description}</p>
                 </div>
               )}
 
               <div className="mt-8 flex justify-end">
                 <button
                   onClick={() => setSelectedPropertyForDetail(null)}
-                  className="rounded-full border border-zinc-200 px-6 py-3 font-semibold transition hover:bg-zinc-50 bg-white"
+                  className="rounded-full border border-[var(--stone-line)] px-6 py-3 font-semibold transition hover:bg-[var(--paper)] bg-white"
                 >
                   Close
                 </button>

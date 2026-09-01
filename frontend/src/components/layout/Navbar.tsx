@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Building2,
   Compass,
   Sparkles,
   Plus,
@@ -13,11 +12,11 @@ import {
   ChevronDown,
   MessageSquare,
   Heart,
-  Calendar,
   Briefcase,
   LayoutDashboard,
 } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
+import GEBLogo from "@/components/common/GEBLogo";
 
 interface NavbarProps {
   onOpenAIChat?: () => void;
@@ -43,25 +42,19 @@ export default function Navbar({ onOpenAIChat }: NavbarProps) {
   }, []);
 
   return (
-    <header className="sticky top-0 z-[999999] w-full bg-white border-b border-slate-200 transition-all shadow-md">
+    <header className="sticky top-0 z-[999999] w-full bg-[var(--paper-raised)]/95 backdrop-blur-md border-b border-[var(--stone-line)] transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-        {/* Brand Logo - Using Official GEB Prop Logo Image */}
-        <Link href="/" className="flex items-center gap-3 group">
-          <img
-            src="/geb-logo.png"
-            alt="GEB Prop Logo"
-            className="h-11 w-auto object-contain transition-transform group-hover:scale-105"
-          />
-        </Link>
+        {/* Brand Logo - Vector GEB Logo */}
+        <GEBLogo size="md" />
 
         {/* Center Pill Capsule Navigation Bar */}
-        <nav className="hidden md:flex items-center bg-slate-100/90 p-1.5 rounded-full border border-slate-200/90 shadow-inner text-xs font-semibold">
+        <nav className="hidden md:flex items-center bg-[var(--paper)] p-1.5 rounded-full border border-[var(--stone-line)] text-xs font-semibold">
           <Link
             href="/"
             className={`px-4 py-2 rounded-full transition-all ${
               pathname === "/"
-                ? "bg-white text-slate-900 shadow-sm font-extrabold"
-                : "text-slate-600 hover:text-slate-900"
+                ? "bg-[var(--ink)] text-white font-bold"
+                : "text-[var(--ink-soft)] hover:text-[var(--ink)]"
             }`}
           >
             Home
@@ -75,7 +68,7 @@ export default function Navbar({ onOpenAIChat }: NavbarProps) {
                 window.location.href = "/#explore";
               }
             }}
-            className="px-4 py-2 rounded-full text-slate-600 hover:text-slate-900 transition-all cursor-pointer font-bold"
+            className="px-4 py-2 rounded-full text-[var(--ink-soft)] hover:text-[var(--ink)] transition-all cursor-pointer font-semibold"
           >
             Marketplace
           </button>
@@ -83,8 +76,8 @@ export default function Navbar({ onOpenAIChat }: NavbarProps) {
             href="/deep-land-analysis"
             className={`px-4 py-2 rounded-full transition-all flex items-center gap-1.5 ${
               isDeepLand
-                ? "bg-sky-600 text-white font-extrabold shadow-md"
-                : "text-slate-600 hover:text-sky-600"
+                ? "bg-[var(--copper-600)] text-white font-bold"
+                : "text-[var(--ink-soft)] hover:text-[var(--copper-700)]"
             }`}
           >
             <Compass className="w-3.5 h-3.5" />
@@ -94,7 +87,7 @@ export default function Navbar({ onOpenAIChat }: NavbarProps) {
             <button
               type="button"
               onClick={onOpenAIChat}
-              className="px-4 py-2 rounded-full text-sky-700 hover:text-sky-900 hover:bg-sky-50 font-extrabold transition-all flex items-center gap-1 cursor-pointer"
+              className="px-4 py-2 rounded-full text-[var(--violet)] hover:bg-[var(--violet-soft)] font-bold transition-all flex items-center gap-1 cursor-pointer"
             >
               <Sparkles className="w-3.5 h-3.5" />
               <span>Ask GEB AI</span>
@@ -106,9 +99,9 @@ export default function Navbar({ onOpenAIChat }: NavbarProps) {
         <div className="flex items-center gap-3">
           <Link
             href="/list-property"
-            className="hidden sm:flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold transition-all shadow-md hover:shadow-lg"
+            className="hidden sm:flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-[var(--ink)] hover:bg-[var(--copper-700)] text-white text-xs font-bold transition-all shadow-sm"
           >
-            <Plus className="w-3.5 h-3.5 text-sky-400" />
+            <Plus className="w-3.5 h-3.5 text-[var(--copper-400)]" />
             <span>List Property</span>
           </Link>
 
@@ -118,49 +111,49 @@ export default function Navbar({ onOpenAIChat }: NavbarProps) {
               <button
                 type="button"
                 onClick={() => setAccountMenuOpen(!accountMenuOpen)}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-sky-50 hover:bg-sky-100 border border-sky-200 transition-all cursor-pointer shadow-sm"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--copper-50)] hover:bg-[var(--copper-100)] border border-[var(--copper-100)] transition-all cursor-pointer"
               >
-                <div className="w-8 h-8 rounded-full bg-sky-600 text-white flex items-center justify-center font-extrabold text-xs shadow-sm">
+                <div className="w-8 h-8 rounded-full bg-[var(--copper-600)] text-white flex items-center justify-center font-bold text-xs">
                   {user.email?.[0].toUpperCase() || "P"}
                 </div>
-                <span className="text-xs font-extrabold text-sky-900 hidden sm:inline truncate max-w-[120px]">
+                <span className="text-xs font-bold text-[var(--copper-900)] hidden sm:inline truncate max-w-[120px]">
                   {user.email?.split("@")[0]}
                 </span>
-                <ChevronDown className={`w-3.5 h-3.5 text-sky-700 transition-transform ${accountMenuOpen ? "rotate-180" : ""}`} />
+                <ChevronDown className={`w-3.5 h-3.5 text-[var(--copper-700)] transition-transform ${accountMenuOpen ? "rotate-180" : ""}`} />
               </button>
 
               {/* Account Dropdown Drawer Menu */}
               {accountMenuOpen && (
-                <div className="absolute right-0 top-full mt-2 w-72 bg-white/95 backdrop-blur-2xl rounded-3xl border border-slate-200 p-4 shadow-2xl z-50 text-slate-800 space-y-3 animate-in fade-in duration-150">
+                <div className="absolute right-0 top-full mt-2 w-72 bg-[var(--paper-raised)]/98 backdrop-blur-2xl rounded-3xl border border-[var(--stone-line)] p-4 shadow-2xl z-50 text-[var(--ink)] space-y-3">
                   {/* Account Header */}
-                  <div className="border-b border-slate-100 pb-3 px-1">
-                    <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Signed In As</p>
-                    <p className="text-xs font-bold text-slate-900 truncate mt-0.5">{user.email}</p>
+                  <div className="border-b border-[var(--stone-line)] pb-3 px-1">
+                    <p className="text-[10px] font-bold text-[var(--ink-soft)] uppercase tracking-wider">Signed In As</p>
+                    <p className="text-xs font-bold text-[var(--ink)] truncate mt-0.5">{user.email}</p>
                   </div>
 
                   {/* Buyer Navigation Links */}
                   <div className="space-y-1">
-                    <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider px-1 mb-1">Buyer Hub</p>
+                    <p className="text-[10px] font-bold text-[var(--ink-soft)] uppercase tracking-wider px-1 mb-1">Buyer Hub</p>
                     <Link
                       href="/buyer-dashboard?tab=profile"
                       onClick={() => setAccountMenuOpen(false)}
-                      className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-700 transition-colors"
+                      className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-[var(--ink-soft)] hover:bg-[var(--copper-50)] hover:text-[var(--copper-700)] transition-colors"
                     >
-                      <User className="w-3.5 h-3.5 text-sky-600" />
+                      <User className="w-3.5 h-3.5 text-[var(--copper-600)]" />
                       <span>My Profile</span>
                     </Link>
                     <Link
                       href="/buyer-dashboard?tab=conversations"
                       onClick={() => setAccountMenuOpen(false)}
-                      className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-700 transition-colors"
+                      className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-[var(--ink-soft)] hover:bg-[var(--copper-50)] hover:text-[var(--copper-700)] transition-colors"
                     >
-                      <MessageSquare className="w-3.5 h-3.5 text-sky-600" />
+                      <MessageSquare className="w-3.5 h-3.5 text-[var(--copper-600)]" />
                       <span>Buyer Messages</span>
                     </Link>
                     <Link
                       href="/buyer-dashboard?tab=saved"
                       onClick={() => setAccountMenuOpen(false)}
-                      className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-700 transition-colors"
+                      className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-[var(--ink-soft)] hover:bg-[var(--copper-50)] hover:text-[var(--copper-700)] transition-colors"
                     >
                       <Heart className="w-3.5 h-3.5 text-rose-500" />
                       <span>Saved Properties</span>
@@ -168,28 +161,28 @@ export default function Navbar({ onOpenAIChat }: NavbarProps) {
                   </div>
 
                   {/* Seller Navigation Links */}
-                  <div className="border-t border-slate-100 pt-2 space-y-1">
-                    <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider px-1 mb-1">Seller Hub</p>
+                  <div className="border-t border-[var(--stone-line)] pt-2 space-y-1">
+                    <p className="text-[10px] font-bold text-[var(--ink-soft)] uppercase tracking-wider px-1 mb-1">Seller Hub</p>
                     <Link
                       href="/seller-dashboard?tab=overview"
                       onClick={() => setAccountMenuOpen(false)}
-                      className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors"
+                      className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-[var(--ink-soft)] hover:bg-[var(--paper)] hover:text-[var(--ink)] transition-colors"
                     >
-                      <LayoutDashboard className="w-3.5 h-3.5 text-slate-700" />
+                      <LayoutDashboard className="w-3.5 h-3.5" />
                       <span>Seller CRM Dashboard</span>
                     </Link>
                     <Link
                       href="/seller-dashboard?tab=properties"
                       onClick={() => setAccountMenuOpen(false)}
-                      className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors"
+                      className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-[var(--ink-soft)] hover:bg-[var(--paper)] hover:text-[var(--ink)] transition-colors"
                     >
-                      <Briefcase className="w-3.5 h-3.5 text-slate-700" />
+                      <Briefcase className="w-3.5 h-3.5" />
                       <span>My Listed Properties</span>
                     </Link>
                   </div>
 
                   {/* Sign Out Button */}
-                  <div className="border-t border-slate-100 pt-2">
+                  <div className="border-t border-[var(--stone-line)] pt-2">
                     <button
                       type="button"
                       onClick={() => {
@@ -208,7 +201,7 @@ export default function Navbar({ onOpenAIChat }: NavbarProps) {
           ) : (
             <Link
               href="/login"
-              className="px-5 py-2.5 rounded-full border border-slate-300 hover:border-slate-400 bg-white text-slate-800 text-xs font-bold transition-all shadow-sm"
+              className="px-5 py-2.5 rounded-full border border-[var(--stone-line)] hover:border-[var(--copper-400)] bg-[var(--paper-raised)] text-[var(--ink)] text-xs font-bold transition-all"
             >
               Sign In
             </Link>
