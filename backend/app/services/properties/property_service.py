@@ -129,6 +129,8 @@ def create_property(property_data: dict):
     property_data["status"] = status
     property_data["rejection_reason"] = reason
     property_data["featured"] = False
+    if not property_data.get("listing_type"):
+        property_data["listing_type"] = "sale"
 
     response = (
         supabase

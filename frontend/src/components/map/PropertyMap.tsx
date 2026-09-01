@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useRef, useState } from "react";
 import L from "leaflet";
@@ -29,7 +29,17 @@ interface LocationResult {
   display_name: string;
 }
 
-function formatPrice(price: number) {
+function formatPrice(property: Property) {
+  const price = property.monthlyRent || property.price;
+  const isRent = property.listingType === "rent" || (property.title && property.title.toLowerCase().includes("rent"));
+
+  if (isRent) {
+    if (price >= 100000) {
+      return `₹${(price / 100000).toFixed(1)}L/mo`;
+    }
+    return `₹${(price / 1000).toFixed(0)}k/mo`;
+  }
+
   if (price >= 10000000) {
     return `₹${(price / 10000000).toFixed(2)} Cr`;
   }
@@ -49,7 +59,7 @@ function createMarkerIcon(property: Property) {
     className: "geb-map-marker-wrapper",
     html: `
       <div class="geb-map-marker ${sourceClass}">
-        <span>${formatPrice(property.price)}</span>
+        <span>${formatPrice(property)}</span>
       </div>
     `,
     iconSize: [90, 38],
@@ -149,7 +159,7 @@ export default function PropertyMap({
           <div class="geb-popup-content">
 
             <div class="geb-popup-price">
-              ${formatPrice(property.price)}
+              ${formatPrice(property)}
             </div>
 
             <div class="geb-popup-title">
@@ -407,7 +417,7 @@ export default function PropertyMap({
    */
 
   return (
-    <div className="relative h-full w-full">
+    <div className="relative z-0 isolate h-full w-full">
 
       {/* MAP */}
 

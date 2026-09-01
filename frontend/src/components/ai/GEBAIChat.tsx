@@ -89,18 +89,28 @@ const API_URL =
   "http://127.0.0.1:8000";
 
 const suggestions = [
+  "2BHK flat for rent under ₹25k in Lucknow",
+  "Furnished house for rent in Lucknow",
   "Find plots in Lucknow under 50 lakh",
-  "Find a villa in Lucknow",
-  "Show properties between 30 and 60 lakh",
-  "I want rental income",
+  "I want long-term investment in Lucknow",
 ];
 
-function formatPrice(price: number) {
-  if (price >= 10000000) {
-    return `₹${(price / 10000000).toFixed(2)} Cr`;
+function formatPrice(property: { price: number; listing_type?: string; monthly_rent?: number; title?: string }) {
+  const isRent = property.listing_type === "rent" || (property.title && property.title.toLowerCase().includes("rent"));
+  const priceVal = property.monthly_rent || property.price;
+
+  if (isRent) {
+    if (priceVal >= 100000) {
+      return `₹${(priceVal / 100000).toFixed(1)} L / month`;
+    }
+    return `₹${priceVal.toLocaleString("en-IN")} / month`;
   }
 
-  return `₹${(price / 100000).toFixed(1)} L`;
+  if (priceVal >= 10000000) {
+    return `₹${(priceVal / 10000000).toFixed(2)} Cr`;
+  }
+
+  return `₹${(priceVal / 100000).toFixed(1)} L`;
 }
 
 function createMessageId() {
@@ -152,7 +162,7 @@ function PropertyRecommendation({
 
         <div className="mt-3 flex items-center justify-between gap-3">
           <p className="font-semibold">
-            {formatPrice(property.price)}
+            {formatPrice(property)}
           </p>
 
           <span className="rounded-full bg-zinc-100 px-2.5 py-1 text-[10px] font-semibold uppercase">

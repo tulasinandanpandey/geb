@@ -5,6 +5,10 @@ export type PropertyType =
   | "commercial"
   | "villa";
 
+export type ListingType = "sale" | "rent";
+
+export type FurnishingStatus = "unfurnished" | "semi_furnished" | "fully_furnished";
+
 export type PropertySource =
   | "geb"
   | "external"
@@ -12,56 +16,33 @@ export type PropertySource =
 
 
 export interface Property {
-
   id: string;
-
   title: string;
-
   propertyType: PropertyType;
-
+  listingType?: ListingType;
   price: number;
+  monthlyRent?: number;
+  securityDeposit?: number;
+  availableFrom?: string;
+  furnishingStatus?: FurnishingStatus;
+  bhk?: number;
 
   area: number;
-
   areaUnit: "sqft" | "sqm";
-
   city: string;
-
   locality: string;
-
   latitude: number;
-
   longitude: number;
-
-  /*
-   * Cover image.
-   *
-   * Kept for backward compatibility
-   * with the existing PropertyCard.
-   */
   image: string;
-
-  /*
-   * Complete property gallery.
-   */
   images?: string[];
-
   source: PropertySource;
-
   sourceName: string;
-
   sourceUrl?: string;
-
   investmentScore?: number;
-
   featured?: boolean;
-
   status?: string;
-
   rejectionReason?: string;
-
   description?: string;
-
   sellerId?: string;
 
   seller?: {
@@ -73,7 +54,5 @@ export interface Property {
   };
 
   createdAt?: string;
-
   updatedAt?: string;
 }
-

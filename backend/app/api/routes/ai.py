@@ -43,6 +43,9 @@ class AIChatRequest(BaseModel):
     city: Optional[str] = None
     locality: Optional[str] = None
     property_type: Optional[str] = None
+    listing_type: Optional[str] = None
+    bhk: Optional[int] = None
+    furnishing_status: Optional[str] = None
 
     min_price: Optional[float] = None
     max_price: Optional[float] = None
@@ -89,6 +92,9 @@ def ai_chat(request: AIChatRequest):
             _normalize_property_type(request.property_type)
             or analyzed.get("property_type")
         )
+        listing_type = request.listing_type or analyzed.get("listing_type")
+        bhk = request.bhk or analyzed.get("bhk")
+        furnishing_status = request.furnishing_status or analyzed.get("furnishing_status")
 
         min_price = (
             request.min_price
@@ -119,6 +125,9 @@ def ai_chat(request: AIChatRequest):
             city=city,
             locality=locality,
             property_type=property_type,
+            listing_type=listing_type,
+            bhk=bhk,
+            furnishing_status=furnishing_status,
             min_price=min_price,
             max_price=max_price,
             purpose=purpose,
@@ -131,6 +140,9 @@ def ai_chat(request: AIChatRequest):
             "city": city,
             "locality": locality,
             "property_type": property_type,
+            "listing_type": listing_type,
+            "bhk": bhk,
+            "furnishing_status": furnishing_status,
             "min_price": min_price,
             "max_price": max_price,
             "purpose": purpose,

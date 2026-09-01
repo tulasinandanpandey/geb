@@ -1,8 +1,9 @@
-﻿import { Property } from "@/types/property";
+import { Property } from "@/types/property";
 
 export interface PropertyFilters {
   query?: string;
   propertyType?: string;
+  listingType?: string;
   minPrice?: number;
   maxPrice?: number;
   latitude?: number;
@@ -38,6 +39,16 @@ export function filterProperties(
 ) {
   return properties.filter((property) => {
     if (
+      filters.listingType &&
+      filters.listingType !== "all"
+    ) {
+      const propListingType = property.listingType || (property.title && property.title.toLowerCase().includes("rent") ? "rent" : "sale");
+      if (propListingType !== filters.listingType) {
+        return false;
+      }
+    }
+
+    if (
       filters.propertyType &&
       filters.propertyType !== "all" &&
       property.propertyType !== filters.propertyType
@@ -45,16 +56,18 @@ export function filterProperties(
       return false;
     }
 
+    const checkPrice = property.monthlyRent || property.price;
+
     if (
       filters.minPrice !== undefined &&
-      property.price < filters.minPrice
+      checkPrice < filters.minPrice
     ) {
       return false;
     }
 
     if (
       filters.maxPrice !== undefined &&
-      property.price > filters.maxPrice
+      checkPrice > filters.maxPrice
     ) {
       return false;
     }

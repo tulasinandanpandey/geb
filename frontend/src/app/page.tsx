@@ -18,6 +18,7 @@ import {
   X,
 } from "lucide-react";
 
+import Navbar from "@/components/layout/Navbar";
 import PropertyCard from "@/components/properties/PropertyCard";
 import GEBAIChat from "@/components/ai/GEBAIChat";
 import GEBChatModal from "@/components/chat/GEBChatModal";
@@ -126,6 +127,9 @@ export default function Home() {
   const [location, setLocation] = useState("");
 
   const [propertyType, setPropertyType] =
+    useState("all");
+
+  const [listingTypeFilter, setListingTypeFilter] =
     useState("all");
 
   const [budgetIndex, setBudgetIndex] =
@@ -317,6 +321,9 @@ export default function Home() {
         propertyType:
           appliedPropertyType,
 
+        listingType:
+          listingTypeFilter,
+
         minPrice:
           selectedBudget.min,
 
@@ -340,6 +347,7 @@ export default function Home() {
     allProperties,
     appliedLocation,
     appliedPropertyType,
+    listingTypeFilter,
     selectedBudget.min,
     selectedBudget.max,
     searchedLatitude,
@@ -483,518 +491,169 @@ export default function Home() {
 
 
   return (
-    <main className="min-h-screen bg-[#f7f7f5] text-zinc-950">
+    <main className="relative min-h-screen bg-slate-900 font-sans text-slate-900 overflow-x-hidden">
+      {/* Full-Bleed Fixed Architectural Background Wallpaper */}
+      <div
+        className="fixed inset-0 bg-cover bg-center bg-no-repeat pointer-events-none z-0 scale-105"
+        style={{ backgroundImage: `url('/hero-house.png')` }}
+      />
+      {/* Light Luxury Glass Overlay */}
+      <div className="fixed inset-0 bg-gradient-to-b from-slate-900/40 via-slate-50/85 to-[#f8fafc]/95 pointer-events-none z-0 backdrop-blur-[2px]" />
 
-      {/* =====================================================
-          NAVBAR
-      ===================================================== */}
-
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
-
-        <div className="flex items-center gap-2">
-
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-zinc-950 text-sm font-bold text-white">
-            G
-          </div>
-
-          <span className="text-xl font-bold tracking-tight">
-            GEB
-          </span>
-
-        </div>
-
-
-        <div className="hidden items-center gap-8 text-sm font-medium md:flex">
-          <a
-            href="#explore"
-            className="transition-colors hover:text-zinc-500 font-semibold"
-          >
-            Properties
-          </a>
-
-          <button
-            onClick={() => setAiOpen(true)}
-            className="transition-colors hover:text-zinc-500 font-semibold text-sm cursor-pointer"
-          >
-            AI Advisor
-          </button>
-
-          <a
-            href="#crm"
-            className="transition-colors hover:text-zinc-500 font-semibold"
-          >
-            For Sellers
-          </a>
-
-          <a
-            href="#about"
-            className="transition-colors hover:text-zinc-500 font-semibold"
-          >
-            About GEB
-          </a>
-        </div>
-
-
-        <div className="flex items-center gap-3">
-
-          {authLoading ? (
-
-            <div className="h-9 w-20 animate-pulse rounded-full bg-zinc-200" />
-
-          ) : user ? (
-
-            <>
-
-              <div className="group relative">
-
-                <button
-                  type="button"
-                  className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-semibold transition hover:bg-zinc-50"
-                >
-                  Account
-                </button>
-
-                <div className="invisible absolute right-0 top-full z-[2000] mt-2 w-64 translate-y-1 rounded-2xl border border-black/10 bg-white p-3 opacity-0 shadow-xl transition-all group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-                  <div className="border-b border-zinc-100 px-3 pb-3">
-                    <p className="text-xs font-bold uppercase tracking-wider text-zinc-400">
-                      Account
-                    </p>
-                    <p className="mt-1 truncate text-sm font-bold text-zinc-800">
-                      {user.email}
-                    </p>
-                  </div>
-
-                  <div className="py-2 max-h-[320px] overflow-y-auto">
-                    {/* Buyer Section */}
-                    <p className="px-3 pt-2 pb-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400">
-                      Buyer
-                    </p>
-                    <Link
-                      href="/buyer-dashboard?tab=profile"
-                      className="block rounded-xl px-3 py-2 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-50"
-                    >
-                      👤 My Profile
-                    </Link>
-                    <Link
-                      href="/buyer-dashboard?tab=conversations"
-                      className="block rounded-xl px-3 py-2 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-50"
-                    >
-                      💬 My Conversations
-                    </Link>
-                    <Link
-                      href="/buyer-dashboard?tab=saved"
-                      className="block rounded-xl px-3 py-2 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-50"
-                    >
-                      ❤️ Saved Properties
-                    </Link>
-                    <Link
-                      href="/buyer-dashboard?tab=followups"
-                      className="block rounded-xl px-3 py-2 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-50"
-                    >
-                      ❓ My Follow-ups
-                    </Link>
-                    <Link
-                      href="/buyer-dashboard?tab=meetings"
-                      className="block rounded-xl px-3 py-2 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-50"
-                    >
-                      📅 My Meetings
-                    </Link>
-
-                    {/* Seller Section - Only show if user has seller role */}
-                    {roles.includes("seller") && (
-                      <>
-                        <div className="border-t border-zinc-100 my-1"></div>
-                        <p className="px-3 pt-2 pb-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400">
-                          Seller
-                        </p>
-                        <Link
-                          href="/seller-dashboard?tab=overview"
-                          className="block rounded-xl px-3 py-2 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-50"
-                        >
-                          💼 Seller Dashboard
-                        </Link>
-                        <Link
-                          href="/seller-dashboard?tab=properties"
-                          className="block rounded-xl px-3 py-2 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-50"
-                        >
-                          🏠 My Properties
-                        </Link>
-                        <Link
-                          href="/seller-dashboard?tab=conversations"
-                          className="block rounded-xl px-3 py-2 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-50"
-                        >
-                          ✉️ Buyer Messages
-                        </Link>
-                        <Link
-                          href="/seller-dashboard?tab=followups"
-                          className="block rounded-xl px-3 py-2 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-50"
-                        >
-                          🙋 Follow-ups
-                        </Link>
-                        <Link
-                          href="/seller-dashboard?tab=meetings"
-                          className="block rounded-xl px-3 py-2 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-50"
-                        >
-                          📅 Meetings
-                        </Link>
-                        <Link
-                          href="/seller-dashboard?tab=leads"
-                          className="block rounded-xl px-3 py-2 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-50"
-                        >
-                          📊 CRM Leads
-                        </Link>
-                      </>
-                    )}
-                  </div>
-
-                  <div className="border-t border-zinc-100 pt-2">
-                    <button
-                      type="button"
-                      onClick={signOut}
-                      className="w-full rounded-xl px-3 py-2 text-left text-xs font-bold text-red-600 transition hover:bg-red-50"
-                    >
-                      Sign out
-                    </button>
-                  </div>
-                </div>
-
-              </div>
-
-
-              <a
-                href="/list-property"
-                className="rounded-full bg-zinc-950 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-zinc-800"
-              >
-                List Property
-              </a>
-
-            </>
-
-          ) : (
-
-            <>
-
-              <a
-                href="/login"
-                className="hidden rounded-full px-4 py-2 text-sm font-medium transition hover:bg-white md:block"
-              >
-                Sign in
-              </a>
-
-              <a
-                href="/list-property"
-                className="rounded-full bg-zinc-950 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-zinc-800"
-              >
-                List Property
-              </a>
-
-            </>
-
-          )}
-
-        </div>
-
-      </nav>
-
-
-      {/* =====================================================
-          HERO
-      ===================================================== */}
-
-      <section className="mx-auto max-w-7xl px-6 pb-12 pt-14 lg:px-8 lg:pt-20">
-
-        <div className="max-w-5xl">
-
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium shadow-sm">
-
-            <Sparkles size={15} />
-
-            AI-powered real estate intelligence
-
-          </div>
-
-
-          <h1 className="max-w-5xl text-6xl font-semibold leading-[0.9] tracking-[-0.05em] sm:text-7xl lg:text-[7.5rem]">
-
-            Find property.
-
-            <br />
-
-            <span className="font-serif italic font-medium text-zinc-400">
-              Make a smarter move.
-            </span>
-
-          </h1>
-
-
-          <p className="mt-7 max-w-2xl text-lg leading-8 text-zinc-500">
-
-            Discover properties across locations, compare opportunities and
-            understand your investment potential with GEB AI.
-
-          </p>
-
-        </div>
-
+      <div className="relative z-10 space-y-4">
+        {/* =====================================================
+            GLOBAL NAVBAR
+        ===================================================== */}
+        <Navbar onOpenAIChat={() => setAiOpen(true)} />
 
         {/* =====================================================
-            SEARCH
+            HERO BANNER - MATCHED TO INSPIRATION IMAGE 2
         ===================================================== */}
-
-        <div className="mt-8 rounded-[2rem] border border-black/10 bg-white p-3 shadow-xl shadow-black/5">
-
-          <div className="grid gap-2 md:grid-cols-[1.4fr_1fr_1fr_auto]">
-
-            {/* LOCATION */}
-
-            <div className="relative flex items-center gap-3 rounded-2xl bg-zinc-50 px-5 py-3">
-
-              <MapPin
-                size={20}
-                className="shrink-0 text-zinc-400"
-              />
-
-              <div className="min-w-0 flex-1">
-
-                <p className="text-xs font-medium text-zinc-400">
-                  Location
-                </p>
-
-                <input
-                  ref={inputRef}
-                  value={location}
-                  onFocus={() => setShowSuggestions(true)}
-                  onChange={(event) => {
-                    setLocation(event.target.value);
-                    setShowSuggestions(true);
-                  }}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter") {
-                      handleSearch();
-                      setShowSuggestions(false);
-                    } else if (event.key === "Escape") {
-                      setShowSuggestions(false);
-                    }
-                  }}
-                  placeholder="City or locality"
-                  className="w-full bg-transparent text-sm font-semibold outline-none placeholder:text-zinc-400"
-                />
-
-              </div>
-
-              {location && (
-                <button
-                  onClick={() => {
-                    setLocation("");
-                    setAppliedLocation("");
-                    setShowSuggestions(false);
-                    setSearchedLatitude(undefined);
-                    setSearchedLongitude(undefined);
-                    setSearchedLocationName("");
-                    setSelectedProperty(null);
-                    setSearchMessage("");
-                  }}
-                  className="text-zinc-400 hover:text-zinc-600 focus:outline-none shrink-0"
-                  type="button"
-                >
-                  <X size={14} />
-                </button>
-              )}
-
-              {/* Suggestions Dropdown */}
-              {showSuggestions && filteredSuggestions.length > 0 && (
-                <div
-                  ref={suggestionsRef}
-                  className="absolute left-0 right-0 top-full z-[2000] mt-2 max-h-60 overflow-y-auto rounded-2xl border border-black/5 bg-white py-2 shadow-xl"
-                >
-                  {filteredSuggestions.map((suggestion) => (
-                    <button
-                      key={suggestion}
-                      onClick={() => {
-                        setLocation(suggestion);
-                        setAppliedLocation(suggestion);
-                        setSearchedLatitude(undefined);
-                        setSearchedLongitude(undefined);
-                        setSearchedLocationName("");
-                        setSelectedProperty(null);
-                        setSearchMessage("Search updated");
-                        setShowSuggestions(false);
-                      }}
-                      className="w-full px-5 py-2 text-left text-sm font-semibold text-zinc-800 hover:bg-zinc-50 transition"
-                      type="button"
-                    >
-                      {suggestion}
-                    </button>
-                  ))}
-                </div>
-              )}
-
+        <section className="relative pt-4 pb-12 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-6xl mx-auto text-center space-y-4 pt-4 pb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 border border-sky-200/80 text-sky-700 text-xs font-extrabold shadow-sm backdrop-blur">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>AI Real Estate Intelligence & GIS Suite</span>
             </div>
 
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight font-sans max-w-4xl mx-auto leading-tight">
+              Find The Perfect Getaway & Investment For You Now!
+            </h1>
 
-            {/* PROPERTY */}
-
-            <div className="relative rounded-2xl bg-zinc-50 px-5 py-3">
-
-              <p className="text-xs font-medium text-zinc-400">
-                Property
-              </p>
-
-              <div className="relative">
-
-                <select
-                  value={propertyType}
-                  onChange={(event) =>
-                    setPropertyType(
-                      event.target.value
-                    )
-                  }
-                  className="w-full cursor-pointer appearance-none bg-transparent pr-6 text-sm font-semibold outline-none"
-                >
-
-                  {propertyTypes.map(
-                    (type) => (
-
-                      <option
-                        key={type.value}
-                        value={type.value}
-                      >
-                        {type.label}
-                      </option>
-
-                    )
-                  )}
-
-                </select>
-
-                <ChevronDown
-                  size={15}
-                  className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-zinc-400"
-                />
-
-              </div>
-
-            </div>
-
-
-            {/* BUDGET */}
-
-            <div className="relative rounded-2xl bg-zinc-50 px-5 py-3">
-
-              <p className="text-xs font-medium text-zinc-400">
-                Budget
-              </p>
-
-              <div className="relative">
-
-                <select
-                  value={budgetIndex}
-                  onChange={(event) =>
-                    setBudgetIndex(
-                      Number(
-                        event.target.value
-                      )
-                    )
-                  }
-                  className="w-full cursor-pointer appearance-none bg-transparent pr-6 text-sm font-semibold outline-none"
-                >
-
-                  {budgets.map(
-                    (budget, index) => (
-
-                      <option
-                        key={budget.label}
-                        value={index}
-                      >
-                        {budget.label}
-                      </option>
-
-                    )
-                  )}
-
-                </select>
-
-                <ChevronDown
-                  size={15}
-                  className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-zinc-400"
-                />
-
-              </div>
-
-            </div>
-
-
-            {/* SEARCH */}
-
-            <button
-              onClick={handleSearch}
-              className="flex items-center justify-center gap-2 rounded-2xl bg-zinc-950 px-7 py-4 font-semibold text-white transition hover:bg-zinc-800"
-            >
-
-              <Search size={19} />
-
-              Search
-
-            </button>
-
+            <p className="text-slate-700 text-sm sm:text-base max-w-2xl mx-auto font-semibold">
+              You will have everything nearby: supermarkets, transit, schools, prime growth corridors, verified soil stability & environmental air quality.
+            </p>
           </div>
 
-        </div>
-
-
-        {/* SEARCH STATUS */}
-
-        <div className="mt-3 flex min-h-5 items-center gap-3">
-
-          {searchMessage && (
-
-            <>
-
-              <span className="text-sm font-medium text-zinc-500">
-
-                {searchMessage}
-
-                {searchedLocationName &&
-                  ` · ${filteredProperties.length} found`}
-
-              </span>
-
-
+          {/* Floating Search Panel - Direct glassmorphic floating box */}
+          <div className="relative z-10 bg-white/95 backdrop-blur-xl rounded-3xl p-6 sm:p-8 shadow-2xl border border-white/80 max-w-5xl mx-auto w-full my-6">
+            {/* Buy / Rent Tab Switcher */}
+            <div className="inline-flex bg-slate-100 p-1 rounded-2xl mb-4 font-bold text-xs">
               <button
-                onClick={resetSearch}
-                className="inline-flex items-center gap-1 text-sm font-semibold text-zinc-950 hover:text-zinc-500"
+                type="button"
+                onClick={() => setListingTypeFilter("sale")}
+                className={`px-6 py-2.5 rounded-xl transition-all cursor-pointer ${
+                  listingTypeFilter === "sale" || listingTypeFilter === "all"
+                    ? "bg-white text-sky-700 shadow-md font-extrabold"
+                    : "text-slate-500 hover:text-slate-800"
+                }`}
               >
-
-                <RotateCcw size={13} />
-
-                Reset
-
+                Buy
               </button>
+              <button
+                type="button"
+                onClick={() => setListingTypeFilter("rent")}
+                className={`px-6 py-2.5 rounded-xl transition-all cursor-pointer ${
+                  listingTypeFilter === "rent"
+                    ? "bg-sky-600 text-white shadow-md font-extrabold"
+                    : "text-slate-500 hover:text-slate-800"
+                }`}
+              >
+                Rent
+              </button>
+            </div>
 
-            </>
+            {/* Inputs Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-center">
+              {/* Location Input */}
+              <div className="relative bg-slate-50 border border-slate-200/80 rounded-2xl p-3 flex flex-col justify-center">
+                <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Location</span>
+                <div className="flex items-center gap-2 mt-1">
+                  <MapPin className="w-4 h-4 text-sky-600 shrink-0" />
+                  <input
+                    ref={inputRef}
+                    value={location}
+                    onFocus={() => setShowSuggestions(true)}
+                    onChange={(e) => {
+                      setLocation(e.target.value);
+                      setShowSuggestions(true);
+                    }}
+                    placeholder="Lucknow, Uttar Pradesh"
+                    className="w-full bg-transparent text-xs font-bold text-slate-900 outline-none placeholder:text-slate-400"
+                  />
+                </div>
 
-          )}
+                {/* Suggestions dropdown */}
+                {showSuggestions && filteredSuggestions.length > 0 && (
+                  <div
+                    ref={suggestionsRef}
+                    className="absolute left-0 right-0 top-full z-50 mt-2 max-h-56 overflow-y-auto rounded-2xl bg-white border border-slate-200 p-2 shadow-2xl"
+                  >
+                    {filteredSuggestions.map((s) => (
+                      <button
+                        key={s}
+                        type="button"
+                        onClick={() => {
+                          setLocation(s);
+                          setAppliedLocation(s);
+                          setShowSuggestions(false);
+                        }}
+                        className="w-full text-left px-3 py-2 text-xs font-semibold text-slate-800 hover:bg-sky-50 rounded-xl transition-all"
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
 
-        </div>
+              {/* Property Type Dropdown */}
+              <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-3 flex flex-col justify-center">
+                <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Property Type</span>
+                <div className="flex items-center gap-2 mt-1">
+                  <Building2 className="w-4 h-4 text-sky-600 shrink-0" />
+                  <select
+                    value={propertyType}
+                    onChange={(e) => {
+                      setPropertyType(e.target.value);
+                      setAppliedPropertyType(e.target.value);
+                    }}
+                    className="w-full bg-transparent text-xs font-bold text-slate-900 outline-none cursor-pointer"
+                  >
+                    {propertyTypes.map((t) => (
+                      <option key={t.value} value={t.value}>
+                        {t.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
 
+              {/* Price Dropdown */}
+              <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-3 flex flex-col justify-center">
+                <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Price Range</span>
+                <div className="flex items-center gap-2 mt-1">
+                  <Sparkles className="w-4 h-4 text-sky-600 shrink-0" />
+                  <select
+                    value={budgetIndex}
+                    onChange={(e) => {
+                      const idx = Number(e.target.value);
+                      setBudgetIndex(idx);
+                      setAppliedBudgetIndex(idx);
+                    }}
+                    className="w-full bg-transparent text-xs font-bold text-slate-900 outline-none cursor-pointer"
+                  >
+                    {budgets.map((b, i) => (
+                      <option key={i} value={i}>
+                        {b.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
 
-        {/* AI CTA */}
-
-        <button
-          id="ai"
-            onClick={() => setAiOpen(true)}
-          className="mt-2 inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-5 py-3 text-sm font-semibold shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
-        >
-
-          <Sparkles size={16} />
-
-          Ask GEB AI what you should buy
-
-          <ArrowRight size={16} />
-
-        </button>
-
-      </section>
+              {/* Submit Search Button */}
+              <button
+                type="button"
+                onClick={handleSearch}
+                className="w-full h-full py-3.5 px-6 rounded-2xl bg-sky-600 hover:bg-sky-500 text-white font-extrabold text-xs transition-all shadow-lg shadow-sky-600/30 flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <Search className="w-4 h-4" />
+                <span>Search Properties</span>
+              </button>
+            </div>
+          </div>
+        </section>
 
       {/* =====================================================
           FEATURES GRID (DISCOVERABILITY)
@@ -1121,6 +780,25 @@ export default function Home() {
               className="mt-6 text-xs font-bold text-rose-700 hover:text-rose-900 self-start underline"
             >
               Manage Meetings
+            </Link>
+          </div>
+
+          {/* DEEP LAND ANALYSIS & SOIL AGENT */}
+          <div className="bg-emerald-950 text-white border border-emerald-800 p-6 rounded-[2rem] shadow-lg flex flex-col justify-between hover:shadow-emerald-900/20 transition">
+            <div>
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400 mb-4">
+                <Zap size={20} />
+              </div>
+              <h4 className="text-sm font-extrabold text-emerald-400 uppercase tracking-wider">Deep Land Analysis & Soil Agent</h4>
+              <p className="mt-2 text-xs text-slate-300 leading-relaxed font-medium">
+                Geotechnical bearing capacity, soil pH, NPK profiles, foundation feasibility, and autonomous Soil AI Co-Pilot.
+              </p>
+            </div>
+            <Link
+              href="/deep-land-analysis"
+              className="mt-6 text-xs font-bold text-emerald-400 hover:text-emerald-300 self-start underline flex items-center gap-1"
+            >
+              Launch Soil Map Agent →
             </Link>
           </div>
 
@@ -1320,26 +998,83 @@ export default function Home() {
       <section className="mx-auto max-w-7xl px-6 py-8 lg:px-8">
 
         <div className="mb-5 flex items-end justify-between">
-
           <div>
-
-            <p className="mb-1.5 text-sm font-semibold uppercase tracking-widest text-zinc-400">
-              Properties
+            <p className="mb-1.5 text-xs font-extrabold uppercase tracking-widest text-sky-700">
+              Live Property Marketplace
             </p>
-
-            <h2 className="font-serif text-4xl font-medium tracking-tight">
-              Worth a closer look.
+            <h2 className="font-sans text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
+              Verified Properties Around You
             </h2>
-
           </div>
 
-
-          <div className="text-sm font-medium text-zinc-400">
+          <div className="text-xs font-extrabold text-slate-500">
             {loadingProperties
-              ? "Loading..."
-              : `${filteredProperties.length} results`}
+              ? "Loading opportunities..."
+              : `${filteredProperties.length} active listings`}
           </div>
+        </div>
 
+        {/* Interactive Filter Control Bar */}
+        <div className="mb-8 bg-white/90 backdrop-blur-md border border-slate-200 p-4 rounded-3xl shadow-sm space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            {/* All | Buy | Rent Segmented Bar */}
+            <div className="inline-flex bg-slate-100 p-1 rounded-2xl font-bold text-xs">
+              <button
+                type="button"
+                onClick={() => setListingTypeFilter("all")}
+                className={`px-5 py-2.5 rounded-xl transition-all cursor-pointer ${
+                  listingTypeFilter === "all"
+                    ? "bg-white text-slate-900 shadow-sm font-extrabold"
+                    : "text-slate-500 hover:text-slate-800"
+                }`}
+              >
+                All
+              </button>
+              <button
+                type="button"
+                onClick={() => setListingTypeFilter("sale")}
+                className={`px-5 py-2.5 rounded-xl transition-all cursor-pointer ${
+                  listingTypeFilter === "sale"
+                    ? "bg-sky-600 text-white shadow-md font-extrabold"
+                    : "text-slate-500 hover:text-slate-800"
+                }`}
+              >
+                Buy (Sale)
+              </button>
+              <button
+                type="button"
+                onClick={() => setListingTypeFilter("rent")}
+                className={`px-5 py-2.5 rounded-xl transition-all cursor-pointer ${
+                  listingTypeFilter === "rent"
+                    ? "bg-sky-600 text-white shadow-md font-extrabold"
+                    : "text-slate-500 hover:text-slate-800"
+                }`}
+              >
+                Rent
+              </button>
+            </div>
+
+            {/* Property Type Pills */}
+            <div className="flex flex-wrap items-center gap-2 text-xs font-semibold">
+              {propertyTypes.map((t) => (
+                <button
+                  key={t.value}
+                  type="button"
+                  onClick={() => {
+                    setPropertyType(t.value);
+                    setAppliedPropertyType(t.value);
+                  }}
+                  className={`px-4 py-2 rounded-xl border transition-all cursor-pointer ${
+                    appliedPropertyType === t.value
+                      ? "bg-slate-900 text-white border-slate-900 font-extrabold shadow-sm"
+                      : "bg-slate-50 text-slate-600 border-slate-200 hover:border-slate-300"
+                  }`}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
 
@@ -1961,6 +1696,17 @@ export default function Home() {
           </div>
         </div>
       )}
+
+      {/* Persistent Floating AI Chatbot Trigger */}
+      <button
+        type="button"
+        onClick={() => setAiOpen(true)}
+        className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-5 py-3.5 rounded-full bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white font-extrabold text-xs shadow-2xl shadow-sky-600/40 hover:scale-105 transition-all cursor-pointer border border-white/40"
+      >
+        <Sparkles className="w-4 h-4 text-amber-300" />
+        <span>Ask GEB AI</span>
+      </button>
+      </div>
     </main>
   );
 }
