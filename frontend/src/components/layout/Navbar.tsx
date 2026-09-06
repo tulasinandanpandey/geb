@@ -14,6 +14,9 @@ import {
   Heart,
   Briefcase,
   LayoutDashboard,
+  HardHat,
+  Wrench,
+  Activity,
 } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import GEBLogo from "@/components/common/GEBLogo";
@@ -29,6 +32,7 @@ export default function Navbar({ onOpenAIChat }: NavbarProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const isDeepLand = pathname === "/deep-land-analysis";
+  const isDealers = pathname === "/dealers";
 
   // Close account menu on outside click
   useEffect(() => {
@@ -72,6 +76,17 @@ export default function Navbar({ onOpenAIChat }: NavbarProps) {
           >
             Marketplace
           </button>
+          <Link
+            href="/dealers"
+            className={`px-4 py-2 rounded-full transition-all flex items-center gap-1.5 ${
+              isDealers
+                ? "bg-[var(--copper-600)] text-white font-bold"
+                : "text-[var(--ink-soft)] hover:text-[var(--copper-700)]"
+            }`}
+          >
+            <HardHat className="w-3.5 h-3.5" />
+            <span>Dealers & Engineers</span>
+          </Link>
           <Link
             href="/deep-land-analysis"
             className={`px-4 py-2 rounded-full transition-all flex items-center gap-1.5 ${
@@ -135,6 +150,14 @@ export default function Navbar({ onOpenAIChat }: NavbarProps) {
                   <div className="space-y-1">
                     <p className="text-[10px] font-bold text-[var(--ink-soft)] uppercase tracking-wider px-1 mb-1">Buyer Hub</p>
                     <Link
+                      href="/buyer-dashboard?tab=projects"
+                      onClick={() => setAccountMenuOpen(false)}
+                      className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-[var(--ink-soft)] hover:bg-[var(--copper-50)] hover:text-[var(--copper-700)] transition-colors"
+                    >
+                      <Activity className="w-3.5 h-3.5 text-[var(--copper-600)]" />
+                      <span>My Projects & AI Monitor</span>
+                    </Link>
+                    <Link
                       href="/buyer-dashboard?tab=profile"
                       onClick={() => setAccountMenuOpen(false)}
                       className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-[var(--ink-soft)] hover:bg-[var(--copper-50)] hover:text-[var(--copper-700)] transition-colors"
@@ -157,6 +180,27 @@ export default function Navbar({ onOpenAIChat }: NavbarProps) {
                     >
                       <Heart className="w-3.5 h-3.5 text-rose-500" />
                       <span>Saved Properties</span>
+                    </Link>
+                  </div>
+
+                  {/* Dealer & Project Hub Links */}
+                  <div className="border-t border-[var(--stone-line)] pt-2 space-y-1">
+                    <p className="text-[10px] font-bold text-[var(--ink-soft)] uppercase tracking-wider px-1 mb-1">Dealer & Engineer Hub</p>
+                    <Link
+                      href="/dealer-dashboard"
+                      onClick={() => setAccountMenuOpen(false)}
+                      className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-[var(--ink-soft)] hover:bg-[var(--copper-50)] hover:text-[var(--copper-700)] transition-colors"
+                    >
+                      <Wrench className="w-3.5 h-3.5 text-[var(--copper-600)]" />
+                      <span>Dealer Project Dashboard</span>
+                    </Link>
+                    <Link
+                      href="/dealers"
+                      onClick={() => setAccountMenuOpen(false)}
+                      className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-[var(--ink-soft)] hover:bg-[var(--copper-50)] hover:text-[var(--copper-700)] transition-colors"
+                    >
+                      <HardHat className="w-3.5 h-3.5 text-[var(--copper-600)]" />
+                      <span>Dealer Marketplace</span>
                     </Link>
                   </div>
 

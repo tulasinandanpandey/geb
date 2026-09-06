@@ -13,6 +13,18 @@ import {
   User,
   Loader2,
   RefreshCw,
+  Activity,
+  ShieldAlert,
+  Sparkles,
+  TrendingUp,
+  DollarSign,
+  FileText,
+  CheckCircle2,
+  AlertTriangle,
+  ArrowRight,
+  Wrench,
+  HardHat,
+  Send,
 } from "lucide-react";
 
 import Navbar from "@/components/layout/Navbar";
@@ -34,8 +46,8 @@ function BuyerDashboardContent() {
 
   // Active Tab
   const [activeTab, setActiveTab] = useState<
-    "profile" | "conversations" | "saved" | "followups" | "meetings"
-  >("profile");
+    "projects" | "profile" | "conversations" | "saved" | "followups" | "meetings"
+  >("projects");
 
   // Data states
   const [conversations, setConversations] = useState<Conversation[]>([]);
@@ -43,6 +55,15 @@ function BuyerDashboardContent() {
   const [savedProperties, setSavedProperties] = useState<Property[]>([]);
   const [followups, setFollowups] = useState<any[]>([]);
   const [meetings, setMeetings] = useState<any[]>([]);
+
+  // Project Monitoring States
+  const [buyerProjects, setBuyerProjects] = useState<any[]>([]);
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
+  const [projectDetails, setProjectDetails] = useState<any>(null);
+  const [aiAnalysis, setAiAnalysis] = useState<any>(null);
+  const [projectLoading, setProjectLoading] = useState(false);
+  const [buyerChatMsg, setBuyerChatMsg] = useState("");
+  const [sendingBuyerMsg, setSendingBuyerMsg] = useState(false);
   
   // Loading & error states
   const [loadingData, setLoadingData] = useState(false);
@@ -53,10 +74,12 @@ function BuyerDashboardContent() {
   const [activeChatConversation, setActiveChatConversation] = useState<Conversation | null>(null);
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+
   // Initialize active tab from query parameter
   useEffect(() => {
     const tabParam = searchParams.get("tab");
-    if (tabParam && ["profile", "conversations", "saved", "followups", "meetings"].includes(tabParam)) {
+    if (tabParam && ["projects", "profile", "conversations", "saved", "followups", "meetings"].includes(tabParam)) {
       setActiveTab(tabParam as any);
     }
   }, [searchParams]);
@@ -107,11 +130,87 @@ function BuyerDashboardContent() {
         setSavedProperties([]);
       }
 
+      // 5. Fetch Projects for Buyer
+      const session = JSON.parse(localStorage.getItem("sb-ljqkrzikddhaltdxlpfj-auth-token") || "{}");
+      const token = session?.access_token || "";
+      const projRes = await fetch(`${API_URL}/api/projects`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      if (projRes.ok) {
+        const projData = await projRes.json();
+        const pList = projData.projects || [];
+        setBuyerProjects(pList);
+        if (pList.length > 0 && !selectedProjectId) {
+          setSelectedProjectId(pList[0].id);
+        }
+      }
+
     } catch (err: any) {
       console.error("Error loading buyer dashboard details:", err);
       setError(err.message || "Failed to load dashboard details.");
     } finally {
       setLoadingData(false);
+    }
+  }
+
+  // Load selected project details & AI analysis
+  useEffect(() => {
+    if (!selectedProjectId) return;
+
+    async function fetchProjectAiAndDetails() {
+      setProjectLoading(true);
+      try {
+        const detRes = await fetch(`${API_URL}/api/projects/${selectedProjectId}`);
+        if (detRes.ok) {
+          setProjectDetails(await detRes.json());
+        }
+
+        const aiRes = await fetch(`${API_URL}/api/projects/${selectedProjectId}/ai-analysis`);
+        if (aiRes.ok) {
+          setAiAnalysis(await aiRes.json());
+        }
+      } catch (err) {
+        console.error("Error fetching project AI report:", err);
+      } finally {
+        setProjectLoading(false);
+      }
+    }
+
+    fetchProjectAiAndDetails();
+  }, [selectedProjectId, API_URL]);
+
+  // Send message to project chat
+  async function handleSendBuyerMessage(e: React.FormEvent) {
+    e.preventDefault();
+    if (!selectedProjectId || !buyerChatMsg.trim()) return;
+
+    setSendingBuyerMsg(true);
+    try {
+      const session = JSON.parse(localStorage.getItem("sb-ljqkrzikddhaltdxlpfj-auth-token") || "{}");
+      const token = session?.access_token || "";
+
+      const res = await fetch(`${API_URL}/api/projects/${selectedProjectId}/messages`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token ? `Bearer ${token}` : "",
+        },
+        body: JSON.stringify({
+          message: buyerChatMsg,
+          sender_name: user?.email?.split("@")[0] || "Buyer",
+          sender_role: "buyer",
+        }),
+      });
+
+      if (res.ok) {
+        setBuyerChatMsg("");
+        const detRes = await fetch(`${API_URL}/api/projects/${selectedProjectId}`);
+        if (detRes.ok) setProjectDetails(await detRes.json());
+      }
+    } catch (err) {
+      console.error("Error sending buyer message:", err);
+    } finally {
+      setSendingBuyerMsg(false);
     }
   }
 
@@ -242,6 +341,7 @@ function BuyerDashboardContent() {
       <section className="mx-auto max-w-7xl px-6 pb-8 lg:px-8">
         <div className="flex w-full items-center gap-1 overflow-x-auto rounded-full border border-[var(--stone-line)] bg-white p-1.5 scrollbar-none">
           {[
+            { id: "projects", label: "My Projects & GEB AI", icon: Activity },
             { id: "profile", label: "My Profile", icon: User },
             { id: "conversations", label: "Contacted Sellers", icon: MessageSquare },
             { id: "saved", label: "Saved Properties", icon: Heart },
@@ -277,6 +377,255 @@ function BuyerDashboardContent() {
         {error && (
           <div className="mb-6 p-4 rounded-2xl bg-red-50 border border-red-100 text-sm font-semibold text-red-600">
             {error}
+          </div>
+        )}
+
+        {/* PROJECTS & GEB AI MONITOR TAB */}
+        {activeTab === "projects" && (
+          <div className="space-y-8">
+            {buyerProjects.length === 0 ? (
+              <div className="rounded-[2.5rem] border border-[var(--stone-line)] bg-white p-12 text-center space-y-4">
+                <HardHat className="w-12 h-12 text-[var(--stone-line)] mx-auto" />
+                <h3 className="text-xl font-bold text-[var(--ink)]">No Active Construction Projects</h3>
+                <p className="text-xs text-[var(--ink-soft)] max-w-md mx-auto">
+                  You haven&apos;t hired any dealer or engineer yet. Hire a verified dealer from the GEB Marketplace to unlock real-time project monitoring and GEB AI risk alerts.
+                </p>
+                <Link
+                  href="/dealers"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[var(--copper-600)] text-white text-xs font-bold shadow-md hover:bg-[var(--copper-700)]"
+                >
+                  <HardHat className="w-4 h-4" />
+                  <span>Explore Dealer Marketplace</span>
+                </Link>
+              </div>
+            ) : (
+              <div className="space-y-6">
+                {/* Project Selector Bar */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-3xl border border-[var(--stone-line)] bg-white p-6 shadow-sm">
+                  <div>
+                    <h3 className="text-lg font-extrabold text-[var(--ink)]">Hired Construction Projects</h3>
+                    <p className="text-xs text-[var(--ink-soft)]">
+                      Hired Dealer: <span className="font-bold text-[var(--copper-700)]">{projectDetails?.dealer?.full_name || "Assigned Engineer"}</span>
+                    </p>
+                  </div>
+
+                  {buyerProjects.length > 1 && (
+                    <div className="w-full sm:w-64">
+                      <select
+                        value={selectedProjectId || ""}
+                        onChange={(e) => setSelectedProjectId(e.target.value)}
+                        className="w-full px-4 py-2.5 rounded-2xl bg-[var(--paper)] border border-[var(--stone-line)] text-xs font-bold focus:outline-none"
+                      >
+                        {buyerProjects.map((p) => (
+                          <option key={p.id} value={p.id}>
+                            {p.title} ({p.progress_pct}%)
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                </div>
+
+                {/* GEB AI PROJECT RISK MONITORING WIDGET */}
+                {aiAnalysis && (
+                  <div className="rounded-3xl border border-amber-200/80 bg-gradient-to-br from-amber-50/70 via-white to-amber-50/30 p-6 md:p-8 shadow-sm space-y-6">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-amber-200/60 pb-5">
+                      <div className="flex items-center gap-3.5">
+                        <div className="w-12 h-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center shadow-md">
+                          <Sparkles className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <h3 className="text-lg font-extrabold text-amber-950">GEB Project AI Risk Engine</h3>
+                            <span className="px-2.5 py-0.5 rounded-full bg-amber-200/80 text-amber-900 text-[10px] font-bold uppercase tracking-wider">
+                              Real-Time Analysis
+                            </span>
+                          </div>
+                          <p className="text-xs text-amber-800 font-medium mt-0.5">
+                            Automated timeline delay analysis, budget variance, and milestone risk detection.
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-3">
+                        <span className={`px-4 py-1.5 rounded-full text-xs font-bold border shadow-sm ${
+                          aiAnalysis.badge_color === "red"
+                            ? "bg-rose-100 text-rose-800 border-rose-300"
+                            : aiAnalysis.badge_color === "amber"
+                            ? "bg-amber-100 text-amber-800 border-amber-300"
+                            : "bg-emerald-100 text-emerald-800 border-emerald-300"
+                        }`}>
+                          {aiAnalysis.overall_status}
+                        </span>
+                        <div className="px-3.5 py-1.5 rounded-full bg-white border border-amber-200 text-xs font-black text-amber-900 shadow-xs">
+                          Risk Score: {aiAnalysis.risk_score} / 100
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Key System Risk Alerts */}
+                    {aiAnalysis.alerts && aiAnalysis.alerts.length > 0 && (
+                      <div className="space-y-2">
+                        <p className="text-xs font-bold text-amber-950 uppercase tracking-wider">Active System Alerts</p>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          {aiAnalysis.alerts.map((alert: string, idx: number) => (
+                            <div key={idx} className="p-3.5 rounded-2xl bg-white border border-amber-200/80 text-xs font-semibold text-amber-900 flex items-start gap-2.5 shadow-xs">
+                              <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                              <span>{alert}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Gemini Plain-Language Report */}
+                    {aiAnalysis.ai_explanation && (
+                      <div className="p-5 rounded-2xl bg-white border border-stone-200/80 text-xs leading-relaxed text-stone-800 space-y-3 shadow-xs">
+                        <div className="flex items-center gap-2 font-bold text-amber-900 border-b border-stone-100 pb-2">
+                          <Sparkles className="w-4 h-4 text-amber-600" />
+                          <span>AI Executive Insight & Recommended Next Steps</span>
+                        </div>
+                        <div className="whitespace-pre-line text-stone-700">
+                          {aiAnalysis.ai_explanation}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Project Financial & Progress Grid */}
+                {projectDetails && (
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div className="rounded-3xl border border-[var(--stone-line)] bg-white p-5 space-y-1">
+                      <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--ink-soft)]">Total Budget</p>
+                      <p className="text-xl font-black text-[var(--ink)]">₹{Number(projectDetails.total_budget || 0).toLocaleString()}</p>
+                    </div>
+                    <div className="rounded-3xl border border-[var(--stone-line)] bg-white p-5 space-y-1">
+                      <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--ink-soft)]">Amount Spent</p>
+                      <p className="text-xl font-black text-rose-600">₹{Number(projectDetails.spent_amount || 0).toLocaleString()}</p>
+                    </div>
+                    <div className="rounded-3xl border border-[var(--stone-line)] bg-white p-5 space-y-1">
+                      <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--ink-soft)]">Remaining Capital</p>
+                      <p className="text-xl font-black text-emerald-600">
+                        ₹{Math.max(0, Number(projectDetails.total_budget || 0) - Number(projectDetails.spent_amount || 0)).toLocaleString()}
+                      </p>
+                    </div>
+                    <div className="rounded-3xl border border-[var(--stone-line)] bg-white p-5 space-y-2">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="font-bold text-[var(--ink-soft)]">Overall Progress</span>
+                        <span className="font-extrabold text-[var(--copper-700)]">{projectDetails.progress_pct}%</span>
+                      </div>
+                      <div className="w-full bg-stone-100 h-2.5 rounded-full overflow-hidden">
+                        <div
+                          className="bg-gradient-to-r from-[var(--copper-500)] to-emerald-500 h-full rounded-full"
+                          style={{ width: `${projectDetails.progress_pct}%` }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Milestones & Expenses Split View */}
+                {projectDetails && (
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {/* Milestones */}
+                    <div className="rounded-3xl border border-[var(--stone-line)] bg-white p-6 space-y-4">
+                      <h4 className="font-extrabold text-base text-[var(--ink)]">Construction Milestones</h4>
+                      <div className="space-y-3">
+                        {projectDetails.milestones?.map((m: any, idx: number) => (
+                          <div key={m.id || idx} className="p-4 rounded-2xl bg-[var(--paper)] border border-[var(--stone-line)] space-y-2 text-xs">
+                            <div className="flex items-center justify-between">
+                              <span className="font-bold text-[var(--ink)]">{m.title}</span>
+                              <span className="font-bold text-[var(--copper-700)]">{m.progress_pct || 0}%</span>
+                            </div>
+                            <p className="text-[11px] text-[var(--ink-soft)]">{m.description}</p>
+                            <div className="flex items-center justify-between text-[11px] text-[var(--ink-soft)] pt-1">
+                              <span>Target: {m.target_date}</span>
+                              <span className="font-semibold text-stone-700">Budget: ₹{(m.budget_allocated || 0).toLocaleString()}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Dealer Updates & Expenses */}
+                    <div className="rounded-3xl border border-[var(--stone-line)] bg-white p-6 space-y-4">
+                      <h4 className="font-extrabold text-base text-[var(--ink)]">Latest Dealer Site Logs & Invoices</h4>
+                      <div className="space-y-3 max-h-96 overflow-y-auto pr-1">
+                        {projectDetails.updates?.map((u: any, idx: number) => (
+                          <div key={u.id || idx} className="p-3.5 rounded-2xl bg-[var(--paper)] border border-[var(--stone-line)] space-y-1 text-xs">
+                            <div className="flex items-center justify-between font-bold text-[var(--ink)]">
+                              <span>{u.title}</span>
+                              <span className="text-[10px] text-[var(--ink-soft)]">{u.log_date}</span>
+                            </div>
+                            <p className="text-xs text-[var(--ink-soft)] leading-relaxed">{u.notes}</p>
+                          </div>
+                        ))}
+
+                        {projectDetails.expenses?.map((e: any, idx: number) => (
+                          <div key={e.id || idx} className="p-3.5 rounded-2xl bg-amber-50/60 border border-amber-200/60 flex items-center justify-between text-xs">
+                            <div>
+                              <p className="font-bold text-amber-950">{e.title}</p>
+                              <p className="text-[10px] text-amber-800">Vendor: {e.vendor || "Supplier"} • {e.expense_date}</p>
+                            </div>
+                            <span className="font-extrabold text-amber-900">₹{Number(e.amount || 0).toLocaleString()}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Buyer ↔ Dealer Project Chat Box */}
+                {projectDetails && (
+                  <div className="rounded-3xl border border-[var(--stone-line)] bg-white p-6 space-y-4">
+                    <h4 className="font-extrabold text-base text-[var(--ink)] flex items-center gap-2">
+                      <MessageSquare className="w-4 h-4 text-[var(--copper-600)]" />
+                      <span>Project Communication Thread with Dealer</span>
+                    </h4>
+
+                    <div className="h-64 overflow-y-auto p-4 rounded-2xl bg-[var(--paper)] border border-[var(--stone-line)] space-y-3">
+                      {projectDetails.messages?.length === 0 ? (
+                        <p className="text-xs text-[var(--ink-soft)] text-center py-8">No messages sent yet. Ask your dealer engineer any questions about construction progress.</p>
+                      ) : (
+                        projectDetails.messages?.map((m: any, idx: number) => (
+                          <div key={m.id || idx} className={`flex flex-col ${m.sender_role === "buyer" ? "items-end" : "items-start"}`}>
+                            <span className="text-[10px] font-semibold text-[var(--ink-soft)] px-1">
+                              {m.sender_name} ({m.sender_role})
+                            </span>
+                            <div className={`p-3 rounded-2xl text-xs max-w-md ${
+                              m.sender_role === "buyer"
+                                ? "bg-[var(--ink)] text-white"
+                                : "bg-[var(--copper-100)] text-[var(--copper-900)] font-medium"
+                            }`}>
+                              {m.message}
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+
+                    <form onSubmit={handleSendBuyerMessage} className="flex gap-3">
+                      <input
+                        type="text"
+                        value={buyerChatMsg}
+                        onChange={(e) => setBuyerChatMsg(e.target.value)}
+                        placeholder="Ask dealer engineer about timeline, site visit, or materials..."
+                        className="flex-1 px-4 py-2.5 rounded-2xl bg-[var(--paper)] border border-[var(--stone-line)] text-xs font-semibold focus:outline-none"
+                      />
+                      <button
+                        type="submit"
+                        disabled={sendingBuyerMsg}
+                        className="px-5 py-2.5 rounded-2xl bg-[var(--copper-600)] hover:bg-[var(--copper-700)] text-white text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                      >
+                        <Send className="w-4 h-4" />
+                        <span>Send</span>
+                      </button>
+                    </form>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
 

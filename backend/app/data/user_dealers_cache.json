@@ -1,0 +1,64 @@
+{
+  "user_test_9999": {
+    "id": "8157aef2-70b3-4d68-a48c-56f064778dff",
+    "user_id": "user_test_9999",
+    "full_name": "Er. Rajesh Dealer",
+    "company_name": "Rajesh Construction & Dealer Co.",
+    "degree": "B.Tech Civil Engineering",
+    "specialization": "Civil Engineering & Structural Construction",
+    "experience_years": 8,
+    "rating": 5.0,
+    "completed_projects": 1,
+    "city": "Lucknow",
+    "locality": "Gomti Nagar",
+    "hourly_rate": 2500.0,
+    "bio": "Civil engineer and verified dealer.",
+    "phone": "+91 9876543210",
+    "email": "rajesh@dealer.com",
+    "avatar_url": "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&auto=format&fit=crop&q=80",
+    "skills": [
+      "Structural RCC",
+      "Site Inspection"
+    ],
+    "work_capabilities": [
+      "Structural RCC",
+      "Site Inspection"
+    ],
+    "is_verified": true
+  },
+  "46be9a5f-033f-4588-a1c2-3a0c0614c0c2": {
+    "id": "af95bd98-0e71-4eb0-b5e8-62442583113a",
+    "user_id": "46be9a5f-033f-4588-a1c2-3a0c0614c0c2",
+    "full_name": "rishi",
+    "company_name": "techx society",
+    "degree": "B.Tech Civil Engineering",
+    "specialization": "Civil Engineering & Structural Construction",
+    "experience_years": 5,
+    "rating": 5.0,
+    "completed_projects": 1,
+    "city": "Lucknow",
+    "locality": "Gomti Nagar",
+    "hourly_rate": 1800.0,
+    "bio": "dedicated toward delievering ur project  efficiently",
+    "phone": "9250201913",
+    "email": "rishi.talk91@gmail.com",
+    "avatar_url": "https://ljqkrzikddhaltdxlpfj.supabase.co/storage/v1/object/public/property-images/properties/404cbd4c-7110-4d15-a0c3-3541f85d73e1.jpg?",
+    "skills": [
+      "RCC Structural Design",
+      "Foundation Engineering",
+      "Site Supervision",
+      "Quality Inspection",
+      "Permitting"
+    ],
+    "work_capabilities": [
+      "RCC Structural Design",
+      "Foundation Engineering",
+      "Site Supervision",
+      "Quality Inspection",
+      "Permitting"
+    ],
+    "is_verified": true,
+    "created_at": "2026-09-06T08:19:04.232697+00:00",
+    "updated_at": "2026-09-06T08:19:04.232697+00:00"
+  }
+}

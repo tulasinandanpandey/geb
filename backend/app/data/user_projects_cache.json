@@ -1,0 +1,290 @@
+{
+  "b77a7021-3759-401c-b4f2-66bb4c02eeb3": {
+    "id": "b77a7021-3759-401c-b4f2-66bb4c02eeb3",
+    "buyer_id": "buyer_user_1111",
+    "dealer_id": "8157aef2-70b3-4d68-a48c-56f064778dff",
+    "title": "3BHK Villa Construction",
+    "description": "",
+    "project_type": "construction",
+    "total_budget": 5000000,
+    "spent_amount": 0,
+    "progress_pct": 0,
+    "status": "active",
+    "start_date": "2026-09-06",
+    "target_completion_date": "2026-12-31",
+    "property_id": null,
+    "city": "Lucknow",
+    "locality": ""
+  },
+  "2ec0ee22-0ae9-4155-8e8f-bbf8bc9d3b89": {
+    "id": "2ec0ee22-0ae9-4155-8e8f-bbf8bc9d3b89",
+    "buyer_id": "buyer_user_1111",
+    "dealer_id": "8157aef2-70b3-4d68-a48c-56f064778dff",
+    "title": "3BHK Villa Construction",
+    "description": "",
+    "project_type": "construction",
+    "total_budget": 5000000,
+    "spent_amount": 0,
+    "progress_pct": 0,
+    "status": "active",
+    "start_date": "2026-09-06",
+    "target_completion_date": "2026-12-31",
+    "property_id": null,
+    "city": "Lucknow",
+    "locality": "",
+    "milestones": [
+      {
+        "id": "m1_2ec0ee22",
+        "project_id": "2ec0ee22-0ae9-4155-8e8f-bbf8bc9d3b89",
+        "title": "Phase 1: Site Prep, Excavation & Foundation",
+        "description": "Soil testing, site clearing, footings, and plinth beam casting.",
+        "target_date": "2026-10-04",
+        "budget_allocated": 1250000.0,
+        "spent": 0,
+        "progress_pct": 0,
+        "status": "in_progress"
+      },
+      {
+        "id": "m2_2ec0ee22",
+        "project_id": "2ec0ee22-0ae9-4155-8e8f-bbf8bc9d3b89",
+        "title": "Phase 2: Structural RCC Frame & Brickwork",
+        "description": "Column casting, slab casting, exterior and interior masonry walls.",
+        "target_date": "2026-11-08",
+        "budget_allocated": 1750000.0,
+        "spent": 0,
+        "progress_pct": 0,
+        "status": "pending"
+      },
+      {
+        "id": "m3_2ec0ee22",
+        "project_id": "2ec0ee22-0ae9-4155-8e8f-bbf8bc9d3b89",
+        "title": "Phase 3: MEP (Mechanical, Electrical, Plumbing) & Plastering",
+        "description": "Conduit piping, water line layout, wall plastering, and door frames.",
+        "target_date": "2026-12-07",
+        "budget_allocated": 1250000.0,
+        "spent": 0,
+        "progress_pct": 0,
+        "status": "pending"
+      },
+      {
+        "id": "m4_2ec0ee22",
+        "project_id": "2ec0ee22-0ae9-4155-8e8f-bbf8bc9d3b89",
+        "title": "Phase 4: Flooring, Paint, Fixtures & Handover",
+        "description": "Tiling, painting, sanitaryware installation, final inspection & handover.",
+        "target_date": "2026-12-31",
+        "budget_allocated": 750000.0,
+        "spent": 0,
+        "progress_pct": 0,
+        "status": "pending"
+      }
+    ],
+    "messages": [
+      {
+        "id": "msg1_2ec0ee22",
+        "project_id": "2ec0ee22-0ae9-4155-8e8f-bbf8bc9d3b89",
+        "sender_name": "Buyer Client",
+        "sender_role": "buyer",
+        "message": "Hello, I would like to hire your engineering team for project '3BHK Villa Construction' with a budget of \u20b95,000,000.00. Target date: 2026-12-31.",
+        "created_at": "2026-09-06T13:46:23.109688"
+      },
+      {
+        "id": "msg2_2ec0ee22",
+        "project_id": "2ec0ee22-0ae9-4155-8e8f-bbf8bc9d3b89",
+        "sender_name": "Er. Rajesh Dealer's CRM Bot",
+        "sender_role": "ai",
+        "message": "\ud83d\udc4b Hello! Thank you for choosing Er. Rajesh Dealer for your project '3BHK Villa Construction'. I am Er. Rajesh Dealer's automated GEB CRM Assistant.\n\n\u2705 Your project request and budget allocation of \u20b95,000,000.00 have been received. I have scheduled your initial project consultation & site meeting for **2026-09-08 at 10:30 AM**.\n\nOur senior engineering team will review your specifications (Lucknow). You can monitor all milestone updates, site logs, and invoices in your GEB Dashboard!",
+        "created_at": "2026-09-06T13:46:23.388085"
+      }
+    ],
+    "updates": [],
+    "expenses": [],
+    "scheduled_meeting": {
+      "date": "2026-09-08",
+      "time": "10:30 AM",
+      "status": "confirmed",
+      "bot_response": "\ud83d\udc4b Hello! Thank you for choosing Er. Rajesh Dealer for your project '3BHK Villa Construction'. I am Er. Rajesh Dealer's automated GEB CRM Assistant.\n\n\u2705 Your project request and budget allocation of \u20b95,000,000.00 have been received. I have scheduled your initial project consultation & site meeting for **2026-09-08 at 10:30 AM**.\n\nOur senior engineering team will review your specifications (Lucknow). You can monitor all milestone updates, site logs, and invoices in your GEB Dashboard!"
+    }
+  },
+  "3091ff06-67e6-4cb2-a6ed-012a677321cb": {
+    "id": "3091ff06-67e6-4cb2-a6ed-012a677321cb",
+    "title": "New Civil Engineering & Structural Construction Project",
+    "description": "",
+    "buyer_id": "46be9a5f-033f-4588-a1c2-3a0c0614c0c2",
+    "dealer_id": "af95bd98-0e71-4eb0-b5e8-62442583113a",
+    "property_id": null,
+    "project_type": "construction",
+    "status": "active",
+    "total_budget": 4500000.0,
+    "spent_amount": 0.0,
+    "progress_pct": 0.0,
+    "start_date": "2026-09-06",
+    "target_completion_date": "2026-12-05",
+    "city": "Lucknow",
+    "locality": "Gomti Nagar",
+    "created_at": "2026-09-06T08:19:16.437617+00:00",
+    "updated_at": "2026-09-06T08:19:16.437617+00:00",
+    "milestones": [
+      {
+        "id": "m1_3091ff06",
+        "project_id": "3091ff06-67e6-4cb2-a6ed-012a677321cb",
+        "title": "Phase 1: Site Prep, Excavation & Foundation",
+        "description": "Soil testing, site clearing, footings, and plinth beam casting.",
+        "target_date": "2026-09-28",
+        "budget_allocated": 1125000.0,
+        "spent": 0,
+        "progress_pct": 0,
+        "status": "in_progress"
+      },
+      {
+        "id": "m2_3091ff06",
+        "project_id": "3091ff06-67e6-4cb2-a6ed-012a677321cb",
+        "title": "Phase 2: Structural RCC Frame & Brickwork",
+        "description": "Column casting, slab casting, exterior and interior masonry walls.",
+        "target_date": "2026-10-24",
+        "budget_allocated": 1575000.0,
+        "spent": 0,
+        "progress_pct": 0,
+        "status": "pending"
+      },
+      {
+        "id": "m3_3091ff06",
+        "project_id": "3091ff06-67e6-4cb2-a6ed-012a677321cb",
+        "title": "Phase 3: MEP (Mechanical, Electrical, Plumbing) & Plastering",
+        "description": "Conduit piping, water line layout, wall plastering, and door frames.",
+        "target_date": "2026-11-16",
+        "budget_allocated": 1125000.0,
+        "spent": 0,
+        "progress_pct": 0,
+        "status": "pending"
+      },
+      {
+        "id": "m4_3091ff06",
+        "project_id": "3091ff06-67e6-4cb2-a6ed-012a677321cb",
+        "title": "Phase 4: Flooring, Paint, Fixtures & Handover",
+        "description": "Tiling, painting, sanitaryware installation, final inspection & handover.",
+        "target_date": "2026-12-05",
+        "budget_allocated": 675000.0,
+        "spent": 0,
+        "progress_pct": 0,
+        "status": "pending"
+      }
+    ],
+    "messages": [
+      {
+        "id": "msg1_3091ff06",
+        "project_id": "3091ff06-67e6-4cb2-a6ed-012a677321cb",
+        "sender_name": "Buyer Client",
+        "sender_role": "buyer",
+        "message": "Hi rishi, I am interested in hiring your team for site planning and construction. Let's confirm our initial meeting.",
+        "created_at": "2026-09-06T13:49:16.858359"
+      },
+      {
+        "id": "msg2_3091ff06",
+        "project_id": "3091ff06-67e6-4cb2-a6ed-012a677321cb",
+        "sender_name": "rishi's CRM Bot",
+        "sender_role": "ai",
+        "message": "\ud83d\udc4b Hello! Thank you for choosing rishi for your project 'New Civil Engineering & Structural Construction Project'. I am rishi's automated GEB CRM Assistant.\n\n\u2705 Your project request and budget allocation of \u20b94,500,000.00 have been received. I have scheduled your initial project consultation & site meeting for **2026-09-08 at 10:30 AM**.\n\nOur senior engineering team will review your specifications (Lucknow). You can monitor all milestone updates, site logs, and invoices in your GEB Dashboard!",
+        "created_at": "2026-09-06T13:49:17.138223"
+      }
+    ],
+    "updates": [],
+    "expenses": [],
+    "scheduled_meeting": {
+      "date": "2026-09-08",
+      "time": "10:30 AM",
+      "status": "confirmed",
+      "bot_response": "\ud83d\udc4b Hello! Thank you for choosing rishi for your project 'New Civil Engineering & Structural Construction Project'. I am rishi's automated GEB CRM Assistant.\n\n\u2705 Your project request and budget allocation of \u20b94,500,000.00 have been received. I have scheduled your initial project consultation & site meeting for **2026-09-08 at 10:30 AM**.\n\nOur senior engineering team will review your specifications (Lucknow). You can monitor all milestone updates, site logs, and invoices in your GEB Dashboard!"
+    }
+  },
+  "aef1d3ea-cd66-4e02-aeae-5e506aaee952": {
+    "id": "aef1d3ea-cd66-4e02-aeae-5e506aaee952",
+    "title": "New Civil Engineering & Structural Construction Project",
+    "description": "",
+    "buyer_id": "c866d3aa-461d-4393-885e-a6fbebc8fea5",
+    "dealer_id": "af95bd98-0e71-4eb0-b5e8-62442583113a",
+    "property_id": null,
+    "project_type": "construction",
+    "status": "active",
+    "total_budget": 4500000.0,
+    "spent_amount": 0.0,
+    "progress_pct": 0.0,
+    "start_date": "2026-09-06",
+    "target_completion_date": "2026-12-05",
+    "city": "Lucknow",
+    "locality": "Gomti Nagar",
+    "created_at": "2026-09-06T08:20:11.90189+00:00",
+    "updated_at": "2026-09-06T08:20:11.90189+00:00",
+    "milestones": [
+      {
+        "id": "m1_aef1d3ea",
+        "project_id": "aef1d3ea-cd66-4e02-aeae-5e506aaee952",
+        "title": "Phase 1: Site Prep, Excavation & Foundation",
+        "description": "Soil testing, site clearing, footings, and plinth beam casting.",
+        "target_date": "2026-09-28",
+        "budget_allocated": 1125000.0,
+        "spent": 0,
+        "progress_pct": 0,
+        "status": "in_progress"
+      },
+      {
+        "id": "m2_aef1d3ea",
+        "project_id": "aef1d3ea-cd66-4e02-aeae-5e506aaee952",
+        "title": "Phase 2: Structural RCC Frame & Brickwork",
+        "description": "Column casting, slab casting, exterior and interior masonry walls.",
+        "target_date": "2026-10-24",
+        "budget_allocated": 1575000.0,
+        "spent": 0,
+        "progress_pct": 0,
+        "status": "pending"
+      },
+      {
+        "id": "m3_aef1d3ea",
+        "project_id": "aef1d3ea-cd66-4e02-aeae-5e506aaee952",
+        "title": "Phase 3: MEP (Mechanical, Electrical, Plumbing) & Plastering",
+        "description": "Conduit piping, water line layout, wall plastering, and door frames.",
+        "target_date": "2026-11-16",
+        "budget_allocated": 1125000.0,
+        "spent": 0,
+        "progress_pct": 0,
+        "status": "pending"
+      },
+      {
+        "id": "m4_aef1d3ea",
+        "project_id": "aef1d3ea-cd66-4e02-aeae-5e506aaee952",
+        "title": "Phase 4: Flooring, Paint, Fixtures & Handover",
+        "description": "Tiling, painting, sanitaryware installation, final inspection & handover.",
+        "target_date": "2026-12-05",
+        "budget_allocated": 675000.0,
+        "spent": 0,
+        "progress_pct": 0,
+        "status": "pending"
+      }
+    ],
+    "messages": [
+      {
+        "id": "msg1_aef1d3ea",
+        "project_id": "aef1d3ea-cd66-4e02-aeae-5e506aaee952",
+        "sender_name": "Buyer Client",
+        "sender_role": "buyer",
+        "message": "Hi rishi, I am interested in hiring your team for site planning and construction. Let's confirm our initial meeting.",
+        "created_at": "2026-09-06T13:50:12.251163"
+      },
+      {
+        "id": "msg2_aef1d3ea",
+        "project_id": "aef1d3ea-cd66-4e02-aeae-5e506aaee952",
+        "sender_name": "rishi's CRM Bot",
+        "sender_role": "ai",
+        "message": "\ud83d\udc4b Hello! Thank you for choosing rishi for your project 'New Civil Engineering & Structural Construction Project'. I am rishi's automated GEB CRM Assistant.\n\n\u2705 Your project request and budget allocation of \u20b94,500,000.00 have been received. I have scheduled your initial project consultation & site meeting for **2026-09-08 at 10:30 AM**.\n\nOur senior engineering team will review your specifications (Lucknow). You can monitor all milestone updates, site logs, and invoices in your GEB Dashboard!",
+        "created_at": "2026-09-06T13:50:12.564999"
+      }
+    ],
+    "updates": [],
+    "expenses": [],
+    "scheduled_meeting": {
+      "date": "2026-09-08",
+      "time": "10:30 AM",
+      "status": "confirmed",
+      "bot_response": "\ud83d\udc4b Hello! Thank you for choosing rishi for your project 'New Civil Engineering & Structural Construction Project'. I am rishi's automated GEB CRM Assistant.\n\n\u2705 Your project request and budget allocation of \u20b94,500,000.00 have been received. I have scheduled your initial project consultation & site meeting for **2026-09-08 at 10:30 AM**.\n\nOur senior engineering team will review your specifications (Lucknow). You can monitor all milestone updates, site logs, and invoices in your GEB Dashboard!"
+    }
+  }
+}

@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Loader2, ShieldCheck, MapPinned, Sparkles } from "lucide-react";
+import { ArrowLeft, Loader2, ShieldCheck, MapPinned, Sparkles, HardHat, UserCheck } from "lucide-react";
 
 import { supabase } from "@/lib/supabase/client";
 
@@ -12,6 +12,7 @@ export default function LoginPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState<"buyer" | "dealer">("buyer");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -42,7 +43,11 @@ export default function LoginPage() {
         throw loginError;
       }
 
-      window.location.href = "/";
+      if (role === "dealer") {
+        window.location.href = "/dealers/onboarding";
+      } else {
+        window.location.href = "/";
+      }
 
     } catch (err) {
 
@@ -126,6 +131,40 @@ export default function LoginPage() {
             onSubmit={handleLogin}
             className="mt-8 rounded-[2rem] border border-[var(--stone-line)] bg-[var(--paper-raised)] p-6 shadow-xl shadow-[var(--copper-900)]/5"
           >
+            {/* Role Selection Switcher */}
+            <div className="mb-6">
+              <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-[var(--ink-soft)]">
+                Sign in as
+              </label>
+              <div className="grid grid-cols-2 gap-2 p-1.5 rounded-2xl bg-[var(--paper)] border border-[var(--stone-line)]">
+                <button
+                  type="button"
+                  onClick={() => setRole("buyer")}
+                  className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                    role === "buyer"
+                      ? "bg-[var(--ink)] text-white shadow"
+                      : "text-[var(--ink-soft)] hover:text-[var(--ink)]"
+                  }`}
+                >
+                  <UserCheck size={15} />
+                  <span>Buyer / User</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setRole("dealer")}
+                  className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                    role === "dealer"
+                      ? "bg-[var(--copper-600)] text-white shadow"
+                      : "text-[var(--ink-soft)] hover:text-[var(--ink)]"
+                  }`}
+                >
+                  <HardHat size={15} />
+                  <span>Dealer / Engineer</span>
+                </button>
+              </div>
+            </div>
+
             <div className="space-y-5">
               <div>
                 <label className="mb-2 block text-sm font-semibold">

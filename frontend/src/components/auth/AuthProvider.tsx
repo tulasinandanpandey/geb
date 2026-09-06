@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import {
   createContext,
@@ -19,7 +19,9 @@ import { supabase } from "@/lib/supabase/client";
 export type GEBRole =
   | "buyer"
   | "seller"
-  | "broker";
+  | "broker"
+  | "dealer"
+  | "engineer";
 
 
 interface AuthContextValue {
@@ -28,6 +30,8 @@ interface AuthContextValue {
   roles: GEBRole[];
   loading: boolean;
   signOut: () => Promise<void>;
+  updateRoles: (newRoles: GEBRole[]) => void;
+  refreshRoles: () => Promise<void>;
 }
 
 
@@ -59,6 +63,15 @@ export function AuthProvider({
   async function loadRoles(
     userId: string
   ) {
+    let localRoles: GEBRole[] = [];
+    try {
+      const stored = localStorage.getItem("geb_user_roles");
+      if (stored) {
+        localRoles = JSON.parse(stored);
+      }
+    } catch (e) {
+      console.warn("Notice reading geb_user_roles from localStorage:", e);
+    }
 
     const {
       data,
@@ -68,41 +81,44 @@ export function AuthProvider({
       .select("role")
       .eq("user_id", userId);
 
-
-    if (error) {
-
-      console.error(
-        "Unable to load GEB roles:",
-        error
+    const dbRoles = (data ?? [])
+      .map((item) => item.role)
+      .filter(
+        (role): role is GEBRole =>
+          role === "buyer" ||
+          role === "seller" ||
+          role === "broker" ||
+          role === "dealer" ||
+          role === "engineer"
       );
 
-      setRoles([]);
-
-      return;
-
+    const combinedSet = new Set<GEBRole>([...dbRoles, ...localRoles]);
+    if (combinedSet.size === 0) {
+      combinedSet.add("buyer");
     }
 
+    const merged = Array.from(combinedSet);
+    setRoles(merged);
+    try {
+      localStorage.setItem("geb_user_roles", JSON.stringify(merged));
+    } catch (e) {}
+  }
 
-    const validRoles =
-      (data ?? [])
-        .map(
-          (item) =>
-            item.role
-        )
-        .filter(
-          (
-            role
-          ): role is GEBRole =>
-            role === "buyer" ||
-            role === "seller" ||
-            role === "broker"
-        );
+  function updateRoles(newRoles: GEBRole[]) {
+    setRoles((prev) => {
+      const mergedSet = new Set<GEBRole>([...prev, ...newRoles]);
+      const updated = Array.from(mergedSet);
+      try {
+        localStorage.setItem("geb_user_roles", JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
+  }
 
-
-    setRoles(
-      validRoles
-    );
-
+  async function refreshRoles() {
+    if (user?.id) {
+      await loadRoles(user.id);
+    }
   }
 
 
@@ -141,7 +157,12 @@ export function AuthProvider({
 
       } else {
 
-        setRoles([]);
+        let storedRoles: GEBRole[] = [];
+        try {
+          const s = localStorage.getItem("geb_user_roles");
+          if (s) storedRoles = JSON.parse(s);
+        } catch (e) {}
+        setRoles(storedRoles.length > 0 ? storedRoles : []);
 
       }
 
@@ -187,7 +208,12 @@ export function AuthProvider({
 
           } else {
 
-            setRoles([]);
+            let storedRoles: GEBRole[] = [];
+            try {
+              const s = localStorage.getItem("geb_user_roles");
+              if (s) storedRoles = JSON.parse(s);
+            } catch (e) {}
+            setRoles(storedRoles.length > 0 ? storedRoles : []);
 
           }
 
@@ -218,6 +244,9 @@ export function AuthProvider({
     setSession(null);
 
     setRoles([]);
+    try {
+      localStorage.removeItem("geb_user_roles");
+    } catch (e) {}
 
   }
 
@@ -231,6 +260,8 @@ export function AuthProvider({
         roles,
         loading,
         signOut,
+        updateRoles,
+        refreshRoles,
       }}
     >
 

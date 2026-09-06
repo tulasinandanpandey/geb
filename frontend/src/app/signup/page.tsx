@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Loader2, Sparkles } from "lucide-react";
+import { ArrowLeft, Loader2, Sparkles, HardHat, UserCheck } from "lucide-react";
 
 import { supabase } from "@/lib/supabase/client";
 import GEBLogo from "@/components/common/GEBLogo";
@@ -13,6 +13,7 @@ export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState<"buyer" | "dealer">("buyer");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -57,6 +58,7 @@ export default function SignupPage() {
         options: {
           data: {
             full_name: fullName.trim(),
+            role: role,
           },
         },
       });
@@ -66,13 +68,21 @@ export default function SignupPage() {
       }
 
       setSuccess(
-        "Account created successfully. Check your email if email confirmation is enabled."
+        role === "dealer"
+          ? "Account created successfully! Redirecting to Dealer Profile Onboarding..."
+          : "Account created successfully. Check your email if email confirmation is enabled."
       );
 
       setFullName("");
       setEmail("");
       setPassword("");
       setConfirmPassword("");
+
+      if (role === "dealer") {
+        setTimeout(() => {
+          window.location.href = "/dealers/onboarding";
+        }, 100);
+      }
 
     } catch (err) {
 
@@ -146,11 +156,42 @@ export default function SignupPage() {
             onSubmit={handleSignup}
             className="mt-8 rounded-[2rem] border border-[var(--stone-line)] bg-[var(--paper-raised)] p-6 shadow-xl shadow-[var(--copper-900)]/5"
           >
+            {/* Role Selection Switcher */}
+            <div className="mb-6">
+              <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-[var(--ink-soft)]">
+                Register as
+              </label>
+              <div className="grid grid-cols-2 gap-2 p-1.5 rounded-2xl bg-[var(--paper)] border border-[var(--stone-line)]">
+                <button
+                  type="button"
+                  onClick={() => setRole("buyer")}
+                  className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                    role === "buyer"
+                      ? "bg-[var(--ink)] text-white shadow"
+                      : "text-[var(--ink-soft)] hover:text-[var(--ink)]"
+                  }`}
+                >
+                  <UserCheck size={15} />
+                  <span>Buyer / User</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setRole("dealer")}
+                  className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                    role === "dealer"
+                      ? "bg-[var(--copper-600)] text-white shadow"
+                      : "text-[var(--ink-soft)] hover:text-[var(--ink)]"
+                  }`}
+                >
+                  <HardHat size={15} />
+                  <span>Dealer / Engineer</span>
+                </button>
+              </div>
+            </div>
 
             <div className="space-y-5">
-
               <div>
-
                 <label className="mb-2 block text-sm font-semibold">
                   Full name
                 </label>

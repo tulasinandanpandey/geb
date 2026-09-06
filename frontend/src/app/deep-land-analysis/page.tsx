@@ -95,7 +95,7 @@ export default function DeepLandAnalysisPage() {
       if (el) {
         el.scrollIntoView({ behavior: "smooth" });
       }
-    }, 150);
+    }, 0);
   };
 
   const handleSelectProperty = async (property: Property, autoScroll = true) => {

@@ -222,15 +222,23 @@ Tested and verified the following end-to-end CRM workflows:
 
 ---
 
-## Phase 11 Completed: RENT Property System, Rental RAG & Homepage Filters
+## Phase 12 Completed: Dealer & Contractor Directory, Active Project Management & AI Risk Auditor
 
 ### Core Capabilities
-✓ Added `listing_type` (`"sale"` / `"rent"`), `monthly_rent`, `security_deposit`, `available_from`, `furnishing_status`, `bhk` to properties schema & moderation engine.
-✓ Dual Listing Creation Form (`/list-property`) with `FOR SALE` / `FOR RENT` toggle and rental-specific inputs.
-✓ Prominent `All Listings | Buy / Sale | Rent` homepage filter bar working seamlessly with property types (`Plot | House | Apartment | Villa | Commercial`), location, and budget.
-✓ Updated Property Cards (`PropertyCard.tsx`) and GIS map pins (`PropertyMap.tsx`) rendering `₹XX,XXX / month`, BHK badges, and Furnishing status.
-✓ Extended Conversational RAG (`query_analyzer.py`, `retriever.py`, `rag_service.py`, `ai.py`) supporting natural queries like `"2BHK flat for rent under ₹25k in Lucknow"`.
-✓ Connected rental inquiries to Buyer-Seller Chat modal & Seller CRM.
-✓ Verified Python backend (`compileall app`) and Next.js production build (`npm run build`) pass cleanly.
+✓ Database table migration schemas (`dealer_profiles`, `projects`, `project_milestones`, `project_updates`, `project_expenses`, `project_messages`) with Row Level Security (RLS) policies.
+✓ FastAPI backend controllers:
+  - `/api/dealers`: List, filter by city, specialization, experience, rating, or keyword search; view profile; upsert profile.
+  - `/api/projects`: Create construction/renovation projects, list buyer/dealer projects, fetch project detail drawer.
+  - `/api/projects/{id}/updates`: Post daily site logs with progress % deltas.
+  - `/api/projects/{id}/expenses`: Log material/labor invoice receipts and expenses.
+  - `/api/projects/{id}/milestones/{id}`: Update phase completion status and budget allocations.
+  - `/api/projects/{id}/messages`: Real-time buyer-dealer project chat log.
+  - `/api/projects/{id}/ai-analysis`: Autonomous AI Risk & Schedule Auditor powered by Gemini analyzing budget variance, completion velocity, and delay risks.
+✓ Next.js Frontend Marketplace & Workspace:
+  - `/dealers`: Premium Dealer & Contractor Marketplace directory with filters (City, Specialization, Experience, Min Rating, Keyword Search), verification badges, hourly rates, project counters, and "Hire for Project" modal.
+  - `/dealer-dashboard`: Interactive Active Project Management Hub featuring Project Switcher, Overview Stats (Budget, Spent, Progress %, Target Date, Risk Status), Milestones timeline with status controls, Daily Site Activity log, Expense Ledger, Direct Project Chat modal, and AI Risk & Milestone Auditor card.
+✓ Navigation Bar (`Navbar.tsx`) & AuthProvider (`AuthProvider.tsx`) integration: Added quick access links for "Find Dealers" and "Project Workspace".
+✓ Verified Python backend (`compileall app` & `app.main` import) and Next.js production build (`npm run build`) pass cleanly.
+
 
 

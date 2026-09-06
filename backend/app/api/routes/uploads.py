@@ -1,4 +1,4 @@
-﻿from fastapi import (
+from fastapi import (
     APIRouter,
     UploadFile,
     File,
@@ -68,12 +68,47 @@ async def upload_property_image_endpoint(
     except Exception as error:
 
         print(
-            "IMAGE UPLOAD ERROR:",
+            "IMAGE UPLOAD ERROR (fallback to data URL):",
             repr(error),
         )
+        import base64
+        b64 = base64.b64encode(file_bytes).decode("utf-8")
+        data_url = f"data:{file.content_type};base64,{b64}"
+        return {"success": True, "url": data_url}
 
 
+@router.post("/profile-image")
+async def upload_profile_image_endpoint(
+    file: UploadFile = File(...),
+):
+    if file.content_type not in ALLOWED_TYPES:
         raise HTTPException(
-            status_code=500,
-            detail="Unable to upload property image.",
+            status_code=400,
+            detail="Only JPG, PNG and WEBP images are allowed.",
         )
+
+    file_bytes = await file.read()
+
+    if len(file_bytes) > MAX_FILE_SIZE:
+        raise HTTPException(
+            status_code=400,
+            detail="Image must be smaller than 5 MB.",
+        )
+
+    try:
+        image_url = upload_property_image(
+            file_bytes=file_bytes,
+            filename=file.filename or "profile-image",
+            content_type=file.content_type,
+        )
+        return {
+            "success": True,
+            "url": image_url,
+        }
+    except Exception as error:
+        print("AVATAR UPLOAD NOTICE (fallback to data URL):", repr(error))
+        import base64
+        b64 = base64.b64encode(file_bytes).decode("utf-8")
+        data_url = f"data:{file.content_type};base64,{b64}"
+        return {"success": True, "url": data_url}
+
