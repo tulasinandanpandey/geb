@@ -7,6 +7,8 @@ import { Search, MapPin, Filter, HardHat, Sparkles, X, Calendar, DollarSign, Bui
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useRouter } from "next/navigation";
 
+import { getApiUrl } from "@/lib/api";
+
 export default function DealerMarketplacePage() {
   const { user, session: authSession, updateRoles } = useAuth();
   const router = useRouter();
@@ -67,7 +69,7 @@ export default function DealerMarketplacePage() {
   const [initialMessage, setInitialMessage] = useState("");
   const [confirmedMeeting, setConfirmedMeeting] = useState<{ date: string; time: string; botResponse?: string } | null>(null);
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+  const API_URL = getApiUrl();
 
   // Fetch dealers from API
   const fetchDealers = async () => {

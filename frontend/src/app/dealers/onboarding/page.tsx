@@ -23,6 +23,8 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { supabase } from "@/lib/supabase/client";
 import ProfileImageUploader from "@/components/upload/ProfileImageUploader";
 
+import { getApiUrl } from "@/lib/api";
+
 export default function DealerOnboardingPage() {
   const { user, session, updateRoles } = useAuth();
   const router = useRouter();
@@ -46,7 +48,7 @@ export default function DealerOnboardingPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+  const API_URL = getApiUrl();
 
   // Pre-fill user details if logged in
   useEffect(() => {
